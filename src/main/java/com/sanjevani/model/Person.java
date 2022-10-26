@@ -16,8 +16,81 @@ public class Person {
     private String role;
     private int age;
     private String gender;
-    private String photo;
-    private int houseID;
-    private String city;
+    private int houseId;
+    private int communityId;
+    
+    public Person(int personId, String name, String userName, String password, String role, int age, String gender, int communityId) {
+        this.personId = personId;
+        this.name = name;
+        this.userName = userName;
+        this.password = password;
+        this.role = role;
+        this.age = age;
+        this.gender = gender;
+        this.communityId = communityId;
+    }
 
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public int getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(int communityId) {
+        this.communityId = communityId;
+    }
 }

@@ -13,10 +13,17 @@ import java.util.List;
 public class Community {
     private int communityId;
     private String name;
-    private String address;
     private String city;
-    private String zipcode;
+    private int zipcode;
     private List<Integer> hospitalIds;
+
+    public Community(int communityId, String name, String city, int zipcode, List<Integer> hospitalIds) {
+        this.communityId = communityId;
+        this.name = name;
+        this.city = city;
+        this.zipcode = zipcode;
+        this.hospitalIds = hospitalIds;
+    }
 
     public int getCommunityId() {
         return communityId;
@@ -34,14 +41,6 @@ public class Community {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getCity() {
         return city;
     }
@@ -50,11 +49,11 @@ public class Community {
         this.city = city;
     }
 
-    public String getZipcode() {
+    public int getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(String zipcode) {
+    public void setZipcode(int zipcode) {
         this.zipcode = zipcode;
     }
 

@@ -10,27 +10,15 @@ import java.util.List;
  *
  * @author rajatsharma
  */
-public class Doctor {
-    private int id;
-    private String name;
+public class Doctor extends Person {
+    
     private List<Integer> hospitalIds;
-
-    public int getId() {
-        return id;
+    
+    public Doctor(int personId, String name, String userName, String password, int age, String gender, int communityId, List<Integer> hospitalIds) {
+        super(personId, name, userName, password, "Doctor", age, gender, communityId);
+        this.hospitalIds = hospitalIds;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    
     public List<Integer> getHospitalIds() {
         return hospitalIds;
     }
@@ -38,5 +26,4 @@ public class Doctor {
     public void setHospitalIds(List<Integer> hospitalIds) {
         this.hospitalIds = hospitalIds;
     }
-   
 }

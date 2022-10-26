@@ -13,9 +13,15 @@ import java.util.List;
 public class Hospital {
     private int hospitalId;
     private String name;
-    private String city;
-    private List<Community> community;
-    private List<Doctor> doctors;
+    private int communityId;
+    private List<Integer> doctorIds;
+
+    public Hospital(int hospitalId, String name, int communityId, List<Integer> doctorIds) {
+        this.hospitalId = hospitalId;
+        this.name = name;
+        this.communityId = communityId;
+        this.doctorIds = doctorIds;
+    }
 
     public int getHospitalId() {
         return hospitalId;
@@ -33,28 +39,19 @@ public class Hospital {
         this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public int getCommunityId() {
+        return communityId;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCommunityId(int communityId) {
+        this.communityId = communityId;
     }
 
-    public List<Community> getCommunity() {
-        return community;
+    public List<Integer> getDoctorIds() {
+        return doctorIds;
     }
 
-    public void setCommunity(List<Community> community) {
-        this.community = community;
+    public void setDoctorIds(List<Integer> doctorIds) {
+        this.doctorIds = doctorIds;
     }
-
-    public List<Doctor> getDoctors() {
-        return doctors;
-    }
-
-    public void setDoctors(List<Doctor> doctors) {
-        this.doctors = doctors;
-    }
-
 }
