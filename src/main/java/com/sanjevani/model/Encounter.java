@@ -9,12 +9,11 @@ package com.sanjevani.model;
  * @author rajatsharma
  */
 public class Encounter {
-    private int encounterID;
-    private int personId;
-    private int vitalSignsId;
+    private int encounterId;
+    private int patientId;
+    private int vitalSignId;
     private String dateOfEncounter;
     private String status; //can be enum("accepted","rejected","pending")
     private int doctorId;
     private int hospitalId;
-
 }

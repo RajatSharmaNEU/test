@@ -9,7 +9,7 @@ package com.sanjevani.model;
  * @author rajatsharma
  */
 public class Person {
-    private int personID;
+    private int personId;
     private String name;
     private String userName;
     private String password;
