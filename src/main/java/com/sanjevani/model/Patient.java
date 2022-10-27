@@ -10,8 +10,8 @@ package com.sanjevani.model;
  */
 public class Patient extends Person {
 
-    public Patient(int personId, String name, String userName, String password, int age, String gender, int communityId) {
-        super(personId, name, userName, password, "Patient", age, gender, communityId);
+    public Patient(int personId, String name, String userName, String password, int age, String gender, int houseId, int communityId) {
+        super(personId, name, userName, password, "Patient", age, gender, houseId, communityId);
     }
     
 }

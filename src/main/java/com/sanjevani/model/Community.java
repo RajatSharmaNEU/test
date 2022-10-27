@@ -16,14 +16,18 @@ public class Community {
     private String city;
     private int zipcode;
     private List<Integer> hospitalIds;
-
-    public Community(int communityId, String name, String city, int zipcode, List<Integer> hospitalIds) {
+    private List<Integer> houseIds;
+    private int personId;
+    
+    public Community(int communityId, String name, String city, int zipcode, List<Integer> hospitalIds, List<Integer> houseIds, int personId) {
         this.communityId = communityId;
         this.name = name;
         this.city = city;
         this.zipcode = zipcode;
         this.hospitalIds = hospitalIds;
-    }
+        this.houseIds = houseIds;
+        this.personId = personId;
+    }    
 
     public int getCommunityId() {
         return communityId;
@@ -63,5 +67,21 @@ public class Community {
 
     public void setHospitalIds(List<Integer> hospitalIds) {
         this.hospitalIds = hospitalIds;
+    }
+
+    public List<Integer> getHouseIds() {
+        return houseIds;
+    }
+
+    public void setHouseIds(List<Integer> houseIds) {
+        this.houseIds = houseIds;
+    }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 }

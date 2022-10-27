@@ -5,7 +5,7 @@
 
 package com.sanjevani;
 
-import com.sanjevani.view.Home;
+import com.sanjevani.view.HomeFrame;
 
 /**
  *
@@ -14,6 +14,6 @@ import com.sanjevani.view.Home;
 public class Sanjevani {
 
     public static void main(String[] args) {
-        new Home().setVisible(true);
+        new HomeFrame().setVisible(true);
     }
 }

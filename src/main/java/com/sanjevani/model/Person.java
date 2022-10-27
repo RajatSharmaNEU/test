@@ -19,7 +19,7 @@ public class Person {
     private int houseId;
     private int communityId;
     
-    public Person(int personId, String name, String userName, String password, String role, int age, String gender, int communityId) {
+    public Person(int personId, String name, String userName, String password, String role, int age, String gender, int houseId, int communityId) {
         this.personId = personId;
         this.name = name;
         this.userName = userName;
@@ -27,6 +27,7 @@ public class Person {
         this.role = role;
         this.age = age;
         this.gender = gender;
+        this.houseId = houseId;
         this.communityId = communityId;
     }
 
@@ -84,6 +85,14 @@ public class Person {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+    
+    public int getHouseId() {
+        return houseId;
+    }
+
+    public void setHouseId(int houseId) {
+        this.houseId = houseId;
     }
 
     public int getCommunityId() {
