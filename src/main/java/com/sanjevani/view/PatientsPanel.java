@@ -4,6 +4,15 @@
  */
 package com.sanjevani.view;
 
+import com.sanjevani.database.Database;
+import com.sanjevani.model.Community;
+import com.sanjevani.model.House;
+import com.sanjevani.model.Person;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rajatsharma
@@ -11,10 +20,36 @@ package com.sanjevani.view;
 public class PatientsPanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form Patients
+     * Creates new form PatientsPanel
      */
     public PatientsPanel() {
         initComponents();
+        setPatientsTable(Database.getPeople("Patient"));
+    }
+    
+    private void setPatientsTable(Map<Integer, Person> list) {
+        String[] tableColumns = {"Patient Name", "Age", "Gender", "House", "Community Name", "City Name", "Zip Code"};
+        String[][] tableContent = new String[list.size()][tableColumns.length];
+        int key = 0;
+        
+        for(Map.Entry<Integer, Person> entry: list.entrySet()) {
+            Person person = entry.getValue();
+            tableContent[key][0] = person.getName();
+            tableContent[key][1] = String.valueOf(Database.personList.get(person.getPersonId()).getAge());
+            tableContent[key][2] = Database.personList.get(person.getPersonId()).getGender();
+            
+            House house = Database.houseList.get(person.getHouseId());
+            
+            tableContent[key][3] = house.getAddress();
+            
+            Community community = Database.communityList.get(house.getCommunityId());
+            tableContent[key][4] = community.getCommunityName();            
+            tableContent[key][5] = Database.cityList.get(community.getCityId()).getCityName();
+            tableContent[key][6] = String.valueOf(community.getZipcode());
+            key++;
+        }
+        
+        patientsTable.setModel(new DefaultTableModel(tableContent, tableColumns));
     }
 
     /**
@@ -27,40 +62,60 @@ public class PatientsPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         PatientsOuterPanel = new javax.swing.JPanel();
+        addPatientPanel = new javax.swing.JPanel();
+        scrollTablePanel = new javax.swing.JScrollPane();
+        patientsTable = new javax.swing.JTable();
 
         PatientsOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Patients"));
+        PatientsOuterPanel.setLayout(new java.awt.GridLayout(2, 1));
 
-        javax.swing.GroupLayout PatientsOuterPanelLayout = new javax.swing.GroupLayout(PatientsOuterPanel);
-        PatientsOuterPanel.setLayout(PatientsOuterPanelLayout);
-        PatientsOuterPanelLayout.setHorizontalGroup(
-            PatientsOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 902, Short.MAX_VALUE)
+        javax.swing.GroupLayout addPatientPanelLayout = new javax.swing.GroupLayout(addPatientPanel);
+        addPatientPanel.setLayout(addPatientPanelLayout);
+        addPatientPanelLayout.setHorizontalGroup(
+            addPatientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 884, Short.MAX_VALUE)
         );
-        PatientsOuterPanelLayout.setVerticalGroup(
-            PatientsOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+        addPatientPanelLayout.setVerticalGroup(
+            addPatientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
+
+        PatientsOuterPanel.add(addPatientPanel);
+
+        patientsTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollTablePanel.setViewportView(patientsTable);
+
+        PatientsOuterPanel.add(scrollTablePanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(PatientsOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(PatientsOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(PatientsOuterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PatientsOuterPanel;
+    private javax.swing.JPanel addPatientPanel;
+    private javax.swing.JTable patientsTable;
+    private javax.swing.JScrollPane scrollTablePanel;
     // End of variables declaration//GEN-END:variables
 }

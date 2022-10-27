@@ -31,7 +31,11 @@ public class DoctorsPanel extends javax.swing.JPanel {
         String[] tableColumns = {"Doctor Name", "Age", "Gender", "House", "Community Name", "City Name", "Zip Code"};
         String[][] tableContent = new String[list.size()][tableColumns.length];
 
-        list.forEach((key, doctor) -> {
+        int key = 0;
+        
+        for(Map.Entry<Integer, Person> entry: list.entrySet()) {
+            Person doctor = entry.getValue();
+        
             tableContent[key][0] = doctor.getName();
             tableContent[key][1] = String.valueOf(Database.personList.get(doctor.getPersonId()).getAge());
             tableContent[key][2] = Database.personList.get(doctor.getPersonId()).getGender();
@@ -44,8 +48,8 @@ public class DoctorsPanel extends javax.swing.JPanel {
             tableContent[key][4] = community.getCommunityName();            
             tableContent[key][5] = Database.cityList.get(community.getCityId()).getCityName();
             tableContent[key][6] = String.valueOf(community.getZipcode());
-            
-        });
+            key++;
+        }
         
         doctorsTable.setModel(new DefaultTableModel(tableContent, tableColumns));
     }
