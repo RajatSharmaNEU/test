@@ -50,11 +50,11 @@ public class Database {
     public static City createCity(String cityName) {
         return cityList.put(lastCityId, new City(lastCityId++, cityName));
     }
-    public static Community createCommunity(String name, int cityId, int zipcode) {
+    public static Community createCommunity(String name, int cityId, String zipcode) {
         return communityList.put(lastCommunityId, new Community(lastCommunityId++, name, cityId, zipcode));
     }
-    public static Hospital createHospital(String name, int cityId, int communityId, List<Integer> doctorIds) {
-        return hospitalList.put(lastHospitalId, new Hospital(lastHospitalId++, name, cityId, communityId, doctorIds));
+    public static Hospital createHospital(String name, int communityId, List<Integer> doctorIds) {
+        return hospitalList.put(lastHospitalId, new Hospital(lastHospitalId++, name, communityId, doctorIds));
     }
     public static Doctor createDoctor(String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
         Doctor doctor = new Doctor(lastPersonId, name, userName, password, age, gender, houseId, hospitalIds);
@@ -92,12 +92,12 @@ public class Database {
     City city2 = createCity("NewYork");
     
     // Community Data
-    Community community1 = createCommunity("Jvue", 0, 02120);
-    Community community2 = createCommunity("Mission Main", 1, 02120);
+    Community community1 = createCommunity("Jvue", 0, "02120");
+    Community community2 = createCommunity("Mission Main", 1, "02122");
     
     // Hospital Data
-    Hospital hospital1 = createHospital("Max Hospital", 0, 0, Arrays.asList(0,1));
-    Hospital hospital2 = createHospital("Fortis Hospital", 1, 1, Arrays.asList(0,1));
+    Hospital hospital1 = createHospital("Max Hospital", 0, Arrays.asList(0,1));
+    Hospital hospital2 = createHospital("Fortis Hospital", 1, Arrays.asList(0,1));
     
     // House Data
     // Patient House
@@ -109,9 +109,9 @@ public class Database {
     House house4 = createHouse(1, "Apartment-301");
     
     // Admin House
-    House house5 = createHouse(0, "Apartment-201");
-    House house6 = createHouse(1, "Apartment-301");
-    House house7 = createHouse(1, "Apartment-301");
+    House house5 = createHouse(0, "Apartment-401");
+    House house6 = createHouse(1, "Apartment-501");
+    House house7 = createHouse(1, "Apartment-601");
     
     
     // Doctor Data
@@ -123,7 +123,7 @@ public class Database {
     VitalSign vitalSign2 = createVitalSign(99.99, "70-110", 77);
     
     // Patient Data
-    Patient patient1 = createPatient("Rajat Sharma", "rajatsharma", "test@1234", 30, "Male", 2);
+    Patient patient1 = createPatient("Manthan Bhatia", "rajatsharma", "test@1234", 30, "Male", 2);
     Patient patient2 = createPatient("Yash Pawar", "yashpawar", "test@1234", 25, "Male", 3);
     
     // Encounter Data
@@ -132,8 +132,8 @@ public class Database {
     
     // Admin Data
     Person systemAdmin = createAdmin("Rajat Sharma", "rajatsharma", "test@1234", "SystemAdmin", 30, "Male", 4);
-    Person communityAdmin = createAdmin("Yash Pawar", "rajatsharma", "test@1234", "CommunityAdmin", 30, "Male", 5);
-    Person hospitalAdmin = createAdmin("Nitin Sharma", "rajatsharma", "test@1234", "HospitalAdmin", 30, "Male", 6);
+    Person communityAdmin = createAdmin("Gaurang Londhe", "rajatsharma", "test@1234", "CommunityAdmin", 30, "Male", 5);
+    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "rajatsharma", "test@1234", "HospitalAdmin", 30, "Male", 6);
     }
 }
 

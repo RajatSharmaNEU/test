@@ -28,7 +28,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
     }
     
     private void setDoctorsTable(Map<Integer, Person> list) {
-        // personId, name, userName, password, "Doctor", age, gender, houseId, communityId
         String[] tableColumns = {"Doctor Name", "Age", "Gender", "House", "Community Name", "City Name", "Zip Code"};
         String[][] tableContent = new String[list.size()][tableColumns.length];
 

@@ -5,6 +5,7 @@
 package com.sanjevani.view;
 
 import com.sanjevani.database.Database;
+import com.sanjevani.model.Community;
 import com.sanjevani.model.Hospital;
 import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
@@ -29,9 +30,12 @@ public class HospitalsPanel extends javax.swing.JPanel {
 
         list.forEach((key, hospital) -> {
             tableContent[key][0] = hospital.getName();
-            tableContent[key][1] = Database.communityList.get(hospital.getCommunityId()).getCommunityName();
-            tableContent[key][2] = Database.cityList.get(hospital.getCityId()).getCityName();
-            tableContent[key][3] = String.valueOf(Database.communityList.get(hospital.getCityId()).getZipcode());
+            
+            Community community = Database.communityList.get(hospital.getCommunityId());
+            
+            tableContent[key][1] = community.getCommunityName();
+            tableContent[key][2] = Database.cityList.get(community.getCityId()).getCityName();
+            tableContent[key][3] = community.getZipcode();
         });
         
         hospitalsTable.setModel(new DefaultTableModel(tableContent, tableColumns));

@@ -11,10 +11,10 @@ package com.sanjevani.model;
 public class Community {
     private int communityId;
     private String communityName;
-    private int zipcode;
+    private String zipcode;
     private int cityId;
     
-    public Community(int communityId, String name, int cityId, int zipcode) {
+    public Community(int communityId, String name, int cityId, String zipcode) {
         this.communityId = communityId;
         this.communityName = name;
         this.cityId = cityId;
@@ -45,11 +45,11 @@ public class Community {
         this.cityId = cityId;
     }
 
-    public int getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(int zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 }
