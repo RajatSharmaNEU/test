@@ -4,29 +4,21 @@
  */
 package com.sanjevani.model;
 
-import java.util.List;
-
 /**
  *
  * @author rajatsharma
  */
 public class Community {
     private int communityId;
-    private String name;
+    private String communityName;
     private int zipcode;
-    private List<Integer> hospitalIds;
-    private List<Integer> houseIds;
-    private int personId;
     private int cityId;
     
-    public Community(int communityId, String name, int cityId, int zipcode, List<Integer> hospitalIds, List<Integer> houseIds, int personId) {
+    public Community(int communityId, String name, int cityId, int zipcode) {
         this.communityId = communityId;
-        this.name = name;
+        this.communityName = name;
         this.cityId = cityId;
         this.zipcode = zipcode;
-        this.hospitalIds = hospitalIds;
-        this.houseIds = houseIds;
-        this.personId = personId;
     }    
 
     public int getCommunityId() {
@@ -37,12 +29,12 @@ public class Community {
         this.communityId = communityId;
     }
 
-    public String getName() {
-        return name;
+    public String getCommunityName() {
+        return communityName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 
     public int getCityId() {
@@ -59,29 +51,5 @@ public class Community {
 
     public void setZipcode(int zipcode) {
         this.zipcode = zipcode;
-    }
-
-    public List<Integer> getHospitalIds() {
-        return hospitalIds;
-    }
-
-    public void setHospitalIds(List<Integer> hospitalIds) {
-        this.hospitalIds = hospitalIds;
-    }
-
-    public List<Integer> getHouseIds() {
-        return houseIds;
-    }
-
-    public void setHouseIds(List<Integer> houseIds) {
-        this.houseIds = houseIds;
-    }
-
-    public int getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(int personId) {
-        this.personId = personId;
     }
 }

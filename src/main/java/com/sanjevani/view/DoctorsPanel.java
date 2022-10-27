@@ -4,6 +4,15 @@
  */
 package com.sanjevani.view;
 
+import com.sanjevani.database.Database;
+import com.sanjevani.model.Community;
+import com.sanjevani.model.House;
+import com.sanjevani.model.Person;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rajatsharma
@@ -15,6 +24,31 @@ public class DoctorsPanel extends javax.swing.JPanel {
      */
     public DoctorsPanel() {
         initComponents();
+        setDoctorsTable(Database.getPeople("Doctor"));
+    }
+    
+    private void setDoctorsTable(Map<Integer, Person> list) {
+        // personId, name, userName, password, "Doctor", age, gender, houseId, communityId
+        String[] tableColumns = {"Doctor Name", "Age", "Gender", "House", "Community Name", "City Name", "Zip Code"};
+        String[][] tableContent = new String[list.size()][tableColumns.length];
+
+        list.forEach((key, doctor) -> {
+            tableContent[key][0] = doctor.getName();
+            tableContent[key][1] = String.valueOf(Database.personList.get(doctor.getPersonId()).getAge());
+            tableContent[key][2] = Database.personList.get(doctor.getPersonId()).getGender();
+            
+            House house = Database.houseList.get(doctor.getHouseId());
+            
+            tableContent[key][3] = house.getAddress();
+            
+            Community community = Database.communityList.get(house.getCommunityId());
+            tableContent[key][4] = community.getCommunityName();            
+            tableContent[key][5] = Database.cityList.get(community.getCityId()).getCityName();
+            tableContent[key][6] = String.valueOf(community.getZipcode());
+            
+        });
+        
+        doctorsTable.setModel(new DefaultTableModel(tableContent, tableColumns));
     }
 
     /**
@@ -27,19 +61,40 @@ public class DoctorsPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         DoctorsOuterPanel = new javax.swing.JPanel();
+        addDoctorPanel = new javax.swing.JPanel();
+        scrollTablePanel = new javax.swing.JScrollPane();
+        doctorsTable = new javax.swing.JTable();
 
         DoctorsOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Doctors"));
+        DoctorsOuterPanel.setLayout(new java.awt.GridLayout(2, 1));
 
-        javax.swing.GroupLayout DoctorsOuterPanelLayout = new javax.swing.GroupLayout(DoctorsOuterPanel);
-        DoctorsOuterPanel.setLayout(DoctorsOuterPanelLayout);
-        DoctorsOuterPanelLayout.setHorizontalGroup(
-            DoctorsOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 903, Short.MAX_VALUE)
+        javax.swing.GroupLayout addDoctorPanelLayout = new javax.swing.GroupLayout(addDoctorPanel);
+        addDoctorPanel.setLayout(addDoctorPanelLayout);
+        addDoctorPanelLayout.setHorizontalGroup(
+            addDoctorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 884, Short.MAX_VALUE)
         );
-        DoctorsOuterPanelLayout.setVerticalGroup(
-            DoctorsOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+        addDoctorPanelLayout.setVerticalGroup(
+            addDoctorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
+
+        DoctorsOuterPanel.add(addDoctorPanel);
+
+        doctorsTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollTablePanel.setViewportView(doctorsTable);
+
+        DoctorsOuterPanel.add(scrollTablePanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -51,15 +106,15 @@ public class DoctorsPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(DoctorsOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(DoctorsOuterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel DoctorsOuterPanel;
+    private javax.swing.JPanel addDoctorPanel;
+    private javax.swing.JTable doctorsTable;
+    private javax.swing.JScrollPane scrollTablePanel;
     // End of variables declaration//GEN-END:variables
 }

@@ -29,7 +29,7 @@ public class HospitalsPanel extends javax.swing.JPanel {
 
         list.forEach((key, hospital) -> {
             tableContent[key][0] = hospital.getName();
-            tableContent[key][1] = Database.communityList.get(hospital.getCommunityId()).getName();
+            tableContent[key][1] = Database.communityList.get(hospital.getCommunityId()).getCommunityName();
             tableContent[key][2] = Database.cityList.get(hospital.getCityId()).getCityName();
             tableContent[key][3] = String.valueOf(Database.communityList.get(hospital.getCityId()).getZipcode());
         });
@@ -58,11 +58,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
         addHospitalPanel.setLayout(addHospitalPanelLayout);
         addHospitalPanelLayout.setHorizontalGroup(
             addHospitalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 906, Short.MAX_VALUE)
+            .addGap(0, 890, Short.MAX_VALUE)
         );
         addHospitalPanelLayout.setVerticalGroup(
             addHospitalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
 
         HospitalsOuterPanel.add(addHospitalPanel);
@@ -88,14 +88,14 @@ public class HospitalsPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(HospitalsOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 916, Short.MAX_VALUE)
+                .addComponent(HospitalsOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(HospitalsOuterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(HospitalsOuterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents

@@ -14,8 +14,8 @@ public class Doctor extends Person {
     
     private List<Integer> hospitalIds;
     
-    public Doctor(int personId, String name, String userName, String password, int age, String gender, int houseId, int communityId, List<Integer> hospitalIds) {
-        super(personId, name, userName, password, "Doctor", age, gender, houseId, communityId);
+    public Doctor(int personId, String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        super(personId, name, userName, password, "Doctor", age, gender, houseId);
         this.hospitalIds = hospitalIds;
     }
     
