@@ -5,6 +5,7 @@
 
 package com.sanjevani;
 
+import com.sanjevani.database.Database;
 import com.sanjevani.view.HomeFrame;
 
 /**
@@ -14,6 +15,8 @@ import com.sanjevani.view.HomeFrame;
 public class Sanjevani {
 
     public static void main(String[] args) {
+        Database.createDatabase();
         new HomeFrame().setVisible(true);
+        
     }
 }

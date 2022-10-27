@@ -4,6 +4,11 @@
  */
 package com.sanjevani.view;
 
+import com.sanjevani.database.Database;
+import com.sanjevani.model.Hospital;
+import java.util.HashMap;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rajatsharma
@@ -15,6 +20,21 @@ public class HospitalsPanel extends javax.swing.JPanel {
      */
     public HospitalsPanel() {
         initComponents();
+        setHospitalsTable(Database.hospitalList);
+    }
+    
+    private void setHospitalsTable(HashMap<Integer,Hospital> list) {
+        String[] tableColumns = {"Hospital Name", "Community Name", "City Name", "Zip Code"};
+        String[][] tableContent = new String[list.size()][tableColumns.length];
+
+        list.forEach((key, hospital) -> {
+            tableContent[key][0] = hospital.getName();
+            tableContent[key][1] = Database.communityList.get(hospital.getCommunityId()).getName();
+            tableContent[key][2] = Database.cityList.get(hospital.getCityId()).getCityName();
+            tableContent[key][3] = String.valueOf(Database.communityList.get(hospital.getCityId()).getZipcode());
+        });
+        
+        hospitalsTable.setModel(new DefaultTableModel(tableContent, tableColumns));
     }
 
     /**
@@ -27,19 +47,40 @@ public class HospitalsPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         HospitalsOuterPanel = new javax.swing.JPanel();
+        addHospitalPanel = new javax.swing.JPanel();
+        scrollTablePanel = new javax.swing.JScrollPane();
+        hospitalsTable = new javax.swing.JTable();
 
         HospitalsOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Hospitals"));
+        HospitalsOuterPanel.setLayout(new java.awt.GridLayout(2, 1));
 
-        javax.swing.GroupLayout HospitalsOuterPanelLayout = new javax.swing.GroupLayout(HospitalsOuterPanel);
-        HospitalsOuterPanel.setLayout(HospitalsOuterPanelLayout);
-        HospitalsOuterPanelLayout.setHorizontalGroup(
-            HospitalsOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 900, Short.MAX_VALUE)
+        javax.swing.GroupLayout addHospitalPanelLayout = new javax.swing.GroupLayout(addHospitalPanel);
+        addHospitalPanel.setLayout(addHospitalPanelLayout);
+        addHospitalPanelLayout.setHorizontalGroup(
+            addHospitalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 906, Short.MAX_VALUE)
         );
-        HospitalsOuterPanelLayout.setVerticalGroup(
-            HospitalsOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 437, Short.MAX_VALUE)
+        addHospitalPanelLayout.setVerticalGroup(
+            addHospitalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 427, Short.MAX_VALUE)
         );
+
+        HospitalsOuterPanel.add(addHospitalPanel);
+
+        hospitalsTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollTablePanel.setViewportView(hospitalsTable);
+
+        HospitalsOuterPanel.add(scrollTablePanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -47,20 +88,23 @@ public class HospitalsPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(HospitalsOuterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addComponent(HospitalsOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 916, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(HospitalsOuterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel HospitalsOuterPanel;
+    private javax.swing.JPanel addHospitalPanel;
+    private javax.swing.JTable hospitalsTable;
+    private javax.swing.JScrollPane scrollTablePanel;
     // End of variables declaration//GEN-END:variables
 }
