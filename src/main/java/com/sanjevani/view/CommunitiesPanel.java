@@ -4,6 +4,11 @@
  */
 package com.sanjevani.view;
 
+import com.sanjevani.database.Database;
+import com.sanjevani.model.Community;
+import java.util.HashMap;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rajatsharma
@@ -11,10 +16,29 @@ package com.sanjevani.view;
 public class CommunitiesPanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form CommunitiesPanel
+     * Creates new form HospitalsPanel
      */
     public CommunitiesPanel() {
         initComponents();
+        setCommunitiesTable(Database.communityList);
+    }
+    
+    private void setCommunitiesTable(HashMap<Integer,Community> list) {
+//        private String communityName;
+//        private String zipcode;
+//        private int cityId;
+//    
+        String[] tableColumns = {"Community Name", "City Name", "Zip Code"};
+        String[][] tableContent = new String[list.size()][tableColumns.length];
+
+        list.forEach((key, community) -> {
+            tableContent[key][0] = community.getCommunityName();            
+            tableContent[key][1] = Database.cityList.get(community.getCityId()).getCityName();
+            tableContent[key][2] = String.valueOf(community.getZipcode());
+            
+        });
+        
+        CommunitiesTable.setModel(new DefaultTableModel(tableContent, tableColumns));
     }
 
     /**
@@ -27,19 +51,40 @@ public class CommunitiesPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         CommunitiesOuterPanel = new javax.swing.JPanel();
+        AddCommunityPanel = new javax.swing.JPanel();
+        scrollTablePanel = new javax.swing.JScrollPane();
+        CommunitiesTable = new javax.swing.JTable();
 
-        CommunitiesOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Communities"));
+        CommunitiesOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Community"));
+        CommunitiesOuterPanel.setLayout(new java.awt.GridLayout(2, 1));
 
-        javax.swing.GroupLayout CommunitiesOuterPanelLayout = new javax.swing.GroupLayout(CommunitiesOuterPanel);
-        CommunitiesOuterPanel.setLayout(CommunitiesOuterPanelLayout);
-        CommunitiesOuterPanelLayout.setHorizontalGroup(
-            CommunitiesOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 880, Short.MAX_VALUE)
+        javax.swing.GroupLayout AddCommunityPanelLayout = new javax.swing.GroupLayout(AddCommunityPanel);
+        AddCommunityPanel.setLayout(AddCommunityPanelLayout);
+        AddCommunityPanelLayout.setHorizontalGroup(
+            AddCommunityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 878, Short.MAX_VALUE)
         );
-        CommunitiesOuterPanelLayout.setVerticalGroup(
-            CommunitiesOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+        AddCommunityPanelLayout.setVerticalGroup(
+            AddCommunityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 439, Short.MAX_VALUE)
         );
+
+        CommunitiesOuterPanel.add(AddCommunityPanel);
+
+        CommunitiesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollTablePanel.setViewportView(CommunitiesTable);
+
+        CommunitiesOuterPanel.add(scrollTablePanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -61,6 +106,9 @@ public class CommunitiesPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel AddCommunityPanel;
     private javax.swing.JPanel CommunitiesOuterPanel;
+    private javax.swing.JTable CommunitiesTable;
+    private javax.swing.JScrollPane scrollTablePanel;
     // End of variables declaration//GEN-END:variables
 }
