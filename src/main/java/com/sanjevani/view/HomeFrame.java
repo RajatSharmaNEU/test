@@ -12,27 +12,11 @@ import java.awt.CardLayout;
 public class HomeFrame extends javax.swing.JFrame {
     
     CardLayout cardLayout;
-    DoctorsPanel doctorsPanel;
-    HospitalsPanel hospitalsPanel;
-    PeoplePanel peoplePanel;
-    PatientsPanel patientsPanel;
-    CommunitiesPanel communitiesPanel;
-    EncountersPanel encountersPanel;
     
-    /**
-     * Creates new form LandingPage
-     */
     public HomeFrame() {
         initComponents();
         cardLayout = (CardLayout)(viewPanel.getLayout());
-        doctorsPanel = new DoctorsPanel();
-        hospitalsPanel = new HospitalsPanel();
-        peoplePanel = new PeoplePanel();
-        patientsPanel = new PatientsPanel();
-        communitiesPanel = new CommunitiesPanel();
-        encountersPanel = new EncountersPanel();
-        
-        viewPanel.add("Hospitals", hospitalsPanel);
+        viewPanel.add("Hospitals", new HospitalsPanel());
         cardLayout.next(viewPanel);
     }
 
@@ -130,38 +114,38 @@ public class HomeFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void showDoctorsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDoctorsBtnActionPerformed
-        // TODO add your handling code here:
-        viewPanel.add("Doctors", doctorsPanel);
+        cardLayout = (CardLayout)(viewPanel.getLayout());
+        viewPanel.add("Doctors", new DoctorsPanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showDoctorsBtnActionPerformed
 
     private void showHospitalsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showHospitalsBtnActionPerformed
         // TODO add your handling code here:
-        viewPanel.add("Hospitals", hospitalsPanel);
+        viewPanel.add("Hospitals", new HospitalsPanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showHospitalsBtnActionPerformed
 
     private void showPeopleBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPeopleBtnActionPerformed
         // TODO add your handling code here:
-        viewPanel.add("People", peoplePanel);
+        viewPanel.add("People", new PeoplePanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showPeopleBtnActionPerformed
 
     private void showPatientsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPatientsBtnActionPerformed
         // TODO add your handling code here:
-        viewPanel.add("People", patientsPanel);
+        viewPanel.add("People", new PatientsPanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showPatientsBtnActionPerformed
 
     private void showCommunitiesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showCommunitiesBtnActionPerformed
         // TODO add your handling code here:
-        viewPanel.add("People", communitiesPanel);
+        viewPanel.add("People", new CommunitiesPanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showCommunitiesBtnActionPerformed
 
     private void showEncountersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showEncountersBtnActionPerformed
         // TODO add your handling code here:
-        viewPanel.add("People", encountersPanel);
+        viewPanel.add("People", new EncountersPanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showEncountersBtnActionPerformed
 
