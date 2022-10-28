@@ -7,6 +7,7 @@ package com.sanjevani.view;
 import com.sanjevani.database.Database;
 import com.sanjevani.model.Community;
 import com.sanjevani.model.Hospital;
+import com.sanjevani.utility.Utility;
 import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -21,18 +22,14 @@ public class HospitalsPanel extends javax.swing.JPanel {
     /**
      * Creates new form HospitalsPanel
      */
+    int selectedHospitalId;
     public HospitalsPanel() {
         initComponents();
-        setHospitalsTable(Database.hospitalList);
+        setHospitalsTable();
         initializeHospitalView();
     }
     
     private void initializeHospitalView() {
-        // Hide ID column
-        hospitalsTable.getColumnModel().getColumn(0).setMinWidth(0);
-        hospitalsTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        hospitalsTable.getColumnModel().getColumn(0).setWidth(0);
-        
         // Populate Communities
         DefaultComboBoxModel communityModel = new DefaultComboBoxModel();
         communityModel.removeAllElements();
@@ -71,7 +68,8 @@ public class HospitalsPanel extends javax.swing.JPanel {
     }
     
     
-    private void setHospitalsTable(HashMap<Integer,Hospital> list) {
+    private void setHospitalsTable() {
+        HashMap<Integer,Hospital> list = Database.hospitalList;
         String[] tableColumns = {"Id", "Hospital Name", "Community Name", "City Name", "Zip Code"};
         String[][] tableContent = new String[list.size()][tableColumns.length];
         list.forEach((key, hospital) -> {
@@ -86,6 +84,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
         });
         
         hospitalsTable.setModel(new DefaultTableModel(tableContent, tableColumns));
+        
+        // Hide ID column
+        hospitalsTable.getColumnModel().getColumn(0).setMinWidth(0);
+        hospitalsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        hospitalsTable.getColumnModel().getColumn(0).setWidth(0);
     }
 
     /**
@@ -105,8 +108,6 @@ public class HospitalsPanel extends javax.swing.JPanel {
         communityComboBox = new javax.swing.JComboBox<>();
         cityLabel = new javax.swing.JLabel();
         cityComboBox = new javax.swing.JComboBox<>();
-        zipcodeLabel = new javax.swing.JLabel();
-        zipcodeTxt = new javax.swing.JTextField();
         doctorLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         doctorsList = new javax.swing.JList<>();
@@ -125,7 +126,7 @@ public class HospitalsPanel extends javax.swing.JPanel {
         HospitalsOuterPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         addHospitalPanel.setPreferredSize(new java.awt.Dimension(900, 600));
-        addHospitalPanel.setLayout(new java.awt.GridLayout(5, 2));
+        addHospitalPanel.setLayout(new java.awt.GridLayout(4, 2));
 
         hospitalNameLabel.setText("Hospital Name");
         addHospitalPanel.add(hospitalNameLabel);
@@ -142,10 +143,6 @@ public class HospitalsPanel extends javax.swing.JPanel {
 
         cityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         addHospitalPanel.add(cityComboBox);
-
-        zipcodeLabel.setText("Zipcode");
-        addHospitalPanel.add(zipcodeLabel);
-        addHospitalPanel.add(zipcodeTxt);
 
         doctorLabel.setText("Doctors");
         addHospitalPanel.add(doctorLabel);
@@ -165,6 +162,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
         buttonsPanel.setLayout(new java.awt.GridLayout(1, 3));
 
         updateBtn.setText("Update");
+        updateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateBtnActionPerformed(evt);
+            }
+        });
         buttonsPanel.add(updateBtn);
 
         addBtn.setText("Add");
@@ -224,13 +226,12 @@ public class HospitalsPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void hospitalsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hospitalsTableMouseClicked
-        int selectedId = Integer.parseInt(hospitalsTable.getValueAt(hospitalsTable.getSelectedRow(), 0 ).toString());
+        selectedHospitalId = Integer.parseInt(hospitalsTable.getValueAt(hospitalsTable.getSelectedRow(), 0 ).toString());
 
-        Hospital selectedItem = Database.hospitalList.get(selectedId);
+        Hospital selectedItem = Database.hospitalList.get(selectedHospitalId);
 
         hospitalNameTxt.setText(selectedItem.getName());
         communityComboBox.setSelectedItem(Database.communityList.get(selectedItem.getCommunityId()).getCommunityName());
-        zipcodeTxt.setText(Database.communityList.get(selectedItem.getCommunityId()).getZipcode());
         cityComboBox.setSelectedItem(Database.cityList.get(selectedItem.getCommunityId()).getCityName());
         
         // set doctors belongs to selected hospital
@@ -254,13 +255,20 @@ public class HospitalsPanel extends javax.swing.JPanel {
     private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
         hospitalNameTxt.setText("");
         communityComboBox.setSelectedIndex(0);
-        zipcodeTxt.setText("");
         cityComboBox.setSelectedIndex(0);
         doctorsList.setSelectedIndices(new int[0]);
         hospitalsTable.getSelectionModel().clearSelection();
         updateBtn.setVisible(false);
         deleteBtn.setVisible(false);
     }//GEN-LAST:event_resetBtnActionPerformed
+
+    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+        Hospital selectedHospital = Database.hospitalList.get(selectedHospitalId);
+        selectedHospital.setName(hospitalNameTxt.getText());
+        selectedHospital.setCommunityId(communityComboBox.getSelectedIndex()-1);
+        selectedHospital.setDoctorIds(Utility.convertIntegerListToIntArray(doctorsList.getSelectedIndices()));
+        setHospitalsTable();
+    }//GEN-LAST:event_updateBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -282,7 +290,5 @@ public class HospitalsPanel extends javax.swing.JPanel {
     private javax.swing.JButton resetBtn;
     private javax.swing.JScrollPane scrollTablePanel;
     private javax.swing.JButton updateBtn;
-    private javax.swing.JLabel zipcodeLabel;
-    private javax.swing.JTextField zipcodeTxt;
     // End of variables declaration//GEN-END:variables
 }

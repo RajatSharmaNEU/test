@@ -69,7 +69,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="2"/>
-            <Property name="rows" type="int" value="5"/>
+            <Property name="rows" type="int" value="4"/>
           </Layout>
           <SubComponents>
             <Component class="javax.swing.JLabel" name="hospitalNameLabel">
@@ -118,13 +118,6 @@
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
-            </Component>
-            <Component class="javax.swing.JLabel" name="zipcodeLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Zipcode"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="zipcodeTxt">
             </Component>
             <Component class="javax.swing.JLabel" name="doctorLabel">
               <Properties>
@@ -179,6 +172,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Update"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateBtnActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="addBtn">
               <Properties>

@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 public class Database {   
     // Initial IDs
     private static int lastPersonId = 0;
+    private static int lastDoctorId = 0;
+    private static int lastPatientId = 0;
     private static int lastHouseId = 0;
     private static int lastCityId = 0;
     private static int lastCommunityId = 0;
@@ -41,6 +43,8 @@ public class Database {
     public static HashMap<Integer,Hospital> hospitalList = new HashMap<>();
     public static HashMap<Integer,VitalSign> vitalSignList= new HashMap<>();
     public static HashMap<Integer,Person> personList = new HashMap<>();
+    public static HashMap<Integer,Integer> doctorList = new HashMap<>();
+    public static HashMap<Integer,Integer> patientList = new HashMap<>();
     public static HashMap<Integer,Encounter> encounterList = new HashMap<>();  
     
     // Create Instance Methods
@@ -57,18 +61,18 @@ public class Database {
         return hospitalList.put(lastHospitalId, new Hospital(lastHospitalId++, name, communityId, doctorIds));
     }
     public static Doctor createDoctor(String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
-        Doctor doctor = new Doctor(lastPersonId, name, userName, password, age, gender, houseId, hospitalIds);
-        personList.put(lastPersonId, doctor );
-        lastPersonId++;
+        Doctor doctor = new Doctor(lastDoctorId, lastPersonId, name, userName, password, age, gender, houseId, hospitalIds);
+        personList.put(lastPersonId, doctor);
+        doctorList.put(lastDoctorId++, lastPersonId++);
         return doctor;
     }
     public static VitalSign createVitalSign(double temperature, String bloodPressure, int heartRate){
         return vitalSignList.put(lastVitalSignId, new VitalSign(lastVitalSignId++, temperature, bloodPressure, heartRate));
     }
     public static Patient createPatient(String name, String userName, String password, int age, String gender, int houseId) {
-        Patient patient = new Patient(lastPersonId, name, userName, password, age, gender, houseId);
+        Patient patient = new Patient(lastPatientId, lastPersonId, name, userName, password, age, gender, houseId);
         personList.put(lastPersonId, patient);
-        lastPersonId++;
+        patientList.put(lastPatientId++, lastPersonId++);
         return patient;
     }
     public static Person createAdmin(String name, String userName, String password, String role, int age, String gender, int houseId) {
