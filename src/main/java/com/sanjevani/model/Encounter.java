@@ -13,7 +13,7 @@ public class Encounter {
     private int patientId;
     private int vitalSignId;
     private String dateOfEncounter;
-    private String status; //can be enum("accepted","rejected","pending")
+    private String status;
     private int doctorId;
     private int hospitalId;
 

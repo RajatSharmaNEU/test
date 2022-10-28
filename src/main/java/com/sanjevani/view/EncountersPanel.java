@@ -4,6 +4,16 @@
  */
 package com.sanjevani.view;
 
+import com.sanjevani.database.Database;
+import com.sanjevani.model.Community;
+import com.sanjevani.model.Encounter;
+import com.sanjevani.model.Hospital;
+import com.sanjevani.model.House;
+import com.sanjevani.model.Person;
+import com.sanjevani.model.VitalSign;
+import java.util.HashMap;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rajatsharma
@@ -11,10 +21,38 @@ package com.sanjevani.view;
 public class EncountersPanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form EncountersPanel
+     * Creates new form HospitalsPanel
      */
     public EncountersPanel() {
         initComponents();
+        setEncounterTable(Database.encounterList);
+    }
+    
+    private void setEncounterTable(HashMap<Integer,Encounter> list) {
+        String[] tableColumns = {"Patient Name", "Age", "Gender", "Temperatire", "Blood Pressure", "Heart Rate", "Encounter Date", "Status", "Doctor Name", "Hospital Name"};
+        String[][] tableContent = new String[list.size()][tableColumns.length];
+
+        list.forEach((key, encounter) -> {
+            Person patient = Database.personList.get(encounter.getPatientId());
+            VitalSign vitalSign = Database.vitalSignList.get(encounter.getVitalSignId());
+            Person doctor = Database.personList.get(encounter.getDoctorId());
+            Hospital hospital = Database.hospitalList.get(encounter.getHospitalId());
+            
+            tableContent[key][0] = patient.getName();
+            tableContent[key][1] = String.valueOf(patient.getAge());
+            tableContent[key][2] = patient.getGender();
+            tableContent[key][3] = String.valueOf(vitalSign.getTemperature());
+            tableContent[key][4] = vitalSign.getBloodPressure();
+            tableContent[key][5] = String.valueOf(vitalSign.getHeartRate());
+            tableContent[key][6] = encounter.getDateOfEncounter();
+            tableContent[key][7] = encounter.getStatus();
+            
+            tableContent[key][8] = doctor.getName();
+            tableContent[key][9] = hospital.getName();
+            
+        });
+        
+        encounterTable.setModel(new DefaultTableModel(tableContent, tableColumns));
     }
 
     /**
@@ -26,20 +64,41 @@ public class EncountersPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        EncounterOuterPanel = new javax.swing.JPanel();
+        EncountersOuterPanel = new javax.swing.JPanel();
+        addEncounterPanel = new javax.swing.JPanel();
+        scrollTablePanel = new javax.swing.JScrollPane();
+        encounterTable = new javax.swing.JTable();
 
-        EncounterOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Encounters"));
+        EncountersOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Encounters"));
+        EncountersOuterPanel.setLayout(new java.awt.GridLayout(2, 1));
 
-        javax.swing.GroupLayout EncounterOuterPanelLayout = new javax.swing.GroupLayout(EncounterOuterPanel);
-        EncounterOuterPanel.setLayout(EncounterOuterPanelLayout);
-        EncounterOuterPanelLayout.setHorizontalGroup(
-            EncounterOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 905, Short.MAX_VALUE)
+        javax.swing.GroupLayout addEncounterPanelLayout = new javax.swing.GroupLayout(addEncounterPanel);
+        addEncounterPanel.setLayout(addEncounterPanelLayout);
+        addEncounterPanelLayout.setHorizontalGroup(
+            addEncounterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 878, Short.MAX_VALUE)
         );
-        EncounterOuterPanelLayout.setVerticalGroup(
-            EncounterOuterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 409, Short.MAX_VALUE)
+        addEncounterPanelLayout.setVerticalGroup(
+            addEncounterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 439, Short.MAX_VALUE)
         );
+
+        EncountersOuterPanel.add(addEncounterPanel);
+
+        encounterTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollTablePanel.setViewportView(encounterTable);
+
+        EncountersOuterPanel.add(scrollTablePanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -47,20 +106,23 @@ public class EncountersPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(EncounterOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(EncountersOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(EncounterOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(EncountersOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel EncounterOuterPanel;
+    private javax.swing.JPanel EncountersOuterPanel;
+    private javax.swing.JPanel addEncounterPanel;
+    private javax.swing.JTable encounterTable;
+    private javax.swing.JScrollPane scrollTablePanel;
     // End of variables declaration//GEN-END:variables
 }

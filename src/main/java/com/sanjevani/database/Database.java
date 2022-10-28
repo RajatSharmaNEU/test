@@ -127,8 +127,8 @@ public class Database {
     Patient patient2 = createPatient("Yash Pawar", "yashpawar", "test@1234", 25, "Male", 3);
     
     // Encounter Data
-    Encounter encounter1 = createEncounter(0, 0, "08-23-2022", "Pending", 0, 0);
-    Encounter encounter2 = createEncounter(1, 1, "09-26-2022", "Pending", 1, 1);    
+    Encounter encounter1 = createEncounter(2, 0, "08-23-2022", "Pending", 0, 0);
+    Encounter encounter2 = createEncounter(3, 1, "09-26-2022", "Pending", 1, 1);    
     
     // Admin Data
     Person systemAdmin = createAdmin("Rajat Sharma", "rajatsharma", "test@1234", "SystemAdmin", 30, "Male", 4);
