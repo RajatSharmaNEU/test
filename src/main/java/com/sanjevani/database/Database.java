@@ -97,7 +97,7 @@ public class Database {
     
     // Hospital Data
     Hospital hospital1 = createHospital("Max Hospital", 0, Arrays.asList(0,1));
-    Hospital hospital2 = createHospital("Fortis Hospital", 1, Arrays.asList(0,1));
+    Hospital hospital2 = createHospital("Fortis Hospital", 1, Arrays.asList(1));
     
     // House Data
     // Patient House
