@@ -64,6 +64,10 @@ public class HospitalsPanel extends javax.swing.JPanel {
             }
         });
         doctorsList.setModel(doctorsListModel);
+        
+        // hide update and delete btn
+        updateBtn.setVisible(false);
+        deleteBtn.setVisible(false);
     }
     
     
@@ -109,7 +113,8 @@ public class HospitalsPanel extends javax.swing.JPanel {
         buttonsPanel = new javax.swing.JPanel();
         updateBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
-        cancelBtn = new javax.swing.JButton();
+        resetBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         scrollTablePanel = new javax.swing.JScrollPane();
         hospitalsTable = new javax.swing.JTable();
 
@@ -165,8 +170,16 @@ public class HospitalsPanel extends javax.swing.JPanel {
         addBtn.setText("Add");
         buttonsPanel.add(addBtn);
 
-        cancelBtn.setText("Cancel");
-        buttonsPanel.add(cancelBtn);
+        resetBtn.setText("Reset");
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
+        buttonsPanel.add(resetBtn);
+
+        deleteBtn.setText("Delete");
+        buttonsPanel.add(deleteBtn);
 
         HospitalsOuterPanel.add(buttonsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 409, 915, 60));
 
@@ -235,8 +248,19 @@ public class HospitalsPanel extends javax.swing.JPanel {
         
         // Hide and Show Button
         updateBtn.setVisible(true);
-        cancelBtn.setVisible(true);
+        deleteBtn.setVisible(true);
     }//GEN-LAST:event_hospitalsTableMouseClicked
+
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
+        hospitalNameTxt.setText("");
+        communityComboBox.setSelectedIndex(0);
+        zipcodeTxt.setText("");
+        cityComboBox.setSelectedIndex(0);
+        doctorsList.setSelectedIndices(new int[0]);
+        hospitalsTable.getSelectionModel().clearSelection();
+        updateBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+    }//GEN-LAST:event_resetBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -244,17 +268,18 @@ public class HospitalsPanel extends javax.swing.JPanel {
     private javax.swing.JButton addBtn;
     private javax.swing.JPanel addHospitalPanel;
     private javax.swing.JPanel buttonsPanel;
-    private javax.swing.JButton cancelBtn;
     private javax.swing.JComboBox<String> cityComboBox;
     private javax.swing.JLabel cityLabel;
     private javax.swing.JComboBox<String> communityComboBox;
     private javax.swing.JLabel communityLabel;
+    private javax.swing.JButton deleteBtn;
     private javax.swing.JLabel doctorLabel;
     private javax.swing.JList<String> doctorsList;
     private javax.swing.JLabel hospitalNameLabel;
     private javax.swing.JTextField hospitalNameTxt;
     private javax.swing.JTable hospitalsTable;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton resetBtn;
     private javax.swing.JScrollPane scrollTablePanel;
     private javax.swing.JButton updateBtn;
     private javax.swing.JLabel zipcodeLabel;
