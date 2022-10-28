@@ -84,13 +84,23 @@ public class HospitalsPanel extends javax.swing.JPanel {
         });
         
         hospitalsTable.setModel(new DefaultTableModel(tableContent, tableColumns));
+        resetHospitalForm();
+    }
+
+    private void resetHospitalForm() {
+        hospitalNameTxt.setText("");
+        communityComboBox.setSelectedIndex(0);
+        cityComboBox.setSelectedIndex(0);
+        doctorsList.setSelectedIndices(new int[0]);
+        hospitalsTable.getSelectionModel().clearSelection();
+        updateBtn.setVisible(false);
+        deleteBtn.setVisible(false);
         
         // Hide ID column
         hospitalsTable.getColumnModel().getColumn(0).setMinWidth(0);
         hospitalsTable.getColumnModel().getColumn(0).setMaxWidth(0);
         hospitalsTable.getColumnModel().getColumn(0).setWidth(0);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -170,6 +180,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
         buttonsPanel.add(updateBtn);
 
         addBtn.setText("Add");
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtnActionPerformed(evt);
+            }
+        });
         buttonsPanel.add(addBtn);
 
         resetBtn.setText("Reset");
@@ -239,10 +254,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
         int[] indices = new int[selectedItem.getDoctorIds().size()];        
         for(Integer doctorId: selectedItem.getDoctorIds()) {
             System.out.println(doctorId);
-            if(Database.personList.containsKey(doctorId)){
-                int index = ((DefaultListModel)doctorsList.getModel()).indexOf(Database.personList.get(doctorId).getName());
+            if(Database.doctorList.containsKey(doctorId)){
+                int personId = Database.doctorList.get(doctorId);
+                String personName = Database.personList.get(personId).getName();
+                int index = ((DefaultListModel)doctorsList.getModel()).indexOf(personName);
                 indices[i++] = index;
-
             }
         }
         doctorsList.setSelectedIndices(indices);
@@ -253,13 +269,7 @@ public class HospitalsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_hospitalsTableMouseClicked
 
     private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
-        hospitalNameTxt.setText("");
-        communityComboBox.setSelectedIndex(0);
-        cityComboBox.setSelectedIndex(0);
-        doctorsList.setSelectedIndices(new int[0]);
-        hospitalsTable.getSelectionModel().clearSelection();
-        updateBtn.setVisible(false);
-        deleteBtn.setVisible(false);
+        resetHospitalForm();
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
@@ -269,6 +279,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
         selectedHospital.setDoctorIds(Utility.convertIntegerListToIntArray(doctorsList.getSelectedIndices()));
         setHospitalsTable();
     }//GEN-LAST:event_updateBtnActionPerformed
+
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        Database.createHospital(hospitalNameTxt.getText(), communityComboBox.getSelectedIndex()-1, Utility.convertIntegerListToIntArray(doctorsList.getSelectedIndices()));
+        setHospitalsTable();
+    }//GEN-LAST:event_addBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
