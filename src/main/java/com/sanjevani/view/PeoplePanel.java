@@ -61,11 +61,15 @@ public class PeoplePanel extends javax.swing.JPanel {
     
     private void resetPersonForm() {
         personNameTxt.setText("");
+        emailIdTxt.setText("");
+        passwordTxt.setText("");
         ageTxt.setText("");
         roleComboBox.setSelectedIndex(0);
         genderComboBox.setSelectedIndex(0);
         houseTxt.setText("");
         communityComboBox.setSelectedIndex(0);
+        peopleTable.getSelectionModel().clearSelection();
+        
         updateBtn.setVisible(false);
         deleteBtn.setVisible(false);
         
@@ -77,7 +81,7 @@ public class PeoplePanel extends javax.swing.JPanel {
     
     private void setPeopleTable() {
         HashMap<Integer,Person> list = Database.personList;
-        String[] tableColumns = {"Id", "Person Name", "Age", "Gender", "Role", "House", "Community Name", "City Name", "Zip Code"};
+        String[] tableColumns = {"Id", "Person Name", "EmailId","Age", "Gender", "Role", "House", "Community Name", "City Name", "Zip Code"};
         String[][] tableContent = new String[list.size()][tableColumns.length];
 
         int key = 0;
@@ -85,18 +89,19 @@ public class PeoplePanel extends javax.swing.JPanel {
         for(Map.Entry<Integer, Person> entry: list.entrySet()) {
             Person person = entry.getValue();
             tableContent[key][0] = String.valueOf(person.getPersonId());
-            tableContent[key][1] = person.getName();
-            tableContent[key][2] = String.valueOf(Database.personList.get(person.getPersonId()).getAge());
-            tableContent[key][3] = Database.personList.get(person.getPersonId()).getGender();
-            tableContent[key][4] = Database.personList.get(person.getPersonId()).getRole();
+            tableContent[key][1] = person.getEmailId();
+            tableContent[key][2] = person.getName();
+            tableContent[key][3] = String.valueOf(Database.personList.get(person.getPersonId()).getAge());
+            tableContent[key][4] = Database.personList.get(person.getPersonId()).getGender();
+            tableContent[key][5] = Database.personList.get(person.getPersonId()).getRole();
             House house = Database.houseList.get(person.getHouseId());
             
-            tableContent[key][5] = house.getAddress();
+            tableContent[key][6] = house.getAddress();
             
             Community community = Database.communityList.get(house.getCommunityId());
-            tableContent[key][6] = community.getCommunityName();            
-            tableContent[key][7] = Database.cityList.get(community.getCityId()).getCityName();
-            tableContent[key][8] = String.valueOf(community.getZipcode());
+            tableContent[key][7] = community.getCommunityName();            
+            tableContent[key][8] = Database.cityList.get(community.getCityId()).getCityName();
+            tableContent[key][9] = String.valueOf(community.getZipcode());
             key++;
         }
         
@@ -117,6 +122,10 @@ public class PeoplePanel extends javax.swing.JPanel {
         AddPeoplePanel = new javax.swing.JPanel();
         personNameLabel = new javax.swing.JLabel();
         personNameTxt = new javax.swing.JTextField();
+        emailIdLabel = new javax.swing.JLabel();
+        emailIdTxt = new javax.swing.JTextField();
+        passwordLabel = new javax.swing.JLabel();
+        passwordTxt = new javax.swing.JTextField();
         ageLabel = new javax.swing.JLabel();
         ageTxt = new javax.swing.JTextField();
         roleLabel = new javax.swing.JLabel();
@@ -138,11 +147,25 @@ public class PeoplePanel extends javax.swing.JPanel {
         PeopleOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage People"));
         PeopleOuterPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        AddPeoplePanel.setLayout(new java.awt.GridLayout(6, 2));
+        AddPeoplePanel.setLayout(new java.awt.GridLayout(8, 2));
 
         personNameLabel.setText("Doctor Name");
         AddPeoplePanel.add(personNameLabel);
         AddPeoplePanel.add(personNameTxt);
+
+        emailIdLabel.setText("EmailID");
+        AddPeoplePanel.add(emailIdLabel);
+        AddPeoplePanel.add(emailIdTxt);
+
+        passwordLabel.setText("Password");
+        AddPeoplePanel.add(passwordLabel);
+
+        passwordTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordTxtActionPerformed(evt);
+            }
+        });
+        AddPeoplePanel.add(passwordTxt);
 
         ageLabel.setText("Age");
         AddPeoplePanel.add(ageLabel);
@@ -172,7 +195,7 @@ public class PeoplePanel extends javax.swing.JPanel {
 
         PeopleOuterPanel.add(AddPeoplePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 19, 900, 360));
 
-        buttonPanel.setLayout(new java.awt.GridLayout());
+        buttonPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         updateBtn.setText("Update");
         updateBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -251,6 +274,8 @@ public class PeoplePanel extends javax.swing.JPanel {
         Person selectedItem = Database.personList.get(selectedPersonId);
 
         personNameTxt.setText(selectedItem.getName());
+        emailIdTxt.setText(selectedItem.getEmailId());
+        passwordTxt.setText(selectedItem.getPassword());
         ageTxt.setText(String.valueOf(selectedItem.getAge()));
         genderComboBox.setSelectedItem(selectedItem.getGender());
         roleComboBox.setSelectedItem(selectedItem.getRole());
@@ -270,6 +295,8 @@ public class PeoplePanel extends javax.swing.JPanel {
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         Person selectedPerson = Database.personList.get(selectedPersonId);
         selectedPerson.setName(personNameTxt.getText());
+        selectedPerson.setEmailId(emailIdTxt.getText());
+        selectedPerson.setPassword(passwordTxt.getText());
         selectedPerson.setAge(Integer.parseInt(ageTxt.getText()));
         selectedPerson.setRole(roleComboBox.getSelectedItem().toString());
         selectedPerson.setGender(genderComboBox.getSelectedItem().toString());
@@ -287,8 +314,8 @@ public class PeoplePanel extends javax.swing.JPanel {
         // TODO: Fix lasthouseID
         Database.createAdmin(
                 personNameTxt.getText(),
-                "",
-                "",
+                emailIdTxt.getText(),
+                passwordTxt.getText(),
                 roleComboBox.getSelectedItem().toString(),
                 Integer.parseInt(ageTxt.getText()),
                 genderComboBox.getSelectedItem().toString(),
@@ -306,6 +333,10 @@ public class PeoplePanel extends javax.swing.JPanel {
         setPeopleTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 
+    private void passwordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordTxtActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AddPeoplePanel;
@@ -317,10 +348,14 @@ public class PeoplePanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> communityComboBox;
     private javax.swing.JLabel communityLabel;
     private javax.swing.JButton deleteBtn;
+    private javax.swing.JLabel emailIdLabel;
+    private javax.swing.JTextField emailIdTxt;
     private javax.swing.JComboBox<String> genderComboBox;
     private javax.swing.JLabel genderLabel;
     private javax.swing.JLabel houseLabel;
     private javax.swing.JTextField houseTxt;
+    private javax.swing.JLabel passwordLabel;
+    private javax.swing.JTextField passwordTxt;
     private javax.swing.JTable peopleTable;
     private javax.swing.JLabel personNameLabel;
     private javax.swing.JTextField personNameTxt;

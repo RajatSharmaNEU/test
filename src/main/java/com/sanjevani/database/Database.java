@@ -58,21 +58,21 @@ public class Database {
     public static Hospital createHospital(String name, int communityId, List<Integer> doctorIds) {
         return hospitalList.put(lastHospitalId, new Hospital(lastHospitalId++, name, communityId, doctorIds));
     }
-    public static Doctor createDoctor(String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
-        Doctor doctor = new Doctor(lastPersonId, name, userName, password, age, gender, houseId, hospitalIds);
+    public static Doctor createDoctor(String name, String emailId, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        Doctor doctor = new Doctor(lastPersonId, name, emailId, password, age, gender, houseId, hospitalIds);
         personList.put(lastPersonId++, doctor);
         return doctor;
     }
     public static VitalSign createVitalSign(double temperature, String bloodPressure, int heartRate){
         return vitalSignList.put(lastVitalSignId, new VitalSign(lastVitalSignId++, temperature, bloodPressure, heartRate));
     }
-    public static Patient createPatient(String name, String userName, String password, int age, String gender, int houseId) {
-        Patient patient = new Patient(lastPersonId, name, userName, password, age, gender, houseId, null);
+    public static Patient createPatient(String name, String emailId, String password, int age, String gender, int houseId) {
+        Patient patient = new Patient(lastPersonId, name, emailId, password, age, gender, houseId, null);
         personList.put(lastPersonId++, patient);
         return patient;
     }
-    public static Person createAdmin(String name, String userName, String password, String role, int age, String gender, int houseId) {
-        return personList.put(lastPersonId, new Person(lastPersonId++, name, userName, password, role, age, gender, houseId, null));
+    public static Person createAdmin(String name, String emailId, String password, String role, int age, String gender, int houseId) {
+        return personList.put(lastPersonId, new Person(lastPersonId++, name, emailId, password, role, age, gender, houseId, null));
     }
     public static Encounter createEncounter(int patientId, int vitalSignId, String dateOfEncounter, String status, int doctorId, int hospitalId) {
         return encounterList.put(lastEncounterId, new Encounter(lastEncounterId++, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
@@ -125,8 +125,8 @@ public class Database {
     
     
     // Doctor Data
-    Doctor doctor1 = createDoctor("Dr. Rajeev Aggarwal", "rajeevAggarwal", "test@1234", 30, "Male", 0, Arrays.asList(0));
-    Doctor doctor2 = createDoctor("Dr. Sunita Williams", "sunitawilliams", "test@1234", 25, "Female", 1, Arrays.asList(0,1));
+    Doctor doctor1 = createDoctor("Dr. Rajeev Aggarwal", "rajeevAggarwal@gmail.com", "test@1234", 30, "Male", 0, Arrays.asList(0));
+    Doctor doctor2 = createDoctor("Dr. Sunita Williams", "sunitawilliams@gmail.com", "test@1234", 25, "Female", 1, Arrays.asList(0,1));
     
     // Vital Sign Data
     VitalSign vitalSign1 = createVitalSign(98.97, "80-120", 72);
@@ -141,14 +141,14 @@ public class Database {
     Encounter encounter2 = createEncounter(3, 1, "09-26-2022", "Pending", 1, 1);    
     
     // Admin Data
-    Person systemAdmin = createAdmin("Rajat Sharma", "rajatsharma", "test@1234", "SystemAdmin", 30, "Male", 4);
-    Person communityAdmin = createAdmin("Gaurang Londhe", "rajatsharma", "test@1234", "CommunityAdmin", 30, "Male", 5);
-    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "rajatsharma", "test@1234", "HospitalAdmin", 30, "Male", 6);
+    Person systemAdmin = createAdmin("Rajat Sharma", "rajatsharma@gmail.com", "test@1234", "SystemAdmin", 30, "Male", 4);
+    Person communityAdmin = createAdmin("Gaurang Londhe", "gaurangLondhe@gmail.com", "test@1234", "CommunityAdmin", 30, "Male", 5);
+    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "chakradharGrandhi@gmail.com", "test@1234", "HospitalAdmin", 30, "Male", 6);
     
     
     // More Doctor Data
-    Doctor doctor3 = createDoctor("Dr. Diljit Singh", "diljitsingh", "test@1234", 30, "Male", 0, Arrays.asList(0));
-    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh", "test@1234", 25, "Female", 1, Arrays.asList(1));
+    Doctor doctor3 = createDoctor("Dr. Diljit Singh", "diljitsingh@gmail.com", "test@1234", 30, "Male", 0, Arrays.asList(0));
+    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh@gmail.com", "test@1234", 25, "Female", 1, Arrays.asList(1));
     }
 }
 

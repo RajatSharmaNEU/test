@@ -13,7 +13,7 @@ import java.util.List;
 public class Person {
     private int personId;
     private String name;
-    private String userName;
+    private String emailId;
     private String password;
     private String role;
     private int age;
@@ -21,10 +21,10 @@ public class Person {
     private int houseId;
     private List<Integer> hospitalIds;
     
-    public Person(int personId, String name, String userName, String password, String role, int age, String gender, int houseId, List<Integer> hospitalIds) {
+    public Person(int personId, String name, String emailId, String password, String role, int age, String gender, int houseId, List<Integer> hospitalIds) {
         this.personId = personId;
         this.name = name;
-        this.userName = userName;
+        this.emailId = emailId;
         this.password = password;
         this.role = role;
         this.age = age;
@@ -49,12 +49,12 @@ public class Person {
         this.name = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getEmailId() {
+        return emailId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
     }
 
     public String getPassword() {
