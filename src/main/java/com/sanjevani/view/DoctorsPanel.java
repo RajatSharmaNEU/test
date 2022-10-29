@@ -10,7 +10,6 @@ import com.sanjevani.model.Hospital;
 import com.sanjevani.model.House;
 import com.sanjevani.model.Person;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
@@ -99,6 +98,9 @@ public class DoctorsPanel extends javax.swing.JPanel {
     
     private void resetDoctorForm() {
         doctorNameTxt.setText("");
+        ageTxt.setText("");
+        genderComboBox.setSelectedIndex(0);
+        houseTxt.setText("");
         communityComboBox.setSelectedIndex(0);
         hospitalsList.setSelectedIndices(new int[0]);
         doctorsTable.getSelectionModel().clearSelection();
