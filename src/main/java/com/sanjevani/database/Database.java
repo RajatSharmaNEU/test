@@ -43,8 +43,6 @@ public class Database {
     public static HashMap<Integer,Hospital> hospitalList = new HashMap<>();
     public static HashMap<Integer,VitalSign> vitalSignList= new HashMap<>();
     public static HashMap<Integer,Person> personList = new HashMap<>();
-    public static HashMap<Integer,Integer> doctorList = new HashMap<>();
-    public static HashMap<Integer,Integer> patientList = new HashMap<>();
     public static HashMap<Integer,Encounter> encounterList = new HashMap<>();  
     
     // Create Instance Methods
@@ -61,18 +59,16 @@ public class Database {
         return hospitalList.put(lastHospitalId, new Hospital(lastHospitalId++, name, communityId, doctorIds));
     }
     public static Doctor createDoctor(String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
-        Doctor doctor = new Doctor(lastDoctorId, lastPersonId, name, userName, password, age, gender, houseId, hospitalIds);
-        personList.put(lastPersonId, doctor);
-        doctorList.put(lastDoctorId++, lastPersonId++);
+        Doctor doctor = new Doctor(lastPersonId, name, userName, password, age, gender, houseId, hospitalIds);
+        personList.put(lastPersonId++, doctor);
         return doctor;
     }
     public static VitalSign createVitalSign(double temperature, String bloodPressure, int heartRate){
         return vitalSignList.put(lastVitalSignId, new VitalSign(lastVitalSignId++, temperature, bloodPressure, heartRate));
     }
     public static Patient createPatient(String name, String userName, String password, int age, String gender, int houseId) {
-        Patient patient = new Patient(lastPatientId, lastPersonId, name, userName, password, age, gender, houseId);
-        personList.put(lastPersonId, patient);
-        patientList.put(lastPatientId++, lastPersonId++);
+        Patient patient = new Patient(lastPersonId, name, userName, password, age, gender, houseId);
+        personList.put(lastPersonId++, patient);
         return patient;
     }
     public static Person createAdmin(String name, String userName, String password, String role, int age, String gender, int houseId) {
@@ -100,8 +96,8 @@ public class Database {
     Community community2 = createCommunity("Mission Main", 1, "02122");
     
     // Hospital Data
-    Hospital hospital1 = createHospital("Max Hospital", 0, Arrays.asList(0,1));
-    Hospital hospital2 = createHospital("Fortis Hospital", 1, Arrays.asList(1));
+    Hospital hospital1 = createHospital("Max Hospital", 0, Arrays.asList(0,1, 7));
+    Hospital hospital2 = createHospital("Fortis Hospital", 1, Arrays.asList(1, 8));
     
     // House Data
     // Patient House
@@ -138,6 +134,11 @@ public class Database {
     Person systemAdmin = createAdmin("Rajat Sharma", "rajatsharma", "test@1234", "SystemAdmin", 30, "Male", 4);
     Person communityAdmin = createAdmin("Gaurang Londhe", "rajatsharma", "test@1234", "CommunityAdmin", 30, "Male", 5);
     Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "rajatsharma", "test@1234", "HospitalAdmin", 30, "Male", 6);
+    
+    
+    // More Doctor Data
+    Doctor doctor3 = createDoctor("Dr. Diljit Singh", "diljitsingh", "test@1234", 30, "Male", 0, Arrays.asList(0,1));
+    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh", "test@1234", 25, "Female", 1, Arrays.asList(0,1));
     }
 }
 
