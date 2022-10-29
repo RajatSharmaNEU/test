@@ -32,7 +32,7 @@ public class Database {
     private static int lastCityId = 0;
     private static int lastCommunityId = 0;
     private static int lastHospitalId = 0;
-    private static int lastVitalSignId = 0;
+    public static int lastVitalSignId = 0;
     private static int lastEncounterId = 0;
     
     // Tables
