@@ -12,18 +12,7 @@ import java.util.List;
  */
 public class Doctor extends Person {
     
-    private List<Integer> hospitalIds;
-    
     public Doctor(int personId, String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
-        super(personId, name, userName, password, "Doctor", age, gender, houseId);
-        this.hospitalIds = hospitalIds;
-    }
-    
-    public List<Integer> getHospitalIds() {
-        return hospitalIds;
-    }
-
-    public void setHospitalIds(List<Integer> hospitalIds) {
-        this.hospitalIds = hospitalIds;
+        super(personId, name, userName, password, "Doctor", age, gender, houseId, hospitalIds);
     }
 }

@@ -4,6 +4,8 @@
  */
 package com.sanjevani.model;
 
+import java.util.List;
+
 /**
  *
  * @author rajatsharma
@@ -17,8 +19,9 @@ public class Person {
     private int age;
     private String gender;
     private int houseId;
+    private List<Integer> hospitalIds;
     
-    public Person(int personId, String name, String userName, String password, String role, int age, String gender, int houseId) {
+    public Person(int personId, String name, String userName, String password, String role, int age, String gender, int houseId, List<Integer> hospitalIds) {
         this.personId = personId;
         this.name = name;
         this.userName = userName;
@@ -27,6 +30,7 @@ public class Person {
         this.age = age;
         this.gender = gender;
         this.houseId = houseId;
+        this.hospitalIds = hospitalIds;
     }
 
     public int getPersonId() {
@@ -91,5 +95,13 @@ public class Person {
 
     public void setHouseId(int houseId) {
         this.houseId = houseId;
+    }
+    
+    public List<Integer> getHospitalIds() {
+        return hospitalIds;
+    }
+
+    public void setHospitalIds(List<Integer> hospitalIds) {
+        this.hospitalIds = hospitalIds;
     }
 }

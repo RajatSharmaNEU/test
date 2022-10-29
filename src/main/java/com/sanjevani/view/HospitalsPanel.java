@@ -180,7 +180,7 @@ public class HospitalsPanel extends javax.swing.JPanel {
 
         addHospitalPanel.add(jScrollPane1);
 
-        HospitalsOuterPanel.add(addHospitalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 19, 915, 380));
+        HospitalsOuterPanel.add(addHospitalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 19, -1, 380));
 
         buttonsPanel.setPreferredSize(new java.awt.Dimension(900, 180));
         buttonsPanel.setLayout(new java.awt.GridLayout(1, 3));

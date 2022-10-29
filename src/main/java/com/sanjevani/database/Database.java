@@ -27,9 +27,7 @@ import java.util.stream.Collectors;
 public class Database {   
     // Initial IDs
     private static int lastPersonId = 0;
-    private static int lastDoctorId = 0;
-    private static int lastPatientId = 0;
-    private static int lastHouseId = 0;
+    public static int lastHouseId = 0;
     private static int lastCityId = 0;
     private static int lastCommunityId = 0;
     private static int lastHospitalId = 0;
@@ -67,12 +65,12 @@ public class Database {
         return vitalSignList.put(lastVitalSignId, new VitalSign(lastVitalSignId++, temperature, bloodPressure, heartRate));
     }
     public static Patient createPatient(String name, String userName, String password, int age, String gender, int houseId) {
-        Patient patient = new Patient(lastPersonId, name, userName, password, age, gender, houseId);
+        Patient patient = new Patient(lastPersonId, name, userName, password, age, gender, houseId, null);
         personList.put(lastPersonId++, patient);
         return patient;
     }
     public static Person createAdmin(String name, String userName, String password, String role, int age, String gender, int houseId) {
-        return personList.put(lastPersonId, new Person(lastPersonId++, name, userName, password, role, age, gender, houseId));
+        return personList.put(lastPersonId, new Person(lastPersonId++, name, userName, password, role, age, gender, houseId, null));
     }
     public static Encounter createEncounter(int patientId, int vitalSignId, String dateOfEncounter, String status, int doctorId, int hospitalId) {
         return encounterList.put(lastEncounterId, new Encounter(lastEncounterId++, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
@@ -115,7 +113,7 @@ public class Database {
     
     
     // Doctor Data
-    Doctor doctor1 = createDoctor("Dr. Rajeev Aggarwal", "rajeevAggarwal", "test@1234", 30, "Male", 0, Arrays.asList(0,1));
+    Doctor doctor1 = createDoctor("Dr. Rajeev Aggarwal", "rajeevAggarwal", "test@1234", 30, "Male", 0, Arrays.asList(0));
     Doctor doctor2 = createDoctor("Dr. Sunita Williams", "sunitawilliams", "test@1234", 25, "Female", 1, Arrays.asList(0,1));
     
     // Vital Sign Data
@@ -137,8 +135,8 @@ public class Database {
     
     
     // More Doctor Data
-    Doctor doctor3 = createDoctor("Dr. Diljit Singh", "diljitsingh", "test@1234", 30, "Male", 0, Arrays.asList(0,1));
-    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh", "test@1234", 25, "Female", 1, Arrays.asList(0,1));
+    Doctor doctor3 = createDoctor("Dr. Diljit Singh", "diljitsingh", "test@1234", 30, "Male", 0, Arrays.asList(0));
+    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh", "test@1234", 25, "Female", 1, Arrays.asList(1));
     }
 }
 
