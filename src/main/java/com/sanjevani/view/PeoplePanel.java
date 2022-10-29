@@ -8,7 +8,12 @@ import com.sanjevani.database.Database;
 import com.sanjevani.model.Community;
 import com.sanjevani.model.House;
 import com.sanjevani.model.Person;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,37 +21,87 @@ import javax.swing.table.DefaultTableModel;
  * @author rajatsharma
  */
 public class PeoplePanel extends javax.swing.JPanel {
-
+    int selectedPersonId;
     /**
      * Creates new form HospitalsPanel
      */
     public PeoplePanel() {
         initComponents();
-        setPeopleTable(Database.personList);
+        setPeopleTable();
+        initializePeopleView();
     }
     
-    private void setPeopleTable(HashMap<Integer,Person> list) {
-        String[] tableColumns = {"Person Name", "Age", "Gender", "Role", "House", "Community Name", "City Name", "Zip Code"};
-        String[][] tableContent = new String[list.size()][tableColumns.length];
+    private void initializePeopleView() {
+        // Populate Roles
+        DefaultComboBoxModel roleModel = new DefaultComboBoxModel();
+        roleModel.removeAllElements();
+        roleModel.addElement("--Select--");
+        
+        for(String role: Database.roles) {
+            roleModel.addElement(role);
+        }
+        
+        roleComboBox.setModel(roleModel);
 
-        list.forEach((key, doctor) -> {
-            tableContent[key][0] = doctor.getName();
-            tableContent[key][1] = String.valueOf(Database.personList.get(doctor.getPersonId()).getAge());
-            tableContent[key][2] = Database.personList.get(doctor.getPersonId()).getGender();
-            tableContent[key][3] = Database.personList.get(doctor.getPersonId()).getRole();
-            
-            House house = Database.houseList.get(doctor.getHouseId());
-            
-            tableContent[key][4] = house.getAddress();
-            
-            Community community = Database.communityList.get(house.getCommunityId());
-            tableContent[key][5] = community.getCommunityName();            
-            tableContent[key][6] = Database.cityList.get(community.getCityId()).getCityName();
-            tableContent[key][7] = String.valueOf(community.getZipcode());
-            
+        // Populate Communities
+        DefaultComboBoxModel communityModel = new DefaultComboBoxModel();
+        communityModel.removeAllElements();
+        communityModel.addElement("--Select--");
+        
+        Database.communityList.forEach((key, community) -> {
+            communityModel.addElement(community.getCommunityName());
         });
         
+        communityComboBox.setModel(communityModel);
+        
+        // hide update and delete btn
+        updateBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+    }
+    
+    private void resetPersonForm() {
+        personNameTxt.setText("");
+        ageTxt.setText("");
+        roleComboBox.setSelectedIndex(0);
+        genderComboBox.setSelectedIndex(0);
+        houseTxt.setText("");
+        communityComboBox.setSelectedIndex(0);
+        updateBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+        
+        // Hide ID column
+        peopleTable.getColumnModel().getColumn(0).setMinWidth(0);
+        peopleTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        peopleTable.getColumnModel().getColumn(0).setWidth(0);
+    }
+    
+    private void setPeopleTable() {
+        HashMap<Integer,Person> list = Database.personList;
+        String[] tableColumns = {"Id", "Person Name", "Age", "Gender", "Role", "House", "Community Name", "City Name", "Zip Code"};
+        String[][] tableContent = new String[list.size()][tableColumns.length];
+
+        int key = 0;
+        
+        for(Map.Entry<Integer, Person> entry: list.entrySet()) {
+            Person person = entry.getValue();
+            tableContent[key][0] = String.valueOf(person.getPersonId());
+            tableContent[key][1] = person.getName();
+            tableContent[key][2] = String.valueOf(Database.personList.get(person.getPersonId()).getAge());
+            tableContent[key][3] = Database.personList.get(person.getPersonId()).getGender();
+            tableContent[key][4] = Database.personList.get(person.getPersonId()).getRole();
+            House house = Database.houseList.get(person.getHouseId());
+            
+            tableContent[key][5] = house.getAddress();
+            
+            Community community = Database.communityList.get(house.getCommunityId());
+            tableContent[key][6] = community.getCommunityName();            
+            tableContent[key][7] = Database.cityList.get(community.getCityId()).getCityName();
+            tableContent[key][8] = String.valueOf(community.getZipcode());
+            key++;
+        }
+        
         peopleTable.setModel(new DefaultTableModel(tableContent, tableColumns));
+        resetPersonForm();
     }
 
     /**
@@ -60,24 +115,98 @@ public class PeoplePanel extends javax.swing.JPanel {
 
         PeopleOuterPanel = new javax.swing.JPanel();
         AddPeoplePanel = new javax.swing.JPanel();
+        personNameLabel = new javax.swing.JLabel();
+        personNameTxt = new javax.swing.JTextField();
+        ageLabel = new javax.swing.JLabel();
+        ageTxt = new javax.swing.JTextField();
+        roleLabel = new javax.swing.JLabel();
+        roleComboBox = new javax.swing.JComboBox<>();
+        genderLabel = new javax.swing.JLabel();
+        genderComboBox = new javax.swing.JComboBox<>();
+        houseLabel = new javax.swing.JLabel();
+        houseTxt = new javax.swing.JTextField();
+        communityLabel = new javax.swing.JLabel();
+        communityComboBox = new javax.swing.JComboBox<>();
+        buttonPanel = new javax.swing.JPanel();
+        updateBtn = new javax.swing.JButton();
+        addBtn = new javax.swing.JButton();
+        resetBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         scrollTablePanel = new javax.swing.JScrollPane();
         peopleTable = new javax.swing.JTable();
 
         PeopleOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage People"));
-        PeopleOuterPanel.setLayout(new java.awt.GridLayout(2, 1));
+        PeopleOuterPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout AddPeoplePanelLayout = new javax.swing.GroupLayout(AddPeoplePanel);
-        AddPeoplePanel.setLayout(AddPeoplePanelLayout);
-        AddPeoplePanelLayout.setHorizontalGroup(
-            AddPeoplePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 878, Short.MAX_VALUE)
-        );
-        AddPeoplePanelLayout.setVerticalGroup(
-            AddPeoplePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 439, Short.MAX_VALUE)
-        );
+        AddPeoplePanel.setLayout(new java.awt.GridLayout(6, 2));
 
-        PeopleOuterPanel.add(AddPeoplePanel);
+        personNameLabel.setText("Doctor Name");
+        AddPeoplePanel.add(personNameLabel);
+        AddPeoplePanel.add(personNameTxt);
+
+        ageLabel.setText("Age");
+        AddPeoplePanel.add(ageLabel);
+        AddPeoplePanel.add(ageTxt);
+
+        roleLabel.setText("Role");
+        AddPeoplePanel.add(roleLabel);
+
+        roleComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        AddPeoplePanel.add(roleComboBox);
+
+        genderLabel.setText("Gender");
+        AddPeoplePanel.add(genderLabel);
+
+        genderComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Select--", "Male", "Female" }));
+        AddPeoplePanel.add(genderComboBox);
+
+        houseLabel.setText("House");
+        AddPeoplePanel.add(houseLabel);
+        AddPeoplePanel.add(houseTxt);
+
+        communityLabel.setText("Community");
+        AddPeoplePanel.add(communityLabel);
+
+        communityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        AddPeoplePanel.add(communityComboBox);
+
+        PeopleOuterPanel.add(AddPeoplePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 19, 900, 360));
+
+        buttonPanel.setLayout(new java.awt.GridLayout());
+
+        updateBtn.setText("Update");
+        updateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(updateBtn);
+
+        addBtn.setText("Add");
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(addBtn);
+
+        resetBtn.setText("Reset");
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(resetBtn);
+
+        deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(deleteBtn);
+
+        PeopleOuterPanel.add(buttonPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 900, 60));
 
         peopleTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,9 +219,14 @@ public class PeoplePanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        peopleTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                peopleTableMouseClicked(evt);
+            }
+        });
         scrollTablePanel.setViewportView(peopleTable);
 
-        PeopleOuterPanel.add(scrollTablePanel);
+        PeopleOuterPanel.add(scrollTablePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 458, 900, 439));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -100,8 +234,7 @@ public class PeoplePanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(PeopleOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(PeopleOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,11 +245,89 @@ public class PeoplePanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void peopleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peopleTableMouseClicked
+        selectedPersonId = Integer.parseInt(peopleTable.getValueAt(peopleTable.getSelectedRow(), 0 ).toString());
+
+        Person selectedItem = Database.personList.get(selectedPersonId);
+
+        personNameTxt.setText(selectedItem.getName());
+        ageTxt.setText(String.valueOf(selectedItem.getAge()));
+        genderComboBox.setSelectedItem(selectedItem.getGender());
+        roleComboBox.setSelectedItem(selectedItem.getRole());
+        
+        House house = Database.houseList.get(selectedItem.getHouseId());
+        
+        houseTxt.setText(house.getAddress());
+        
+        Community community = Database.communityList.get(house.getCommunityId());
+        communityComboBox.setSelectedItem(community.getCommunityName());
+        
+        // Hide and Show Button
+        updateBtn.setVisible(true);
+        deleteBtn.setVisible(true);
+    }//GEN-LAST:event_peopleTableMouseClicked
+
+    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+        Person selectedPerson = Database.personList.get(selectedPersonId);
+        selectedPerson.setName(personNameTxt.getText());
+        selectedPerson.setAge(Integer.parseInt(ageTxt.getText()));
+        selectedPerson.setRole(roleComboBox.getSelectedItem().toString());
+        selectedPerson.setGender(genderComboBox.getSelectedItem().toString());
+        
+        House selectedPersonHouse = Database.houseList.get(selectedPerson.getHouseId());
+        selectedPersonHouse.setAddress(houseTxt.getText());
+        selectedPersonHouse.setCommunityId(communityComboBox.getSelectedIndex()-1);
+        
+        setPeopleTable();
+    }//GEN-LAST:event_updateBtnActionPerformed
+
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        Database.createHouse(communityComboBox.getSelectedIndex()-1, houseTxt.getText());
+
+        // TODO: Fix lasthouseID
+        Database.createAdmin(
+                personNameTxt.getText(),
+                "",
+                "",
+                roleComboBox.getSelectedItem().toString(),
+                Integer.parseInt(ageTxt.getText()),
+                genderComboBox.getSelectedItem().toString(),
+                Database.lastHouseId-1
+        );
+        setPeopleTable();
+    }//GEN-LAST:event_addBtnActionPerformed
+
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
+        resetPersonForm();
+    }//GEN-LAST:event_resetBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        Database.personList.remove(selectedPersonId);
+        setPeopleTable();
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AddPeoplePanel;
     private javax.swing.JPanel PeopleOuterPanel;
+    private javax.swing.JButton addBtn;
+    private javax.swing.JLabel ageLabel;
+    private javax.swing.JTextField ageTxt;
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JComboBox<String> communityComboBox;
+    private javax.swing.JLabel communityLabel;
+    private javax.swing.JButton deleteBtn;
+    private javax.swing.JComboBox<String> genderComboBox;
+    private javax.swing.JLabel genderLabel;
+    private javax.swing.JLabel houseLabel;
+    private javax.swing.JTextField houseTxt;
     private javax.swing.JTable peopleTable;
+    private javax.swing.JLabel personNameLabel;
+    private javax.swing.JTextField personNameTxt;
+    private javax.swing.JButton resetBtn;
+    private javax.swing.JComboBox<String> roleComboBox;
+    private javax.swing.JLabel roleLabel;
     private javax.swing.JScrollPane scrollTablePanel;
+    private javax.swing.JButton updateBtn;
     // End of variables declaration//GEN-END:variables
 }

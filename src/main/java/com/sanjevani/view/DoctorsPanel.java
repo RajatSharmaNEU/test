@@ -320,7 +320,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
             selectedHospitalIds.add(hospitalKeyList.get(index));
         }
         
-        // public static Doctor createDoctor(String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) { 
         Database.createHouse(communityComboBox.getSelectedIndex()-1, houseTxt.getText());
 
         // TODO: Fix lasthouseID

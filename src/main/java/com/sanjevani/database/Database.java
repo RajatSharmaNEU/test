@@ -42,6 +42,7 @@ public class Database {
     public static HashMap<Integer,VitalSign> vitalSignList= new HashMap<>();
     public static HashMap<Integer,Person> personList = new HashMap<>();
     public static HashMap<Integer,Encounter> encounterList = new HashMap<>();  
+    public static String[] roles = {"Doctor", "Patient", "SystemAdmin", "CommunityAdmin", "HospitalAdmin"};
     
     // Create Instance Methods
     public static House createHouse(int communityId, String address) {
