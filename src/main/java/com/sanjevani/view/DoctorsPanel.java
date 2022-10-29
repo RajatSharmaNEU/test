@@ -47,17 +47,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
         
         communityComboBox.setModel(communityModel);
         
-        // Populate Cities
-        DefaultComboBoxModel cityModel = new DefaultComboBoxModel();
-        cityModel.removeAllElements();
-        cityModel.addElement("--Select--");
-        
-        Database.cityList.forEach((key, city) -> {
-            cityModel.addElement(city.getCityName());
-        });
-        
-        cityComboBox.setModel(cityModel);
-        
         // Populate Hospitals
         DefaultListModel hospitalsListModel = new DefaultListModel();
         hospitalsListModel.removeAllElements();
@@ -111,7 +100,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
     private void resetDoctorForm() {
         doctorNameTxt.setText("");
         communityComboBox.setSelectedIndex(0);
-        cityComboBox.setSelectedIndex(0);
         hospitalsList.setSelectedIndices(new int[0]);
         doctorsTable.getSelectionModel().clearSelection();
         updateBtn.setVisible(false);
@@ -144,8 +132,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
         houseTxt = new javax.swing.JTextField();
         communityLabel = new javax.swing.JLabel();
         communityComboBox = new javax.swing.JComboBox<>();
-        cityLabel = new javax.swing.JLabel();
-        cityComboBox = new javax.swing.JComboBox<>();
         hospitalsLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         hospitalsList = new javax.swing.JList<>();
@@ -186,12 +172,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
 
         communityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         addDoctorPanel.add(communityComboBox);
-
-        cityLabel.setText("City");
-        addDoctorPanel.add(cityLabel);
-
-        cityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        addDoctorPanel.add(cityComboBox);
 
         hospitalsLabel.setText("Hospitals");
         addDoctorPanel.add(hospitalsLabel);
@@ -295,7 +275,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
         
         Community community = Database.communityList.get(house.getCommunityId());
         communityComboBox.setSelectedItem(community.getCommunityName());
-        cityComboBox.setSelectedItem(Database.cityList.get(community.getCityId()).getCityName());
         
         // set hospitals belongs to selected doctor
         int i = 0;
@@ -370,8 +349,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel ageLabel;
     private javax.swing.JTextField ageTxt;
     private javax.swing.JPanel buttonPanel;
-    private javax.swing.JComboBox<String> cityComboBox;
-    private javax.swing.JLabel cityLabel;
     private javax.swing.JComboBox<String> communityComboBox;
     private javax.swing.JLabel communityLabel;
     private javax.swing.JButton deleteBtn;
