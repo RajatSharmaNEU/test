@@ -13,6 +13,7 @@ import com.sanjevani.model.House;
 import com.sanjevani.model.Patient;
 import com.sanjevani.model.Person;
 import com.sanjevani.model.VitalSign;
+import java.util.ArrayList;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -83,6 +84,16 @@ public class Database {
         return Database.personList.entrySet().stream()
                 .filter(x -> Database.personList.get(x.getKey()).getRole() == role)
 		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+    
+    public static List<Encounter> getEncounterByPatientId(int patientId){
+        List<Encounter> patientEncounterList = new ArrayList<>();
+        for(Encounter encounter: Database.encounterList.values()) {
+            if(encounter.getPatientId() == patientId){
+                patientEncounterList.add(encounter);
+            }
+        }
+        return patientEncounterList;
     }
 
     public static void createDatabase() {
