@@ -5,8 +5,10 @@
 package com.sanjevani.view;
 
 import com.sanjevani.database.Database;
+import com.sanjevani.model.City;
 import com.sanjevani.model.Community;
 import java.util.HashMap;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -14,31 +16,58 @@ import javax.swing.table.DefaultTableModel;
  * @author rajatsharma
  */
 public class CommunitiesPanel extends javax.swing.JPanel {
-
+    int selectedCommunityId;
     /**
      * Creates new form HospitalsPanel
      */
     public CommunitiesPanel() {
         initComponents();
-        setCommunitiesTable(Database.communityList);
+        setCommunitiesTable();
+        initializeCommunityView();
     }
     
-    private void setCommunitiesTable(HashMap<Integer,Community> list) {
-//        private String communityName;
-//        private String zipcode;
-//        private int cityId;
-//    
-        String[] tableColumns = {"Community Name", "City Name", "Zip Code"};
-        String[][] tableContent = new String[list.size()][tableColumns.length];
+    private void initializeCommunityView() {
+        // Populate Communities
+        DefaultComboBoxModel cityModel = new DefaultComboBoxModel();
+        cityModel.removeAllElements();
+        cityModel.addElement("--Select--");
+        
+        Database.cityList.forEach((key, city) -> {
+            cityModel.addElement(city.getCityName());
+        });
+        
+        cityComboBox.setModel(cityModel);
+        
+        // hide update and delete btn
+        updateBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+    }
+    
+    private void setCommunitiesTable() {
+        HashMap<Integer,Community> communityList= Database.communityList;
+        String[] tableColumns = {"Id", "Community Name", "City Name", "Zip Code"};
+        String[][] tableContent = new String[communityList.size()][tableColumns.length];
 
-        list.forEach((key, community) -> {
-            tableContent[key][0] = community.getCommunityName();            
-            tableContent[key][1] = Database.cityList.get(community.getCityId()).getCityName();
-            tableContent[key][2] = String.valueOf(community.getZipcode());
+        communityList.forEach((key, community) -> {
+            tableContent[key][0] = String.valueOf(community.getCommunityId());            
+            tableContent[key][1] = community.getCommunityName();            
+            tableContent[key][2] = Database.cityList.get(community.getCityId()).getCityName();
+            tableContent[key][3] = String.valueOf(community.getZipcode());
             
         });
         
-        CommunitiesTable.setModel(new DefaultTableModel(tableContent, tableColumns));
+        communitiesTable.setModel(new DefaultTableModel(tableContent, tableColumns));
+        resetCommunityForm();
+    }
+    
+    private void resetCommunityForm() {
+        communityNameTxt.setText("");
+        zipcodeTxt.setText("");
+        cityComboBox.setSelectedIndex(0);
+        // Hide ID column
+        communitiesTable.getColumnModel().getColumn(0).setMinWidth(0);
+        communitiesTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        communitiesTable.getColumnModel().getColumn(0).setWidth(0);
     }
 
     /**
@@ -51,27 +80,81 @@ public class CommunitiesPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         CommunitiesOuterPanel = new javax.swing.JPanel();
-        AddCommunityPanel = new javax.swing.JPanel();
+        addDoctorPanel = new javax.swing.JPanel();
+        communityNameLabel = new javax.swing.JLabel();
+        communityNameTxt = new javax.swing.JTextField();
+        zipcodeLabel = new javax.swing.JLabel();
+        zipcodeTxt = new javax.swing.JTextField();
+        cityLabel = new javax.swing.JLabel();
+        cityComboBox = new javax.swing.JComboBox<>();
+        buttonPanel = new javax.swing.JPanel();
+        updateBtn = new javax.swing.JButton();
+        addBtn = new javax.swing.JButton();
+        resetBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         scrollTablePanel = new javax.swing.JScrollPane();
-        CommunitiesTable = new javax.swing.JTable();
+        communitiesTable = new javax.swing.JTable();
 
         CommunitiesOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Community"));
-        CommunitiesOuterPanel.setLayout(new java.awt.GridLayout(2, 1));
+        CommunitiesOuterPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout AddCommunityPanelLayout = new javax.swing.GroupLayout(AddCommunityPanel);
-        AddCommunityPanel.setLayout(AddCommunityPanelLayout);
-        AddCommunityPanelLayout.setHorizontalGroup(
-            AddCommunityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 878, Short.MAX_VALUE)
-        );
-        AddCommunityPanelLayout.setVerticalGroup(
-            AddCommunityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 439, Short.MAX_VALUE)
-        );
+        addDoctorPanel.setPreferredSize(new java.awt.Dimension(900, 550));
+        addDoctorPanel.setLayout(new java.awt.GridLayout(3, 2));
 
-        CommunitiesOuterPanel.add(AddCommunityPanel);
+        communityNameLabel.setText("Community Name");
+        addDoctorPanel.add(communityNameLabel);
+        addDoctorPanel.add(communityNameTxt);
 
-        CommunitiesTable.setModel(new javax.swing.table.DefaultTableModel(
+        zipcodeLabel.setText("Zip Code");
+        addDoctorPanel.add(zipcodeLabel);
+        addDoctorPanel.add(zipcodeTxt);
+
+        cityLabel.setText("City");
+        addDoctorPanel.add(cityLabel);
+
+        cityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        addDoctorPanel.add(cityComboBox);
+
+        CommunitiesOuterPanel.add(addDoctorPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 19, 890, 160));
+
+        buttonPanel.setPreferredSize(new java.awt.Dimension(900, 180));
+        buttonPanel.setLayout(new java.awt.GridLayout(1, 4));
+
+        updateBtn.setText("Update");
+        updateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(updateBtn);
+
+        addBtn.setText("Add");
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(addBtn);
+
+        resetBtn.setText("Reset");
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(resetBtn);
+
+        deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(deleteBtn);
+
+        CommunitiesOuterPanel.add(buttonPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, -1, 60));
+
+        communitiesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -82,9 +165,14 @@ public class CommunitiesPanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        scrollTablePanel.setViewportView(CommunitiesTable);
+        communitiesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                communitiesTableMouseClicked(evt);
+            }
+        });
+        scrollTablePanel.setViewportView(communitiesTable);
 
-        CommunitiesOuterPanel.add(scrollTablePanel);
+        CommunitiesOuterPanel.add(scrollTablePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 458, 890, 439));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -92,8 +180,7 @@ public class CommunitiesPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(CommunitiesOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(CommunitiesOuterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,11 +191,59 @@ public class CommunitiesPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+        Community selectedCommunity = Database.communityList.get(selectedCommunityId);
+        selectedCommunity.setCommunityName(communityNameTxt.getText());
+        selectedCommunity.setZipcode(zipcodeTxt.getText());
+        selectedCommunity.setCityId(cityComboBox.getSelectedIndex()-1);
+        setCommunitiesTable();
+    }//GEN-LAST:event_updateBtnActionPerformed
+
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        Database.createCommunity(communityNameTxt.getText(),cityComboBox.getSelectedIndex()-1, zipcodeTxt.getText());
+        setCommunitiesTable();
+    }//GEN-LAST:event_addBtnActionPerformed
+
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
+        resetCommunityForm();
+    }//GEN-LAST:event_resetBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        Database.communityList.remove(selectedCommunityId);
+        setCommunitiesTable();
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void communitiesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_communitiesTableMouseClicked
+        selectedCommunityId = Integer.parseInt(communitiesTable.getValueAt(communitiesTable.getSelectedRow(), 0 ).toString());
+        Community community = Database.communityList.get(selectedCommunityId);
+        communityNameTxt.setText(community.getCommunityName());
+        zipcodeTxt.setText(community.getZipcode());
+        City city = Database.cityList.get(community.getCityId());
+        
+        cityComboBox.setSelectedItem(city.getCityName());
+        
+        // Hide and Show Button
+        updateBtn.setVisible(true);
+        deleteBtn.setVisible(true);
+        
+    }//GEN-LAST:event_communitiesTableMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel AddCommunityPanel;
     private javax.swing.JPanel CommunitiesOuterPanel;
-    private javax.swing.JTable CommunitiesTable;
+    private javax.swing.JButton addBtn;
+    private javax.swing.JPanel addDoctorPanel;
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JComboBox<String> cityComboBox;
+    private javax.swing.JLabel cityLabel;
+    private javax.swing.JTable communitiesTable;
+    private javax.swing.JLabel communityNameLabel;
+    private javax.swing.JTextField communityNameTxt;
+    private javax.swing.JButton deleteBtn;
+    private javax.swing.JButton resetBtn;
     private javax.swing.JScrollPane scrollTablePanel;
+    private javax.swing.JButton updateBtn;
+    private javax.swing.JLabel zipcodeLabel;
+    private javax.swing.JTextField zipcodeTxt;
     // End of variables declaration//GEN-END:variables
 }
