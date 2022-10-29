@@ -7,7 +7,7 @@ package com.sanjevani.view;
 import com.sanjevani.database.Database;
 import com.sanjevani.model.Community;
 import com.sanjevani.model.Hospital;
-import com.sanjevani.utility.Utility;
+import com.sanjevani.model.Person;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,13 +59,18 @@ public class HospitalsPanel extends javax.swing.JPanel {
         // Populate Doctors
         DefaultListModel doctorsListModel = new DefaultListModel();
         doctorsListModel.removeAllElements();
-        Database.personList.forEach((key, person) -> {
+        
+        int key = 0;
+        
+        for(Person person: Database.personList.values()) {
             if(person.getRole() == "Doctor") {
                 doctorKeyList.add(person.getPersonId());
                 doctorNameList.add(person.getName());
                 doctorsListModel.addElement(person.getName());
             }
-        });
+            key++;
+        }
+        
         doctorsList.setModel(doctorsListModel);
         
         // hide update and delete btn
@@ -78,7 +83,9 @@ public class HospitalsPanel extends javax.swing.JPanel {
         HashMap<Integer,Hospital> list = Database.hospitalList;
         String[] tableColumns = {"Id", "Hospital Name", "Community Name", "City Name", "Zip Code"};
         String[][] tableContent = new String[list.size()][tableColumns.length];
-        list.forEach((key, hospital) -> {
+        
+        int key = 0;
+        for(Hospital hospital: list.values() ) {
             tableContent[key][0] = String.valueOf(hospital.getHospitalId());
             tableContent[key][1] = hospital.getName();
             
@@ -87,7 +94,8 @@ public class HospitalsPanel extends javax.swing.JPanel {
             tableContent[key][2] = community.getCommunityName();
             tableContent[key][3] = Database.cityList.get(community.getCityId()).getCityName();
             tableContent[key][4] = community.getZipcode();
-        });
+            key++;
+        }
         
         hospitalsTable.setModel(new DefaultTableModel(tableContent, tableColumns));
         resetHospitalForm();
@@ -202,6 +210,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
         buttonsPanel.add(resetBtn);
 
         deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
         buttonsPanel.add(deleteBtn);
 
         HospitalsOuterPanel.add(buttonsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 409, 915, 60));
@@ -297,6 +310,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
         Database.createHospital(hospitalNameTxt.getText(), communityComboBox.getSelectedIndex()-1, selectedDoctorIds );
         setHospitalsTable();
     }//GEN-LAST:event_addBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        Database.hospitalList.remove(selectedHospitalId);
+        setHospitalsTable();
+    }//GEN-LAST:event_deleteBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
