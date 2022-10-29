@@ -36,6 +36,7 @@ public class HomeFrame extends javax.swing.JFrame {
         showPatientsBtn = new javax.swing.JButton();
         showCommunitiesBtn = new javax.swing.JButton();
         showEncountersBtn = new javax.swing.JButton();
+        logoutBtn = new javax.swing.JButton();
         viewPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -90,6 +91,14 @@ public class HomeFrame extends javax.swing.JFrame {
             }
         });
         directoryPanel.add(showEncountersBtn);
+
+        logoutBtn.setText("Logout");
+        logoutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutBtnActionPerformed(evt);
+            }
+        });
+        directoryPanel.add(logoutBtn);
 
         viewPanel.setLayout(new java.awt.CardLayout());
 
@@ -149,6 +158,11 @@ public class HomeFrame extends javax.swing.JFrame {
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showEncountersBtnActionPerformed
 
+    private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
+        new LoginFrame().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_logoutBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -189,6 +203,7 @@ public class HomeFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel directoryPanel;
+    private javax.swing.JButton logoutBtn;
     private javax.swing.JButton showCommunitiesBtn;
     private javax.swing.JButton showDoctorsBtn;
     private javax.swing.JButton showEncountersBtn;
