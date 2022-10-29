@@ -323,6 +323,7 @@ public class DoctorsPanel extends javax.swing.JPanel {
         // public static Doctor createDoctor(String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) { 
         Database.createHouse(communityComboBox.getSelectedIndex()-1, houseTxt.getText());
 
+        // TODO: Fix lasthouseID
         Database.createDoctor(
                 doctorNameTxt.getText(),
                 "",
@@ -330,7 +331,6 @@ public class DoctorsPanel extends javax.swing.JPanel {
                 Integer.parseInt(ageTxt.getText()),
                 genderComboBox.getSelectedItem().toString(),
                 Database.lastHouseId-1,
-//                newHouse.getHouseId(),
                 selectedHospitalIds );
         setDoctorsTable();
     }//GEN-LAST:event_addBtnActionPerformed
@@ -340,7 +340,8 @@ public class DoctorsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        // TODO add your handling code here:
+        Database.personList.remove(selectedDoctorId);
+        setDoctorsTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 
 
