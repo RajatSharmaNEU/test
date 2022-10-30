@@ -4,6 +4,8 @@
  */
 package com.sanjevani.model;
 
+import java.util.Date;
+
 /**
  *
  * @author rajatsharma
@@ -12,12 +14,12 @@ public class Encounter {
     private int encounterId;
     private int patientId;
     private int vitalSignId;
-    private String dateOfEncounter;
+    private Date dateOfEncounter;
     private String status;
     private int doctorId;
     private int hospitalId;
 
-    public Encounter(int encounterId, int patientId, int vitalSignId, String dateOfEncounter, String status, int doctorId, int hospitalId) {
+    public Encounter(int encounterId, int patientId, int vitalSignId, Date dateOfEncounter, String status, int doctorId, int hospitalId) {
         this.encounterId = encounterId;
         this.patientId = patientId;
         this.vitalSignId = vitalSignId;
@@ -51,11 +53,11 @@ public class Encounter {
         this.vitalSignId = vitalSignId;
     }
 
-    public String getDateOfEncounter() {
+    public Date getDateOfEncounter() {
         return dateOfEncounter;
     }
 
-    public void setDateOfEncounter(String dateOfEncounter) {
+    public void setDateOfEncounter(Date dateOfEncounter) {
         this.dateOfEncounter = dateOfEncounter;
     }
 

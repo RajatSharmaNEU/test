@@ -12,7 +12,10 @@ import com.sanjevani.model.Hospital;
 import com.sanjevani.model.House;
 import com.sanjevani.model.Person;
 import com.sanjevani.model.VitalSign;
+import com.toedter.calendar.JCalendar;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -32,6 +35,8 @@ public class EncountersPanel extends javax.swing.JPanel {
     
     List<Integer> doctorKeyList = new ArrayList<>();
     List<String> doctorNameList = new ArrayList<>();
+    
+    JCalendar calendar = new JCalendar();
     /**
      * Creates new form HospitalsPanel
      */
@@ -42,6 +47,11 @@ public class EncountersPanel extends javax.swing.JPanel {
     }
     
     private void initializeEncounterView() {
+        //Add calendar
+        calendarPanel.add(calendar);
+        calendarPanel.setLayout(new BorderLayout());
+        calendarPanel.add(calendar, BorderLayout.CENTER);
+
         // Populate Hospital
         DefaultComboBoxModel hospitalModel = new DefaultComboBoxModel();
         hospitalModel.removeAllElements();
@@ -97,7 +107,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         hospitalComboBox.setSelectedIndex(0);
         doctorComboBox.setSelectedIndex(0);
         patientComboBox.setSelectedIndex(0);
-        dateOfEncounterTxt.setText("");
+        calendar.setDate(new Date());
         
         bloodPressureTxt.setText("");
         temperatureTxt.setText("");
@@ -132,7 +142,7 @@ public class EncountersPanel extends javax.swing.JPanel {
             tableContent[key][4] = String.valueOf(vitalSign.getTemperature());
             tableContent[key][5] = vitalSign.getBloodPressure();
             tableContent[key][6] = String.valueOf(vitalSign.getHeartRate());
-            tableContent[key][7] = encounter.getDateOfEncounter();
+            tableContent[key][7] = String.valueOf(encounter.getDateOfEncounter());
             tableContent[key][8] = encounter.getStatus();
             
             tableContent[key][9] = doctor.getName();
@@ -161,14 +171,15 @@ public class EncountersPanel extends javax.swing.JPanel {
         doctorComboBox = new javax.swing.JComboBox<>();
         patientLabel = new javax.swing.JLabel();
         patientComboBox = new javax.swing.JComboBox<>();
-        dateOfEncounterLabel = new javax.swing.JLabel();
-        dateOfEncounterTxt = new javax.swing.JTextField();
         bloodPressureLabel = new javax.swing.JLabel();
         bloodPressureTxt = new javax.swing.JTextField();
         temperatureLabel = new javax.swing.JLabel();
         temperatureTxt = new javax.swing.JTextField();
         heartRateLabel = new javax.swing.JLabel();
         heartRateTxt = new javax.swing.JTextField();
+        calendarControlPanel = new javax.swing.JPanel();
+        dateOfEncounterLabel = new javax.swing.JLabel();
+        calendarPanel = new javax.swing.JLabel();
         buttonPanel = new javax.swing.JPanel();
         updateBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
@@ -180,7 +191,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         EncountersOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Encounters"));
         EncountersOuterPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        addEncounterPanel.setLayout(new java.awt.GridLayout(7, 2));
+        addEncounterPanel.setLayout(new java.awt.GridLayout(6, 2));
 
         hospitalLabel.setText("Hospital");
         addEncounterPanel.add(hospitalLabel);
@@ -199,16 +210,6 @@ public class EncountersPanel extends javax.swing.JPanel {
 
         patientComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         addEncounterPanel.add(patientComboBox);
-
-        dateOfEncounterLabel.setText("Date of Encounter");
-        addEncounterPanel.add(dateOfEncounterLabel);
-
-        dateOfEncounterTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateOfEncounterTxtActionPerformed(evt);
-            }
-        });
-        addEncounterPanel.add(dateOfEncounterTxt);
 
         bloodPressureLabel.setText("Blood Pressure");
         addEncounterPanel.add(bloodPressureLabel);
@@ -234,7 +235,35 @@ public class EncountersPanel extends javax.swing.JPanel {
         });
         addEncounterPanel.add(heartRateTxt);
 
-        EncountersOuterPanel.add(addEncounterPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 19, 870, 370));
+        EncountersOuterPanel.add(addEncounterPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 19, 870, 240));
+
+        dateOfEncounterLabel.setText("Date of Encounter");
+
+        calendarPanel.setMixingCutoutShape(null);
+
+        javax.swing.GroupLayout calendarControlPanelLayout = new javax.swing.GroupLayout(calendarControlPanel);
+        calendarControlPanel.setLayout(calendarControlPanelLayout);
+        calendarControlPanelLayout.setHorizontalGroup(
+            calendarControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, calendarControlPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(dateOfEncounterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        calendarControlPanelLayout.setVerticalGroup(
+            calendarControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(calendarControlPanelLayout.createSequentialGroup()
+                .addComponent(dateOfEncounterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 188, Short.MAX_VALUE))
+            .addGroup(calendarControlPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(calendarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        EncountersOuterPanel.add(calendarControlPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 870, 240));
 
         buttonPanel.setPreferredSize(new java.awt.Dimension(900, 180));
         buttonPanel.setLayout(new java.awt.GridLayout(1, 4));
@@ -271,7 +300,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         });
         buttonPanel.add(deleteBtn);
 
-        EncountersOuterPanel.add(buttonPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 870, 70));
+        EncountersOuterPanel.add(buttonPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 870, 60));
 
         encounterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -291,7 +320,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         });
         scrollTablePanel.setViewportView(encounterTable);
 
-        EncountersOuterPanel.add(scrollTablePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 497, 878, 400));
+        EncountersOuterPanel.add(scrollTablePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 587, 878, 310));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -329,8 +358,8 @@ public class EncountersPanel extends javax.swing.JPanel {
         Database.updateEncounter(
                 selectedEncounterId, 
                 patientId, 
-                selectedEncounter.getVitalSignId(), 
-                dateOfEncounterTxt.getText(), 
+                selectedEncounter.getVitalSignId(),
+                calendar.getDate(),
                 selectedEncounter.getStatus(),
                 doctorId, 
                 hospitalId
@@ -343,7 +372,9 @@ public class EncountersPanel extends javax.swing.JPanel {
         int hospitalId = hospitalKeyList.get(hospitalComboBox.getSelectedIndex()-1);
         int doctorId = doctorKeyList.get(doctorComboBox.getSelectedIndex()-1);
         int patientId = patientKeyList.get(patientComboBox.getSelectedIndex()-1);
-        String dateOfEncounter = dateOfEncounterTxt.getText();
+        
+        Date dateOfEncounter = calendar.getDate();
+        
         
         Database.createVitalSign(Double.parseDouble(temperatureTxt.getText()), bloodPressureTxt.getText(), Integer.parseInt(heartRateTxt.getText()));
         
@@ -360,10 +391,6 @@ public class EncountersPanel extends javax.swing.JPanel {
         setEncounterTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 
-    private void dateOfEncounterTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateOfEncounterTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateOfEncounterTxtActionPerformed
-
     private void encounterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encounterTableMouseClicked
         selectedEncounterId = Integer.parseInt(encounterTable.getValueAt(encounterTable.getSelectedRow(), 0 ).toString());
         Encounter encounter = Database.encounterList.get(selectedEncounterId);
@@ -371,7 +398,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         hospitalComboBox.setSelectedItem(Database.hospitalList.get(encounter.getHospitalId()).getName());
         doctorComboBox.setSelectedItem(Database.personList.get(encounter.getDoctorId()).getName());
         patientComboBox.setSelectedItem(Database.personList.get(encounter.getPatientId()).getName());
-        dateOfEncounterTxt.setText(encounter.getDateOfEncounter());
+        calendar.setDate(encounter.getDateOfEncounter());
         
         VitalSign vitalSign = Database.vitalSignList.get(encounter.getVitalSignId());
         bloodPressureTxt.setText(vitalSign.getBloodPressure());
@@ -399,8 +426,9 @@ public class EncountersPanel extends javax.swing.JPanel {
     private javax.swing.JLabel bloodPressureLabel;
     private javax.swing.JTextField bloodPressureTxt;
     private javax.swing.JPanel buttonPanel;
+    private javax.swing.JPanel calendarControlPanel;
+    private javax.swing.JLabel calendarPanel;
     private javax.swing.JLabel dateOfEncounterLabel;
-    private javax.swing.JTextField dateOfEncounterTxt;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JComboBox<String> doctorComboBox;
     private javax.swing.JLabel doctorLabel;

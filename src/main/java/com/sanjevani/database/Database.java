@@ -16,6 +16,7 @@ import com.sanjevani.model.VitalSign;
 import java.util.ArrayList;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -191,11 +192,11 @@ public class Database {
     }
     
     // Encounter CRUD Method
-    public static Encounter createEncounter(int patientId, int vitalSignId, String dateOfEncounter, String status, int doctorId, int hospitalId) {
+    public static Encounter createEncounter(int patientId, int vitalSignId, Date dateOfEncounter, String status, int doctorId, int hospitalId) {
         masterEncounterList.put(lastEncounterId, new Encounter(lastEncounterId, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
         return encounterList.put(lastEncounterId, new Encounter(lastEncounterId++, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
     }
-    public static Encounter updateEncounter(int encounterId, int patientId, int vitalSignId, String dateOfEncounter, String status, int doctorId, int hospitalId) {
+    public static Encounter updateEncounter(int encounterId, int patientId, int vitalSignId, Date dateOfEncounter, String status, int doctorId, int hospitalId) {
         masterEncounterList.put(encounterId, new Encounter(encounterId, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
         return encounterList.put(encounterId, new Encounter(encounterId, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
     }
@@ -264,8 +265,8 @@ public class Database {
     Patient patient2 = createPatient("Yash Pawar", "yashpawar", "test@1234", 25, "Male", 3);
     
     // Encounter Data
-    Encounter encounter1 = createEncounter(2, 0, "08-23-2022", "Pending", 0, 0);
-    Encounter encounter2 = createEncounter(3, 1, "09-26-2022", "Pending", 1, 1);    
+    Encounter encounter1 = createEncounter(2, 0, new Date(), "Pending", 0, 0);
+    Encounter encounter2 = createEncounter(3, 1, new Date(), "Pending", 1, 1);    
     
     // Admin Data
     Person systemAdmin = createAdmin("Rajat Sharma", "a", "a", "SystemAdmin", 30, "Male", 4, null);
