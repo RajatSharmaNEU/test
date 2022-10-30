@@ -335,7 +335,7 @@ public class HospitalsPanel extends javax.swing.JPanel {
             }
         } catch(CustomException e) {
             Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
-            JOptionPane.showMessageDialog(this, Constants.INVALID_HOSPITAL_DETAIL);
+            JOptionPane.showMessageDialog(this, Constants.INVALID_DOCTOR_DETAIL);
         }
         
         

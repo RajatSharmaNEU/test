@@ -5,7 +5,9 @@
 package com.sanjevani.view;
 
 import com.sanjevani.database.ApplicationState;
+import com.sanjevani.database.Constants;
 import com.sanjevani.database.Database;
+import com.sanjevani.exceptions.CustomException;
 import com.sanjevani.model.Community;
 import com.sanjevani.model.Hospital;
 import com.sanjevani.model.House;
@@ -13,8 +15,12 @@ import com.sanjevani.model.Person;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -107,6 +113,8 @@ public class DoctorsPanel extends javax.swing.JPanel {
     
     private void resetDoctorForm() {
         doctorNameTxt.setText("");
+        emailIdTxt.setText("");
+        passwordTxt.setText("");
         ageTxt.setText("");
         genderComboBox.setSelectedIndex(0);
         houseTxt.setText("");
@@ -135,6 +143,10 @@ public class DoctorsPanel extends javax.swing.JPanel {
         addDoctorPanel = new javax.swing.JPanel();
         doctorNameLabel = new javax.swing.JLabel();
         doctorNameTxt = new javax.swing.JTextField();
+        emailIdLabel = new javax.swing.JLabel();
+        emailIdTxt = new javax.swing.JTextField();
+        passwordLabel = new javax.swing.JLabel();
+        passwordTxt = new javax.swing.JTextField();
         ageLabel = new javax.swing.JLabel();
         ageTxt = new javax.swing.JTextField();
         genderLabel = new javax.swing.JLabel();
@@ -158,11 +170,25 @@ public class DoctorsPanel extends javax.swing.JPanel {
         DoctorsOuterPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         addDoctorPanel.setPreferredSize(new java.awt.Dimension(900, 550));
-        addDoctorPanel.setLayout(new java.awt.GridLayout(7, 2));
+        addDoctorPanel.setLayout(new java.awt.GridLayout(9, 2));
 
         doctorNameLabel.setText("Doctor Name");
         addDoctorPanel.add(doctorNameLabel);
         addDoctorPanel.add(doctorNameTxt);
+
+        emailIdLabel.setText("EmailID");
+        addDoctorPanel.add(emailIdLabel);
+        addDoctorPanel.add(emailIdTxt);
+
+        passwordLabel.setText("Password");
+        addDoctorPanel.add(passwordLabel);
+
+        passwordTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordTxtActionPerformed(evt);
+            }
+        });
+        addDoctorPanel.add(passwordTxt);
 
         ageLabel.setText("Age");
         addDoctorPanel.add(ageLabel);
@@ -277,6 +303,9 @@ public class DoctorsPanel extends javax.swing.JPanel {
         Person selectedItem = Database.personList.get(selectedDoctorId);
 
         doctorNameTxt.setText(selectedItem.getName());
+        emailIdTxt.setText(selectedItem.getEmailId());
+        passwordTxt.setText(selectedItem.getPassword());
+        
         ageTxt.setText(String.valueOf(selectedItem.getAge()));
         genderComboBox.setSelectedItem(selectedItem.getGender());
         
@@ -311,8 +340,35 @@ public class DoctorsPanel extends javax.swing.JPanel {
             selectedHospitalIds.add(hospitalKeyList.get(index));
         }
         
-        Database.updateHouse(selectedPerson.getHouseId(), communityComboBox.getSelectedIndex()-1, houseTxt.getText());
-        Database.updateDoctor(
+        
+        String doctorName = doctorNameTxt.getText(),
+                doctorEmailId = emailIdTxt.getText(),
+                doctorPassword = passwordTxt.getText(),
+                age = ageTxt.getText(),
+                gender = genderComboBox.getSelectedItem().toString();
+        
+        int selectedCommunityId = communityComboBox.getSelectedIndex();
+        
+        
+        try {
+            if (!Pattern.matches(Constants.ageRegex, age) || !Pattern.matches(Constants.numberReg, age)){
+                throw new CustomException(Constants.INVALID_AGE);
+            }
+            
+            if (doctorName.isBlank()
+                    || doctorEmailId.isBlank()
+                    || doctorPassword.isBlank()
+                    || age.isBlank()
+                    || houseTxt.getText().isBlank()
+                    || genderComboBox.getSelectedIndex() == 0
+                    || selectedCommunityId == 0) 
+            {
+                throw new CustomException("Invalid Doctor Details");
+            }
+            
+            int communityId = communityKeyList.get(selectedCommunityId-1);
+            Database.updateHouse(selectedPerson.getHouseId(), communityComboBox.getSelectedIndex()-1, houseTxt.getText());
+            Database.updateDoctor(
                 selectedDoctorId, 
                 doctorNameTxt.getText(),
                 selectedPerson.getEmailId(),
@@ -320,11 +376,19 @@ public class DoctorsPanel extends javax.swing.JPanel {
                 Integer.parseInt(ageTxt.getText()), 
                 genderComboBox.getSelectedItem().toString(),
                 selectedPerson.getHouseId(),
-                selectedHospitalIds
-        );
-                
-        
-        setDoctorsTable();
+                selectedHospitalIds);
+            
+            setDoctorsTable();
+            
+        } catch(CustomException e) {
+            Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
+            if(e.getMessage().endsWith(Constants.INVALID_AGE)){
+                JOptionPane.showMessageDialog(this, Constants.INVALID_AGE);
+            } else {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_DOCTOR_DETAIL);
+            }
+            
+        }       
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
@@ -332,22 +396,49 @@ public class DoctorsPanel extends javax.swing.JPanel {
         for(int index: hospitalsList.getSelectedIndices()){
             selectedHospitalIds.add(hospitalKeyList.get(index));
         }
+        String doctorName = doctorNameTxt.getText(),
+                doctorEmailId = emailIdTxt.getText(),
+                doctorPassword = passwordTxt.getText(),
+                age = ageTxt.getText(),
+                gender = genderComboBox.getSelectedItem().toString();
         
-        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
+        int selectedCommunityId = communityComboBox.getSelectedIndex();
         
-        
-        Database.createHouse(communityId, houseTxt.getText());
-
-        // TODO: Fix lasthouseID
-        Database.createDoctor(
-                doctorNameTxt.getText(),
-                "",
-                "",
-                Integer.parseInt(ageTxt.getText()),
+        try {
+            if (!Pattern.matches(Constants.ageRegex, age) || !Pattern.matches(Constants.numberReg, age)){
+                throw new CustomException(Constants.INVALID_AGE);
+            }
+            
+            if (doctorName.isBlank()
+                    || doctorEmailId.isBlank()
+                    || doctorPassword.isBlank()
+                    || age.isBlank()
+                    || houseTxt.getText().isBlank()
+                    || genderComboBox.getSelectedIndex() == 0
+                    || selectedCommunityId == 0) 
+            {
+                throw new CustomException("Invalid Doctor Details");
+            } 
+            int communityId = communityKeyList.get(selectedCommunityId-1);
+            Database.createHouse(communityId, houseTxt.getText());
+            Database.createDoctor(
+                doctorName,
+                doctorEmailId,
+                doctorPassword,
+                Integer.parseInt(age),
                 genderComboBox.getSelectedItem().toString(),
                 Database.lastHouseId-1,
                 selectedHospitalIds );
-        setDoctorsTable();
+            setDoctorsTable();
+            
+        } catch(CustomException e) {
+            Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
+            if(e.getMessage().endsWith(Constants.INVALID_AGE)){
+                JOptionPane.showMessageDialog(this, Constants.INVALID_AGE);
+            } else {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_DOCTOR_DETAIL);
+            }
+        }
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
@@ -358,6 +449,10 @@ public class DoctorsPanel extends javax.swing.JPanel {
         Database.deleteDoctor(selectedDoctorId);
         setDoctorsTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void passwordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordTxtActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -373,6 +468,8 @@ public class DoctorsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel doctorNameLabel;
     private javax.swing.JTextField doctorNameTxt;
     private javax.swing.JTable doctorsTable;
+    private javax.swing.JLabel emailIdLabel;
+    private javax.swing.JTextField emailIdTxt;
     private javax.swing.JComboBox<String> genderComboBox;
     private javax.swing.JLabel genderLabel;
     private javax.swing.JLabel hospitalsLabel;
@@ -380,6 +477,8 @@ public class DoctorsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel houseLabel;
     private javax.swing.JTextField houseTxt;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel passwordLabel;
+    private javax.swing.JTextField passwordTxt;
     private javax.swing.JButton resetBtn;
     private javax.swing.JScrollPane scrollTablePanel;
     private javax.swing.JButton updateBtn;
