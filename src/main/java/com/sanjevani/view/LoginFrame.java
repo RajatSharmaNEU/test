@@ -40,15 +40,25 @@ public class LoginFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        errorLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        errorLabel.setForeground(new java.awt.Color(255, 51, 51));
+        jPanel1.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(147, 32, -1, -1));
+
         emailIdLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         emailIdLabel.setText("Email ID");
+        jPanel1.add(emailIdLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(147, 69, -1, -1));
 
         emailIdTxt.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jPanel1.add(emailIdTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 66, 219, -1));
 
         passwordLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         passwordLabel.setText("Password");
+        jPanel1.add(passwordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(147, 132, -1, -1));
 
         passwordTxt.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jPanel1.add(passwordTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 129, 219, -1));
 
         signInBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         signInBtn.setText("Sign In");
@@ -57,45 +67,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 signInBtnActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(emailIdLabel)
-                            .addComponent(passwordLabel)
-                            .addComponent(errorLabel))
-                        .addGap(56, 56, 56)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(emailIdTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-                            .addComponent(passwordTxt)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(213, 213, 213)
-                        .addComponent(signInBtn)))
-                .addContainerGap(106, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(errorLabel)
-                .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(emailIdLabel)
-                    .addComponent(emailIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordLabel)
-                    .addComponent(passwordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
-                .addComponent(signInBtn)
-                .addContainerGap(138, Short.MAX_VALUE))
-        );
+        jPanel1.add(signInBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 218, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,14 +76,14 @@ public class LoginFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(174, 174, 174)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(197, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(106, 106, 106)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
 
         pack();
@@ -123,13 +95,13 @@ public class LoginFrame extends javax.swing.JFrame {
         Person authenticatedPerson = null;
         
         for(Person person: Database.personList.values()) {
-            if(person.getEmailId().equalsIgnoreCase(enteredEmailId) && person.getPassword().equalsIgnoreCase(enteredPassword)){
+            if(person.getEmailId().equalsIgnoreCase(enteredEmailId) && person.getPassword().equals(enteredPassword)){
                 authenticatedPerson = person;
             }
         }
         
         if (authenticatedPerson == null) {
-            errorLabel.setText("User not found!!!");
+            errorLabel.setText("User not found. Please try with valid credentials.");
         } else {
             System.out.println("Login successfully");
             ApplicationState.authenticatedPerson = authenticatedPerson;
