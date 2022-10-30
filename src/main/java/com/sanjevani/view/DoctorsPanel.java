@@ -300,22 +300,24 @@ public class DoctorsPanel extends javax.swing.JPanel {
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         Person selectedPerson = Database.personList.get(selectedDoctorId);
-        selectedPerson.setName(doctorNameTxt.getText());
-        selectedPerson.setAge(Integer.parseInt(ageTxt.getText()));
-        selectedPerson.setGender(genderComboBox.getSelectedItem().toString());
-        
-        House selectedPersonHouse = Database.houseList.get(selectedPerson.getHouseId());
-        selectedPersonHouse.setAddress(houseTxt.getText());
-        
-        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
-        selectedPersonHouse.setCommunityId(communityId);
-        
-        
         List<Integer> selectedHospitalIds = new ArrayList<>();
         for(int index: hospitalsList.getSelectedIndices()){
             selectedHospitalIds.add(hospitalKeyList.get(index));
         }
-        selectedPerson.setHospitalIds(selectedHospitalIds);
+        
+        Database.updateHouse(selectedPerson.getHouseId(), communityComboBox.getSelectedIndex()-1, houseTxt.getText());
+        Database.updateDoctor(
+                selectedDoctorId, 
+                doctorNameTxt.getText(),
+                selectedPerson.getEmailId(),
+                selectedPerson.getPassword(),
+                Integer.parseInt(ageTxt.getText()), 
+                genderComboBox.getSelectedItem().toString(),
+                selectedPerson.getHouseId(),
+                selectedHospitalIds
+        );
+                
+        
         setDoctorsTable();
     }//GEN-LAST:event_updateBtnActionPerformed
 
@@ -347,7 +349,7 @@ public class DoctorsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.personList.remove(selectedDoctorId);
+        Database.deleteDoctor(selectedDoctorId);
         setDoctorsTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 

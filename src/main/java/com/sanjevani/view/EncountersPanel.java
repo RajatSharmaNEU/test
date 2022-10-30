@@ -311,15 +311,23 @@ public class EncountersPanel extends javax.swing.JPanel {
         int doctorId = doctorKeyList.get(doctorComboBox.getSelectedIndex()-1);
         int patientId = patientKeyList.get(patientComboBox.getSelectedIndex()-1);
         
-        selectedEncounter.setHospitalId(hospitalId);
-        selectedEncounter.setDoctorId(doctorId);
-        selectedEncounter.setPatientId(patientId);
         
-        selectedEncounter.setDateOfEncounter(dateOfEncounterTxt.getText());
+        Database.updateVitalSign(
+                selectedEncounter.getVitalSignId(), 
+                Double.parseDouble(temperatureTxt.getText()), 
+                bloodPressureTxt.getText(), 
+                Integer.parseInt(heartRateTxt.getText())
+        );
         
-        Database.createVitalSign(Double.parseDouble(temperatureTxt.getText()), bloodPressureTxt.getText(), Integer.parseInt(heartRateTxt.getText()));
-        
-        selectedEncounter.setVitalSignId(Database.lastVitalSignId - 1);
+        Database.updateEncounter(
+                selectedEncounterId, 
+                patientId, 
+                selectedEncounter.getVitalSignId(), 
+                dateOfEncounterTxt.getText(), 
+                selectedEncounter.getStatus(),
+                doctorId, 
+                hospitalId
+        );
         setEncounterTable();
         
     }//GEN-LAST:event_updateBtnActionPerformed
@@ -341,7 +349,7 @@ public class EncountersPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.encounterList.remove(selectedEncounterId);
+        Database.deleteEncounter(selectedEncounterId);
         setEncounterTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 

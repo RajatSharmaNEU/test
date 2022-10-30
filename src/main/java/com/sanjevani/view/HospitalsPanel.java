@@ -276,17 +276,21 @@ public class HospitalsPanel extends javax.swing.JPanel {
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         Hospital selectedHospital = Database.hospitalList.get(selectedHospitalId);
-        selectedHospital.setName(hospitalNameTxt.getText());
         
         int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
-        
-        selectedHospital.setCommunityId(communityId);
         
         List<Integer> selectedDoctorIds = new ArrayList<>();
         for(int index: doctorsList.getSelectedIndices()){
             selectedDoctorIds.add(doctorKeyList.get(index));
         }
-        selectedHospital.setDoctorIds(selectedDoctorIds);
+        
+        Database.updateHospital(
+                selectedHospitalId,
+                hospitalNameTxt.getText(),
+                communityId, 
+                selectedDoctorIds
+        );
+        
         setHospitalsTable();
     }//GEN-LAST:event_updateBtnActionPerformed
 
@@ -301,7 +305,7 @@ public class HospitalsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.hospitalList.remove(selectedHospitalId);
+        Database.deleteHospital(selectedHospitalId);
         setHospitalsTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 

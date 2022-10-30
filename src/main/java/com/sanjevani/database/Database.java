@@ -36,6 +36,14 @@ public class Database {
     private static int lastEncounterId = 0;
     
     // Tables
+    public static HashMap<Integer,House> masterHouseList = new HashMap<>();
+    public static HashMap<Integer, City> masterCityList = new HashMap<>();
+    public static HashMap<Integer, Community> masterCommunityList = new HashMap<>();
+    public static HashMap<Integer,Hospital> masterHospitalList = new HashMap<>();
+    public static HashMap<Integer,VitalSign> masterVitalSignList= new HashMap<>();
+    public static HashMap<Integer,Person> masterPersonList = new HashMap<>();
+    public static HashMap<Integer,Encounter> masterEncounterList = new HashMap<>();  
+    
     public static HashMap<Integer,House> houseList = new HashMap<>();
     public static HashMap<Integer, City> cityList = new HashMap<>();
     public static HashMap<Integer, Community> communityList = new HashMap<>();
@@ -46,37 +54,145 @@ public class Database {
     public static String[] roles = {"Doctor", "Patient", "SystemAdmin", "CommunityAdmin", "HospitalAdmin"};
     
     // Create Instance Methods
+    // House CRUD Method
     public static House createHouse(int communityId, String address) {
+        masterHouseList.put(lastHouseId, new House(lastHouseId, communityId, address));
         return houseList.put(lastHouseId, new House(lastHouseId++, communityId, address));
     }
+    public static House updateHouse(int houseId, int communityId, String address) {
+        masterHouseList.put(houseId, new House(houseId, communityId, address));
+        return houseList.put(houseId, new House(houseId, communityId, address));
+    }
+    public static House deleteHouse(int houseId) {
+        masterHouseList.remove(houseId);
+        return houseList.remove(houseId);
+    }
+    
     public static City createCity(String cityName) {
+        masterCityList.put(lastCityId, new City(lastCityId, cityName));
         return cityList.put(lastCityId, new City(lastCityId++, cityName));
     }
+    
+    // Community CRUD Method
     public static Community createCommunity(String name, int cityId, String zipcode) {
+        masterCommunityList.put(lastCommunityId, new Community(lastCommunityId, name, cityId, zipcode));
         return communityList.put(lastCommunityId, new Community(lastCommunityId++, name, cityId, zipcode));
     }
+    public static Community updateCommunity(int communityId, String name, int cityId, String zipcode) {
+        masterCommunityList.put(communityId, new Community(communityId, name, cityId, zipcode));
+        return communityList.put(communityId, new Community(communityId, name, cityId, zipcode));
+    }
+    public static Community deleteCommunity(int communityId) {
+        masterCommunityList.remove(communityId);
+        return communityList.remove(communityId);
+    }
+    
+    // Hospital CRUD Method
     public static Hospital createHospital(String name, int communityId, List<Integer> doctorIds) {
+        masterHospitalList.put(lastHospitalId, new Hospital(lastHospitalId, name, communityId, doctorIds));
         return hospitalList.put(lastHospitalId, new Hospital(lastHospitalId++, name, communityId, doctorIds));
     }
+    public static Hospital updateHospital(int hospitalId, String name, int communityId, List<Integer> doctorIds) {
+        masterHospitalList.put(hospitalId, new Hospital(hospitalId, name, communityId, doctorIds));
+        return hospitalList.put(hospitalId, new Hospital(hospitalId, name, communityId, doctorIds));
+    }
+    public static Hospital deleteHospital(int hospitalId) {
+        masterHospitalList.remove(hospitalId);
+        return hospitalList.remove(hospitalId);
+    }
+    
+    // Person CRUD Method
+    public static Person createPerson(String name, String emailId, String password, String role, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        masterPersonList.put(lastPersonId, new Person(lastPersonId, name, emailId, password, role, age, gender, houseId, hospitalIds));
+        return personList.put(lastPersonId, new Person(lastPersonId++, name, emailId, password, role, age, gender, houseId, hospitalIds));
+    }
+    public static Person updatePerson(int personId, String name, String emailId, String password, String role, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        masterPersonList.put(personId, new Person(personId, name, emailId, password, role, age, gender, houseId, hospitalIds));
+        return personList.put(personId, new Person(personId, name, emailId, password, role, age, gender, houseId, hospitalIds));
+    }
+    public static Person deletePerson(int doctorId) {
+        masterPersonList.remove(doctorId);
+        return personList.remove(doctorId);
+    }
+    
+    // Doctor CRUD Method
     public static Doctor createDoctor(String name, String emailId, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
         Doctor doctor = new Doctor(lastPersonId, name, emailId, password, age, gender, houseId, hospitalIds);
+        masterPersonList.put(lastPersonId, doctor);
         personList.put(lastPersonId++, doctor);
         return doctor;
     }
+    public static Doctor updateDoctor(int doctorId, String name, String emailId, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        Doctor doctor = new Doctor(doctorId, name, emailId, password, age, gender, houseId, hospitalIds);
+        masterPersonList.put(doctorId, doctor);
+        personList.put(doctorId, doctor);
+        return doctor;
+    }
+    public static Person deleteDoctor(int doctorId) {
+        masterPersonList.remove(doctorId);
+        return personList.remove(doctorId);
+    }
+    
+    // Vital Sign
     public static VitalSign createVitalSign(double temperature, String bloodPressure, int heartRate){
+        masterVitalSignList.put(lastVitalSignId, new VitalSign(lastVitalSignId, temperature, bloodPressure, heartRate));
         return vitalSignList.put(lastVitalSignId, new VitalSign(lastVitalSignId++, temperature, bloodPressure, heartRate));
     }
+    public static VitalSign updateVitalSign(int vitalSignId, double temperature, String bloodPressure, int heartRate){
+        masterVitalSignList.put(vitalSignId, new VitalSign(vitalSignId, temperature, bloodPressure, heartRate));
+        return vitalSignList.put(vitalSignId, new VitalSign(vitalSignId, temperature, bloodPressure, heartRate));
+    }
+    public static VitalSign deleteVitalSign(int vitalSignId){
+        masterVitalSignList.remove(vitalSignId);
+        return vitalSignList.remove(vitalSignId);
+    }
+    
+    //Patient CRUD Method
     public static Patient createPatient(String name, String emailId, String password, int age, String gender, int houseId) {
         Patient patient = new Patient(lastPersonId, name, emailId, password, age, gender, houseId, null);
+        masterPersonList.put(lastPersonId, patient);
         personList.put(lastPersonId++, patient);
         return patient;
     }
+    public static Patient updatePatient(int personId, String name, String emailId, String password, int age, String gender, int houseId) {
+        Patient patient = new Patient(personId, name, emailId, password, age, gender, houseId, null);
+        masterPersonList.put(personId, patient);
+        personList.put(personId, patient);
+        return patient;
+    }
+    public static Person deletePatient(int personId) {
+        masterPersonList.remove(personId);
+        return personList.remove(personId);
+    }
+    
+    //Admin CRUD Method
     public static Person createAdmin(String name, String emailId, String password, String role, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        masterPersonList.put(lastPersonId, new Person(lastPersonId, name, emailId, password, role, age, gender, houseId, hospitalIds));
         return personList.put(lastPersonId, new Person(lastPersonId++, name, emailId, password, role, age, gender, houseId, hospitalIds));
     }
+    public static Person updateAdmin(int personId, String name, String emailId, String password, String role, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        masterPersonList.put(personId, new Person(personId, name, emailId, password, role, age, gender, houseId, hospitalIds));
+        return personList.put(personId, new Person(personId, name, emailId, password, role, age, gender, houseId, hospitalIds));
+    }
+    public static Person deleteAdmin(int personId) {
+        masterPersonList.remove(personId);
+        return personList.remove(personId);
+    }
+    
+    // Encounter CRUD Method
     public static Encounter createEncounter(int patientId, int vitalSignId, String dateOfEncounter, String status, int doctorId, int hospitalId) {
+        masterEncounterList.put(lastEncounterId, new Encounter(lastEncounterId, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
         return encounterList.put(lastEncounterId, new Encounter(lastEncounterId++, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
     }
+    public static Encounter updateEncounter(int encounterId, int patientId, int vitalSignId, String dateOfEncounter, String status, int doctorId, int hospitalId) {
+        masterEncounterList.put(encounterId, new Encounter(encounterId, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
+        return encounterList.put(encounterId, new Encounter(encounterId, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
+    }
+    public static Encounter deleteEncounter(int encounterId) {
+        masterEncounterList.remove(encounterId);
+        return encounterList.remove(encounterId);
+    }
+    
     public static Map<Integer, Person> getPeople(String role){
         if(role == null) {
             return personList;

@@ -199,10 +199,12 @@ public class CommunitiesPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
-        Community selectedCommunity = Database.communityList.get(selectedCommunityId);
-        selectedCommunity.setCommunityName(communityNameTxt.getText());
-        selectedCommunity.setZipcode(zipcodeTxt.getText());
-        selectedCommunity.setCityId(cityComboBox.getSelectedIndex()-1);
+        Database.updateCommunity(
+                selectedCommunityId, 
+                communityNameTxt.getText(), 
+                cityComboBox.getSelectedIndex()-1,
+                zipcodeTxt.getText());
+        
         setCommunitiesTable();
     }//GEN-LAST:event_updateBtnActionPerformed
 
@@ -216,7 +218,7 @@ public class CommunitiesPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.communityList.remove(selectedCommunityId);
+        Database.deleteEncounter(selectedCommunityId);
         setCommunitiesTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 

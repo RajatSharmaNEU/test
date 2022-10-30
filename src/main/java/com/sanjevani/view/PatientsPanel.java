@@ -252,14 +252,21 @@ public class PatientsPanel extends javax.swing.JPanel {
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         Person selectedPerson = Database.personList.get(selectedPatientId);
-        selectedPerson.setName(patientNameTxt.getText());
-        selectedPerson.setAge(Integer.parseInt(ageTxt.getText()));
-        selectedPerson.setGender(genderComboBox.getSelectedItem().toString());
-
-        House selectedPersonHouse = Database.houseList.get(selectedPerson.getHouseId());
-        selectedPersonHouse.setAddress(houseTxt.getText());
-
-        selectedPersonHouse.setCommunityId(communityComboBox.getSelectedIndex()-1);
+        Database.updateHouse(
+                selectedPerson.getHouseId(), 
+                communityComboBox.getSelectedIndex()-1, 
+                houseTxt.getText());
+        
+        Database.updatePatient(
+                selectedPatientId,
+                patientNameTxt.getText(),
+                selectedPerson.getEmailId(),
+                selectedPerson.getPassword(),
+                Integer.parseInt(ageTxt.getText()), 
+                genderComboBox.getSelectedItem().toString(), 
+                selectedPerson.getHouseId()
+        );
+        setPatientsTable();
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
@@ -282,7 +289,7 @@ public class PatientsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.personList.remove(selectedPatientId);
+        Database.deletePatient(selectedPatientId);
         setPatientsTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 

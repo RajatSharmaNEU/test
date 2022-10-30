@@ -371,26 +371,32 @@ public class PeoplePanel extends javax.swing.JPanel {
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         Person selectedPerson = Database.personList.get(selectedPersonId);
-        selectedPerson.setName(personNameTxt.getText());
-        selectedPerson.setEmailId(emailIdTxt.getText());
-        selectedPerson.setPassword(passwordTxt.getText());
-        selectedPerson.setAge(Integer.parseInt(ageTxt.getText()));
-        selectedPerson.setRole(roleComboBox.getSelectedItem().toString());
-        selectedPerson.setGender(genderComboBox.getSelectedItem().toString());
-        
-        House selectedPersonHouse = Database.houseList.get(selectedPerson.getHouseId());
-        selectedPersonHouse.setAddress(houseTxt.getText());
         
         int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
-        selectedPersonHouse.setCommunityId(communityId);
+        
         
         List<Integer> selectedHospitalIds = new ArrayList<>();
         for(int index: hospitalsList.getSelectedIndices()){
             selectedHospitalIds.add(hospitalKeyList.get(index));
         }
-        selectedPerson.setHospitalIds(selectedHospitalIds);
         
+        Database.updateHouse(
+                selectedPerson.getHouseId(),
+                communityId,
+                houseTxt.getText()
+        );
         
+        Database.updateAdmin(
+                selectedPersonId,
+                personNameTxt.getText(),
+                emailIdTxt.getText(),
+                passwordTxt.getText(), 
+                roleComboBox.getSelectedItem().toString(),
+                Integer.parseInt(ageTxt.getText()),
+                genderComboBox.getSelectedItem().toString(),
+                HEIGHT, 
+                selectedHospitalIds
+        );
         setPeopleTable();
     }//GEN-LAST:event_updateBtnActionPerformed
 
@@ -423,7 +429,7 @@ public class PeoplePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.personList.remove(selectedPersonId);
+        Database.deletePerson(selectedPersonId);
         setPeopleTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 
