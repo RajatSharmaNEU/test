@@ -18,6 +18,7 @@ public class Constants {
     public static String INVALID_HEART_RATE = "Heart rate must be a number and between 000 to 199";
     public static String INVALID_TEMP = "Temperature must be a number and between 000.00 to 199.99";
     public static String INVALID_AGE = "Age must be a number and between 10 to 99";
+    public static String INVALID_EMAILID = "Email id is already used.";
     public static final String heartRateRegex = "[0-1]{1}[0-9]{1}[0-9]{1}";
     public static final String temperatureRegex = "^([0-1]{1}[0-9]{1}[0-9]{1}\\.[0-9]?[0-9])";
     public static final String ageRegex = "[1-9]{1}[0-9]{1}";

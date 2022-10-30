@@ -419,6 +419,11 @@ public class DoctorsPanel extends javax.swing.JPanel {
             {
                 throw new CustomException("Invalid Doctor Details");
             } 
+            
+            if(Database.isEmailIdExist(doctorEmailId)) {
+                throw new CustomException(Constants.INVALID_EMAILID);
+            }
+ 
             int communityId = communityKeyList.get(selectedCommunityId-1);
             Database.createHouse(communityId, houseTxt.getText());
             Database.createDoctor(
@@ -435,6 +440,8 @@ public class DoctorsPanel extends javax.swing.JPanel {
             Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
             if(e.getMessage().endsWith(Constants.INVALID_AGE)){
                 JOptionPane.showMessageDialog(this, Constants.INVALID_AGE);
+            } else if(e.getMessage().endsWith(Constants.INVALID_EMAILID)){
+                JOptionPane.showMessageDialog(this, Constants.INVALID_EMAILID);
             } else {
                 JOptionPane.showMessageDialog(this, Constants.INVALID_DOCTOR_DETAIL);
             }

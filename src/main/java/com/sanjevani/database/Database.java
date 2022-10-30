@@ -223,6 +223,19 @@ public class Database {
         }
         return patientEncounterList;
     }
+    
+    public static boolean isEmailIdExist(String emailId){
+        int key = 0;
+        
+        for(Person person: personList.values()) {
+            if(person.getEmailId().trim().equalsIgnoreCase(emailId.trim().toLowerCase())){
+                return true;
+            }
+            key++;
+        }
+        
+        return false;
+    }
 
     public static void createDatabase() {
     // City Data

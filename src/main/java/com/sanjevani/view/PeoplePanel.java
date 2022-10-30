@@ -406,7 +406,7 @@ public class PeoplePanel extends javax.swing.JPanel {
                     || selectedCommunityId == 0) {
                 throw new CustomException("Invalid Person Details");
             }
-
+            
             Database.updateHouse(
                     selectedPerson.getHouseId(),
                     communityId,
@@ -465,8 +465,13 @@ public class PeoplePanel extends javax.swing.JPanel {
                     || genderComboBox.getSelectedIndex() == 0
                     || selectedCommunityId == 0) 
             {
-                throw new CustomException("Invalid Person Details");
+                throw new CustomException(Constants.INVALID_PERSON_DETAIL);
             } 
+            
+            if(Database.isEmailIdExist(personEmailId)) {
+                throw new CustomException(Constants.INVALID_EMAILID);
+            }
+            
             int communityId = communityKeyList.get(selectedCommunityId-1);
             Database.createHouse(communityId, houseTxt.getText());
             Database.createAdmin(
@@ -485,6 +490,8 @@ public class PeoplePanel extends javax.swing.JPanel {
             Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
             if(e.getMessage().endsWith(Constants.INVALID_AGE)){
                 JOptionPane.showMessageDialog(this, Constants.INVALID_AGE);
+            } else if(e.getMessage().endsWith(Constants.INVALID_EMAILID)){
+                JOptionPane.showMessageDialog(this, Constants.INVALID_EMAILID);
             } else {
                 JOptionPane.showMessageDialog(this, Constants.INVALID_PERSON_DETAIL);
             }
