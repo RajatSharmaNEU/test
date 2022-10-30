@@ -19,9 +19,11 @@ public class HomeFrame extends javax.swing.JFrame {
         initComponents();
         setCardVisibility();
         
+        nameLabel.setText("Name - " + ApplicationState.authenticatedPerson.getName());
+        roleLabel.setText("Role - " + ApplicationState.authenticatedPerson.getRole());
+        
         cardLayout = (CardLayout)(viewPanel.getLayout());
-        viewPanel.add("Hospitals", new HospitalsPanel());
-        cardLayout.next(viewPanel);
+        
     }
     
     private void setCardVisibility(){
@@ -43,6 +45,8 @@ public class HomeFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         directoryPanel = new javax.swing.JPanel();
+        nameLabel = new javax.swing.JLabel();
+        roleLabel = new javax.swing.JLabel();
         showHospitalsBtn = new javax.swing.JButton();
         showDoctorsBtn = new javax.swing.JButton();
         showPeopleBtn = new javax.swing.JButton();
@@ -56,6 +60,8 @@ public class HomeFrame extends javax.swing.JFrame {
 
         directoryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Directory"));
         directoryPanel.setLayout(new java.awt.GridLayout(10, 1, 10, 10));
+        directoryPanel.add(nameLabel);
+        directoryPanel.add(roleLabel);
 
         showHospitalsBtn.setText("Hospitals");
         showHospitalsBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -218,6 +224,8 @@ public class HomeFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel directoryPanel;
     private javax.swing.JButton logoutBtn;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel roleLabel;
     private javax.swing.JButton showCommunitiesBtn;
     private javax.swing.JButton showDoctorsBtn;
     private javax.swing.JButton showEncountersBtn;

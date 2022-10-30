@@ -57,6 +57,10 @@
         <Property name="verticalGap" type="int" value="10"/>
       </Layout>
       <SubComponents>
+        <Component class="javax.swing.JLabel" name="nameLabel">
+        </Component>
+        <Component class="javax.swing.JLabel" name="roleLabel">
+        </Component>
         <Component class="javax.swing.JButton" name="showHospitalsBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="Hospitals"/>
