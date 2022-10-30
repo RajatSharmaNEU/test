@@ -205,12 +205,22 @@ public class EncountersPanel extends javax.swing.JPanel {
         addEncounterPanel.add(hospitalLabel);
 
         hospitalComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        hospitalComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                hospitalComboBoxItemStateChanged(evt);
+            }
+        });
         addEncounterPanel.add(hospitalComboBox);
 
         doctorLabel.setText("Doctor");
         addEncounterPanel.add(doctorLabel);
 
         doctorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        doctorComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                doctorComboBoxItemStateChanged(evt);
+            }
+        });
         addEncounterPanel.add(doctorComboBox);
 
         patientLabel.setText("Patient");
@@ -223,7 +233,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         addEncounterPanel.add(bloodPressureLabel);
         addEncounterPanel.add(bloodPressureTxt);
 
-        temperatureLabel.setText("Temperature (fahrenheit)");
+        temperatureLabel.setText("Temperature (000.00 F - 199.99 F)");
         addEncounterPanel.add(temperatureLabel);
 
         temperatureTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -233,7 +243,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         });
         addEncounterPanel.add(temperatureTxt);
 
-        heartRateLabel.setText("Heart Rate");
+        heartRateLabel.setText("Heart Rate ()000 - 999)");
         addEncounterPanel.add(heartRateLabel);
 
         heartRateTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -368,16 +378,16 @@ public class EncountersPanel extends javax.swing.JPanel {
 
         String heartRateText = heartRateTxt.getText();
         String temperatureText = temperatureTxt.getText();
-        
+
         try {
-            if (!Pattern.matches(Constants.heartRateRegex, heartRateText) || !Pattern.matches(Constants.numberReg, heartRateText)){
+            if (!Pattern.matches(Constants.heartRateRegex, heartRateText) || !Pattern.matches(Constants.numberReg, heartRateText)) {
                 throw new CustomException(Constants.INVALID_HEART_RATE);
             }
-            
-            if (!Pattern.matches(Constants.temperatureRegex, temperatureText) || !Pattern.matches(Constants.decimalReg, temperatureText)){
+
+            if (!Pattern.matches(Constants.temperatureRegex, temperatureText) || !Pattern.matches(Constants.decimalReg, temperatureText)) {
                 throw new CustomException(Constants.INVALID_TEMP);
             }
-            
+
             if (selectedHospitalId == 0
                     || selectedDoctorId == 0
                     || selectedPatientId == 0
@@ -432,17 +442,16 @@ public class EncountersPanel extends javax.swing.JPanel {
 
         String heartRateText = heartRateTxt.getText();
         String temperatureText = temperatureTxt.getText();
-        
-        
+
         try {
-            if (!Pattern.matches(Constants.heartRateRegex, heartRateText) || !Pattern.matches(Constants.numberReg, heartRateText)){
+            if (!Pattern.matches(Constants.heartRateRegex, heartRateText) || !Pattern.matches(Constants.numberReg, heartRateText)) {
                 throw new CustomException(Constants.INVALID_HEART_RATE);
             }
-            
-            if (!Pattern.matches(Constants.temperatureRegex, temperatureText) || !Pattern.matches(Constants.decimalReg, temperatureText)){
+
+            if (!Pattern.matches(Constants.temperatureRegex, temperatureText) || !Pattern.matches(Constants.decimalReg, temperatureText)) {
                 throw new CustomException(Constants.INVALID_TEMP);
             }
-            
+
             if (selectedHospitalId == 0
                     || selectedDoctorId == 0
                     || selectedPatientId == 0
@@ -456,7 +465,6 @@ public class EncountersPanel extends javax.swing.JPanel {
             int doctorId = doctorKeyList.get(selectedDoctorId - 1);
             int patientId = patientKeyList.get(selectedPatientId - 1);
 
-        
             Double temperature = Double.parseDouble(temperatureTxt.getText());
             String bloodPressure = bloodPressureTxt.getText();
             Integer heartRate = Integer.parseInt(heartRateTxt.getText());
@@ -521,6 +529,43 @@ public class EncountersPanel extends javax.swing.JPanel {
     private void statusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_statusComboBoxActionPerformed
+
+    private void hospitalComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_hospitalComboBoxItemStateChanged
+        int index = hospitalComboBox.getSelectedIndex();
+        int key = 0;
+
+        // Populate Doctor
+        DefaultComboBoxModel doctorModel = new DefaultComboBoxModel();
+        doctorModel.removeAllElements();
+        doctorModel.addElement("--Select--");
+
+        if (index == 0) {
+            for (Person person : Database.getPeople("Doctor").values()) {
+
+                doctorKeyList.add(key);
+                doctorNameList.add(person.getName());
+                doctorModel.addElement(person.getName());
+
+                key++;
+            }
+        } else {
+            int doctorId = doctorKeyList.get(index - 1);
+            for (Person person : Database.getPeople("Doctor").values()) {
+                if (person.getHospitalIds().contains(doctorId)) {
+                    doctorKeyList.add(key);
+                    doctorNameList.add(person.getName());
+                    doctorModel.addElement(person.getName());
+                }
+
+                key++;
+            }
+
+        }
+        doctorComboBox.setModel(doctorModel);
+    }//GEN-LAST:event_hospitalComboBoxItemStateChanged
+
+    private void doctorComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_doctorComboBoxItemStateChanged
+    }//GEN-LAST:event_doctorComboBoxItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -128,8 +128,8 @@ public class PeoplePanel extends javax.swing.JPanel {
         for (Map.Entry<Integer, Person> entry : list.entrySet()) {
             Person person = entry.getValue();
             tableContent[key][0] = String.valueOf(person.getPersonId());
-            tableContent[key][1] = person.getEmailId();
-            tableContent[key][2] = person.getName();
+            tableContent[key][1] = person.getName();
+            tableContent[key][2] = person.getEmailId();
             tableContent[key][3] = String.valueOf(Database.personList.get(person.getPersonId()).getAge());
             tableContent[key][4] = Database.personList.get(person.getPersonId()).getGender();
             tableContent[key][5] = Database.personList.get(person.getPersonId()).getRole();

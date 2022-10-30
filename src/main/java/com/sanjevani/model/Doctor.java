@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Doctor extends Person {
     
-    public Doctor(int personId, String name, String userName, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
-        super(personId, name, userName, password, "Doctor", age, gender, houseId, hospitalIds);
+    public Doctor(int personId, String name, String emailId, String password, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        super(personId, name, emailId, password, "Doctor", age, gender, houseId, hospitalIds);
     }
 }
