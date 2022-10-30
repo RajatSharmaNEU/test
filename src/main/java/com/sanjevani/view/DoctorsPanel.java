@@ -75,6 +75,8 @@ public class DoctorsPanel extends javax.swing.JPanel {
         
         if(ApplicationState.isDoctor() || ApplicationState.isPatient()){
             buttonPanel.setVisible(false);
+            passwordLabel.setVisible(false);
+            passwordTxt.setVisible(false);
         }
         
         // hide update and delete btn

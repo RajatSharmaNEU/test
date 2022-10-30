@@ -76,6 +76,11 @@ public class HospitalsPanel extends javax.swing.JPanel {
             buttonsPanel.setVisible(false);
         }
         
+        if(ApplicationState.isHospitalAdmin()){
+            addBtn.setVisible(false);
+            resetBtn.setVisible(false);
+        }
+        
         // hide update and delete btn
         updateBtn.setVisible(false);
         deleteBtn.setVisible(false);
