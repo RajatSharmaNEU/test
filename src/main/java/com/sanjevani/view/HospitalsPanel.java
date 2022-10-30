@@ -5,15 +5,20 @@
 package com.sanjevani.view;
 
 import com.sanjevani.database.ApplicationState;
+import com.sanjevani.database.Constants;
 import com.sanjevani.database.Database;
+import com.sanjevani.exceptions.CustomException;
 import com.sanjevani.model.Community;
 import com.sanjevani.model.Hospital;
 import com.sanjevani.model.Person;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -286,30 +291,54 @@ public class HospitalsPanel extends javax.swing.JPanel {
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         Hospital selectedHospital = Database.hospitalList.get(selectedHospitalId);
         
-        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
-        
+        int selectedCommunityId = communityComboBox.getSelectedIndex();        
+        String hospitalName = hospitalNameTxt.getText();
         List<Integer> selectedDoctorIds = new ArrayList<>();
         for(int index: doctorsList.getSelectedIndices()){
             selectedDoctorIds.add(doctorKeyList.get(index));
         }
         
-        Database.updateHospital(
+        try {
+            if (!hospitalName.isBlank() && selectedCommunityId > 0) {
+                int communityId = communityKeyList.get(selectedCommunityId-1);        
+                Database.updateHospital(
                 selectedHospitalId,
-                hospitalNameTxt.getText(),
+                hospitalName,
                 communityId, 
-                selectedDoctorIds
-        );
-        
-        setHospitalsTable();
+                selectedDoctorIds);
+                setHospitalsTable();
+            } else {
+                throw new CustomException("Invalid Hospital Details");
+            }
+        } catch(CustomException e) {
+            Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
+            JOptionPane.showMessageDialog(this, Constants.INVALID_HOSPITAL_DETAIL);
+        }
+
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         List<Integer> selectedDoctorIds = new ArrayList<>();
+        String hospitalName = hospitalNameTxt.getText();
+        
         for(int index: doctorsList.getSelectedIndices()){
             selectedDoctorIds.add(doctorKeyList.get(index));
         }
-        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
-        Database.createHospital(hospitalNameTxt.getText(), communityId, selectedDoctorIds );
+        int selectedCommunityId = communityComboBox.getSelectedIndex();        
+        
+        try {
+            if (!hospitalName.isBlank() && selectedCommunityId > 0) {
+                int communityId = communityKeyList.get(selectedCommunityId-1);        
+                Database.createHospital(hospitalNameTxt.getText(), communityId, selectedDoctorIds );
+            } else {
+                throw new CustomException("Invalid Hospital Details");
+            }
+        } catch(CustomException e) {
+            Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
+            JOptionPane.showMessageDialog(this, Constants.INVALID_HOSPITAL_DETAIL);
+        }
+        
+        
         setHospitalsTable();
     }//GEN-LAST:event_addBtnActionPerformed
 

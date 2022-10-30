@@ -9,11 +9,5 @@ package com.sanjevani.database;
  * @author rajatsharma
  */
 public class Constants {
-    public static enum ROLE {
-        SA,
-        CA,
-        HA,
-        PATIENT,
-        DOCTOR
-    }
+    public static String INVALID_HOSPITAL_DETAIL = "Please provide all hospial details.";
 }
