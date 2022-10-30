@@ -74,7 +74,7 @@ public class ApplicationState {
     
     public static boolean isEncountersViewVisible(){
         String role = authenticatedPerson.getRole();
-        List<String> roleWithEncountersAccess = Arrays.asList("SystemAdmin", "Patient", "Doctor");
+        List<String> roleWithEncountersAccess = Arrays.asList("SystemAdmin", "Doctor");
         return roleWithEncountersAccess.contains(role);
     }
     
@@ -135,6 +135,30 @@ public class ApplicationState {
         Database.hospitalList = filteredList;
     }
     
+    public static void refreshPatientListForPatient(List<String> roleList) {
+        HashMap<Integer, Person> filteredList = new HashMap<>();
+        
+        Database.personList.forEach((key, value) -> {
+            if(authenticatedPerson.getPersonId() == key || roleList.contains(value.getRole())){
+                filteredList.put(value.getPersonId(), value);
+            } 
+        });
+        
+        Database.personList = filteredList;
+    }
+    
+    public static void refreshEncounterList() {
+        HashMap<Integer, Encounter> filteredList = new HashMap<>();
+        
+        Database.encounterList.forEach((key, value) -> {
+            if(authenticatedPerson.getPersonId() == value.getPatientId()){
+                filteredList.put(key, value);
+            } 
+        });
+        
+        Database.encounterList = filteredList;
+    }
+    
     public static void refreshDatabase() {
         if(isCommunityAdmin()) {
             refreshCommunityList();
@@ -145,6 +169,12 @@ public class ApplicationState {
         
         if(isHospitalAdmin()){
             refreshHospitalListForHA();
+        }
+        
+        if(isPatient()){
+            refreshPatientListForPatient(Arrays.asList("Doctor"));
+            refreshEncounterList();
+            
         }
     }
 }

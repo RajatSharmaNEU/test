@@ -5,6 +5,8 @@
 
 package com.sanjevani;
 
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightIJTheme;
 import com.sanjevani.database.Database;
 import com.sanjevani.view.LoginFrame;
 
@@ -15,6 +17,8 @@ import com.sanjevani.view.LoginFrame;
 public class Sanjevani {
 
     public static void main(String[] args) {
+        FlatMoonlightIJTheme.setup();
+        
         Database.createDatabase();
         new LoginFrame().setVisible(true);
     }

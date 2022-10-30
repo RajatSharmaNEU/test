@@ -4,6 +4,7 @@
  */
 package com.sanjevani.view;
 
+import com.sanjevani.database.ApplicationState;
 import com.sanjevani.database.Database;
 import com.sanjevani.model.Community;
 import com.sanjevani.model.Hospital;
@@ -64,6 +65,11 @@ public class DoctorsPanel extends javax.swing.JPanel {
         }
         
         hospitalsList.setModel(hospitalsListModel);
+        
+        
+        if(ApplicationState.isDoctor() || ApplicationState.isPatient()){
+            buttonPanel.setVisible(false);
+        }
         
         // hide update and delete btn
         updateBtn.setVisible(false);

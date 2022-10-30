@@ -4,6 +4,7 @@
  */
 package com.sanjevani.view;
 
+import com.sanjevani.database.ApplicationState;
 import com.sanjevani.database.Database;
 import com.sanjevani.model.Community;
 import com.sanjevani.model.Encounter;
@@ -43,6 +44,10 @@ public class PatientsPanel extends javax.swing.JPanel {
         });
         
         communityComboBox.setModel(communityModel);
+        
+        if(ApplicationState.isPatient()){
+            buttonPanel.setVisible(false);
+        }
         
         // hide update and delete btn
         updateBtn.setVisible(false);

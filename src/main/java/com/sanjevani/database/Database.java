@@ -275,7 +275,7 @@ public class Database {
     
     // More Doctor Data
     Doctor doctor3 = createDoctor("Dr. Diljit Singh", "diljitsingh@gmail.com", "test@1234", 30, "Male", 0, Arrays.asList(0));
-    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh@gmail.com", "test@1234", 25, "Female", 1, Arrays.asList(1));
+    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh@gmail.com", "test@1234", 25, "Female", 1, Arrays.asList(0, 1));
     }
 }
 
