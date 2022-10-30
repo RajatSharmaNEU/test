@@ -24,9 +24,12 @@ public class HomeFrame extends javax.swing.JFrame {
     }
     
     private void setCardVisibility(){
-        showPatientsBtn.setVisible(ApplicationState.isPatientsViewVisible());
-        showEncountersBtn.setVisible(ApplicationState.isEncountersViewVisible());
+        showHospitalsBtn.setVisible(ApplicationState.isHospitasViewVisible());
         showDoctorsBtn.setVisible(ApplicationState.isDoctorsViewVisible());
+        showPatientsBtn.setVisible(ApplicationState.isPatientsViewVisible());
+        showPeopleBtn.setVisible(ApplicationState.isPeopleViewVisible());
+        showCommunitiesBtn.setVisible(ApplicationState.isCommunitiesViewVisible());
+        showEncountersBtn.setVisible(ApplicationState.isEncountersViewVisible());
     }
 
     /**

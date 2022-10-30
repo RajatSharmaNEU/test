@@ -42,21 +42,39 @@ public class ApplicationState {
         return authenticatedPerson.getRole().equals("Patient");
     }
     
+    public static boolean isHospitasViewVisible(){
+        String role = authenticatedPerson.getRole();
+        List<String> roleWithDoctorsAccess = Arrays.asList("SystemAdmin", "CommunityAdmin", "HospitalAdmin", "Patient");
+        return roleWithDoctorsAccess.contains(role);
+    }
+    
     public static boolean isDoctorsViewVisible(){
         String role = authenticatedPerson.getRole();
-        List<String> roleWithPatientsAccess = Arrays.asList("SystemAdmin");
-        return roleWithPatientsAccess.contains(role);
+        List<String> roleWithDoctorsAccess = Arrays.asList("SystemAdmin", "CommunityAdmin", "HospitalAdmin", "Patient", "Doctor");
+        return roleWithDoctorsAccess.contains(role);
     }
     
     public static boolean isPatientsViewVisible(){
         String role = authenticatedPerson.getRole();
-        List<String> roleWithPatientsAccess = Arrays.asList("SystemAdmin");
+        List<String> roleWithPatientsAccess = Arrays.asList("SystemAdmin", "Patient", "Doctor");
+        return roleWithPatientsAccess.contains(role);
+    }
+    
+    public static boolean isPeopleViewVisible(){
+        String role = authenticatedPerson.getRole();
+        List<String> roleWithPeopleAccess = Arrays.asList("SystemAdmin", "CommunityAdmin");
+        return roleWithPeopleAccess.contains(role);
+    }
+    
+    public static boolean isCommunitiesViewVisible(){
+        String role = authenticatedPerson.getRole();
+        List<String> roleWithPatientsAccess = Arrays.asList("SystemAdmin", "CommunityAdmin");
         return roleWithPatientsAccess.contains(role);
     }
     
     public static boolean isEncountersViewVisible(){
         String role = authenticatedPerson.getRole();
-        List<String> roleWithEncountersAccess = Arrays.asList("SystemAdmin", "Patient");
+        List<String> roleWithEncountersAccess = Arrays.asList("SystemAdmin", "Patient", "Doctor");
         return roleWithEncountersAccess.contains(role);
     }
     
@@ -105,12 +123,28 @@ public class ApplicationState {
         Database.personList = filteredList;
     }
     
+    public static void refreshHospitalListForHA(){
+        List<Integer> hospitalIds = ApplicationState.authenticatedPerson.getHospitalIds();
+        
+        HashMap<Integer,Hospital> filteredList = new HashMap<>();
+        
+        for(int hospitalId: hospitalIds){
+            filteredList.put(hospitalId, Database.hospitalList.get(hospitalId));
+        }
+        
+        Database.hospitalList = filteredList;
+    }
+    
     public static void refreshDatabase() {
         if(isCommunityAdmin()) {
             refreshCommunityList();
             refreshHospitalList();
             refreshPersonList(Arrays.asList("Patient", "Doctor"));
             Database.roles = new String[]{"Patient", "Doctor"};
+        }
+        
+        if(isHospitalAdmin()){
+            refreshHospitalListForHA();
         }
     }
 }

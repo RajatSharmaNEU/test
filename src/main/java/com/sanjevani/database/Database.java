@@ -125,7 +125,7 @@ public class Database {
     
     
     // Doctor Data
-    Doctor doctor1 = createDoctor("Dr. Rajeev Aggarwal", "rajeevAggarwal@gmail.com", "test@1234", 30, "Male", 0, Arrays.asList(0));
+    Doctor doctor1 = createDoctor("Dr. Rajeev Aggarwal", "d", "d", 30, "Male", 0, Arrays.asList(0));
     Doctor doctor2 = createDoctor("Dr. Sunita Williams", "sunitawilliams@gmail.com", "test@1234", 25, "Female", 1, Arrays.asList(0,1));
     
     // Vital Sign Data
@@ -133,7 +133,7 @@ public class Database {
     VitalSign vitalSign2 = createVitalSign(99.99, "70-110", 77);
     
     // Patient Data
-    Patient patient1 = createPatient("Manthan Bhatia", "rajatsharma", "test@1234", 30, "Male", 2);
+    Patient patient1 = createPatient("Manthan", "p", "p", 30, "Male", 2);
     Patient patient2 = createPatient("Yash Pawar", "yashpawar", "test@1234", 25, "Male", 3);
     
     // Encounter Data
