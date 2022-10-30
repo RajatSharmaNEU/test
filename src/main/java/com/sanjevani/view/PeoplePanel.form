@@ -60,7 +60,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="personNameLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Doctor Name"/>
+                <Property name="text" type="java.lang.String" value="Name"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="personNameTxt">

@@ -23,6 +23,9 @@ public class HospitalsPanel extends javax.swing.JPanel {
 
     List<Integer> doctorKeyList = new ArrayList<>();
     List<String> doctorNameList = new ArrayList<>();
+    List<Integer> communityKeyList = new ArrayList<>();
+    List<String> communityNameList = new ArrayList<>();
+    
     /**
      * Creates new form HospitalsPanel
      */
@@ -40,6 +43,7 @@ public class HospitalsPanel extends javax.swing.JPanel {
         communityModel.addElement("--Select--");
         
         Database.communityList.forEach((key, community) -> {
+            communityKeyList.add(key);
             communityModel.addElement(community.getCommunityName());
         });
         
@@ -78,6 +82,8 @@ public class HospitalsPanel extends javax.swing.JPanel {
             tableContent[key][0] = String.valueOf(hospital.getHospitalId());
             tableContent[key][1] = hospital.getName();
             
+            System.out.println(hospital.getCommunityId());
+            System.out.println(Database.communityList);
             Community community = Database.communityList.get(hospital.getCommunityId());
             
             tableContent[key][2] = community.getCommunityName();
@@ -271,7 +277,10 @@ public class HospitalsPanel extends javax.swing.JPanel {
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         Hospital selectedHospital = Database.hospitalList.get(selectedHospitalId);
         selectedHospital.setName(hospitalNameTxt.getText());
-        selectedHospital.setCommunityId(communityComboBox.getSelectedIndex()-1);
+        
+        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
+        
+        selectedHospital.setCommunityId(communityId);
         
         List<Integer> selectedDoctorIds = new ArrayList<>();
         for(int index: doctorsList.getSelectedIndices()){
@@ -286,7 +295,8 @@ public class HospitalsPanel extends javax.swing.JPanel {
         for(int index: doctorsList.getSelectedIndices()){
             selectedDoctorIds.add(doctorKeyList.get(index));
         }
-        Database.createHospital(hospitalNameTxt.getText(), communityComboBox.getSelectedIndex()-1, selectedDoctorIds );
+        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
+        Database.createHospital(hospitalNameTxt.getText(), communityId, selectedDoctorIds );
         setHospitalsTable();
     }//GEN-LAST:event_addBtnActionPerformed
 

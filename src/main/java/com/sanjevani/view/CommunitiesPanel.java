@@ -4,6 +4,7 @@
  */
 package com.sanjevani.view;
 
+import com.sanjevani.database.ApplicationState;
 import com.sanjevani.database.Database;
 import com.sanjevani.model.City;
 import com.sanjevani.model.Community;
@@ -41,6 +42,11 @@ public class CommunitiesPanel extends javax.swing.JPanel {
         // hide update and delete btn
         updateBtn.setVisible(false);
         deleteBtn.setVisible(false);
+        
+        if(ApplicationState.isCommunityAdmin()) {
+            addBtn.setVisible(false);
+            resetBtn.setVisible(false);
+        }
     }
     
     private void setCommunitiesTable() {
@@ -48,13 +54,14 @@ public class CommunitiesPanel extends javax.swing.JPanel {
         String[] tableColumns = {"Id", "Community Name", "City Name", "Zip Code"};
         String[][] tableContent = new String[communityList.size()][tableColumns.length];
 
-        communityList.forEach((key, community) -> {
+        int key = 0;
+        for(Community community: communityList.values()) {
             tableContent[key][0] = String.valueOf(community.getCommunityId());            
             tableContent[key][1] = community.getCommunityName();            
             tableContent[key][2] = Database.cityList.get(community.getCityId()).getCityName();
             tableContent[key][3] = String.valueOf(community.getZipcode());
-            
-        });
+            key++;
+        }
         
         communitiesTable.setModel(new DefaultTableModel(tableContent, tableColumns));
         resetCommunityForm();
@@ -224,7 +231,11 @@ public class CommunitiesPanel extends javax.swing.JPanel {
         
         // Hide and Show Button
         updateBtn.setVisible(true);
-        deleteBtn.setVisible(true);
+        
+        if(!ApplicationState.isCommunityAdmin()) {
+            deleteBtn.setVisible(true);
+        }
+        
         
     }//GEN-LAST:event_communitiesTableMouseClicked
 

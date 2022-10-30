@@ -133,6 +133,7 @@ public class LoginFrame extends javax.swing.JFrame {
         } else {
             System.out.println("Login successfully");
             ApplicationState.authenticatedPerson = authenticatedPerson;
+            ApplicationState.refreshDatabase();
             new HomeFrame().setVisible(true);
             dispose();
         }

@@ -23,6 +23,8 @@ import javax.swing.table.DefaultTableModel;
 public class DoctorsPanel extends javax.swing.JPanel {
     List<Integer> hospitalKeyList = new ArrayList<>();
     List<String> hospitalNameList = new ArrayList<>();
+    List<Integer> communityKeyList = new ArrayList<>();
+    
     int selectedDoctorId;
     
     /**
@@ -41,6 +43,7 @@ public class DoctorsPanel extends javax.swing.JPanel {
         communityModel.addElement("--Select--");
         
         Database.communityList.forEach((key, community) -> {
+            communityKeyList.add(key);
             communityModel.addElement(community.getCommunityName());
         });
         
@@ -304,7 +307,9 @@ public class DoctorsPanel extends javax.swing.JPanel {
         House selectedPersonHouse = Database.houseList.get(selectedPerson.getHouseId());
         selectedPersonHouse.setAddress(houseTxt.getText());
         
-        selectedPersonHouse.setCommunityId(communityComboBox.getSelectedIndex()-1);
+        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
+        selectedPersonHouse.setCommunityId(communityId);
+        
         
         List<Integer> selectedHospitalIds = new ArrayList<>();
         for(int index: hospitalsList.getSelectedIndices()){
@@ -320,7 +325,10 @@ public class DoctorsPanel extends javax.swing.JPanel {
             selectedHospitalIds.add(hospitalKeyList.get(index));
         }
         
-        Database.createHouse(communityComboBox.getSelectedIndex()-1, houseTxt.getText());
+        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
+        
+        
+        Database.createHouse(communityId, houseTxt.getText());
 
         // TODO: Fix lasthouseID
         Database.createDoctor(

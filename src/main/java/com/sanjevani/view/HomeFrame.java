@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.sanjevani.view;
+import com.sanjevani.database.ApplicationState;
 import java.awt.CardLayout;
 
 /**
@@ -15,9 +16,17 @@ public class HomeFrame extends javax.swing.JFrame {
     
     public HomeFrame() {
         initComponents();
+        setCardVisibility();
+        
         cardLayout = (CardLayout)(viewPanel.getLayout());
         viewPanel.add("Hospitals", new HospitalsPanel());
         cardLayout.next(viewPanel);
+    }
+    
+    private void setCardVisibility(){
+        showPatientsBtn.setVisible(ApplicationState.isPatientsViewVisible());
+        showEncountersBtn.setVisible(ApplicationState.isEncountersViewVisible());
+        showDoctorsBtn.setVisible(ApplicationState.isDoctorsViewVisible());
     }
 
     /**

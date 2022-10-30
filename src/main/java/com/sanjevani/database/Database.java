@@ -142,8 +142,8 @@ public class Database {
     
     // Admin Data
     Person systemAdmin = createAdmin("Rajat Sharma", "a", "a", "SystemAdmin", 30, "Male", 4);
-    Person communityAdmin = createAdmin("Gaurang Londhe", "gaurangLondhe@gmail.com", "test@1234", "CommunityAdmin", 30, "Male", 5);
-    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "chakradharGrandhi@gmail.com", "test@1234", "HospitalAdmin", 30, "Male", 6);
+    Person communityAdmin = createAdmin("Gaurang Londhe", "c", "c", "CommunityAdmin", 30, "Male", 5);
+    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "h", "h", "HospitalAdmin", 30, "Male", 6);
     
     
     // More Doctor Data

@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -22,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PeoplePanel extends javax.swing.JPanel {
     int selectedPersonId;
+    List<Integer> communityKeyList = new ArrayList<>();
     /**
      * Creates new form HospitalsPanel
      */
@@ -49,6 +49,7 @@ public class PeoplePanel extends javax.swing.JPanel {
         communityModel.addElement("--Select--");
         
         Database.communityList.forEach((key, community) -> {
+            communityKeyList.add(key);
             communityModel.addElement(community.getCommunityName());
         });
         
@@ -149,7 +150,7 @@ public class PeoplePanel extends javax.swing.JPanel {
 
         AddPeoplePanel.setLayout(new java.awt.GridLayout(8, 2));
 
-        personNameLabel.setText("Doctor Name");
+        personNameLabel.setText("Name");
         AddPeoplePanel.add(personNameLabel);
         AddPeoplePanel.add(personNameTxt);
 
@@ -303,13 +304,16 @@ public class PeoplePanel extends javax.swing.JPanel {
         
         House selectedPersonHouse = Database.houseList.get(selectedPerson.getHouseId());
         selectedPersonHouse.setAddress(houseTxt.getText());
-        selectedPersonHouse.setCommunityId(communityComboBox.getSelectedIndex()-1);
+        
+        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
+        selectedPersonHouse.setCommunityId(communityId);
         
         setPeopleTable();
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        Database.createHouse(communityComboBox.getSelectedIndex()-1, houseTxt.getText());
+        int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
+        Database.createHouse(communityId, houseTxt.getText());
 
         // TODO: Fix lasthouseID
         Database.createAdmin(
