@@ -48,7 +48,7 @@ public class PatientsPanel extends javax.swing.JPanel {
         
         communityComboBox.setModel(communityModel);
         
-        if(ApplicationState.isPatient()){
+        if(ApplicationState.isDoctor() || ApplicationState.isPatient()){
             buttonPanel.setVisible(false);
         }
         
@@ -141,7 +141,7 @@ public class PatientsPanel extends javax.swing.JPanel {
         PatientsOuterPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         addPatientPanel.setPreferredSize(new java.awt.Dimension(900, 550));
-        addPatientPanel.setLayout(new java.awt.GridLayout(7, 2));
+        addPatientPanel.setLayout(new java.awt.GridLayout(6, 2));
 
         patientNameLabel.setText("Patient Name");
         addPatientPanel.add(patientNameLabel);

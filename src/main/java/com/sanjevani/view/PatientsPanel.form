@@ -56,7 +56,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="2"/>
-            <Property name="rows" type="int" value="7"/>
+            <Property name="rows" type="int" value="6"/>
           </Layout>
           <SubComponents>
             <Component class="javax.swing.JLabel" name="patientNameLabel">
