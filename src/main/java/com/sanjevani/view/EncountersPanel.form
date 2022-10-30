@@ -134,7 +134,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="temperatureLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Temperature (000.00 F - 199.99 F)"/>
+                <Property name="text" type="java.lang.String" value="Temperature (0 F - 200 F)"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="temperatureTxt">
@@ -144,7 +144,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="heartRateLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Heart Rate ()000 - 999)"/>
+                <Property name="text" type="java.lang.String" value="Heart Rate (0 - 160)"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="heartRateTxt">

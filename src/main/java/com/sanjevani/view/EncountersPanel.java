@@ -233,7 +233,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         addEncounterPanel.add(bloodPressureLabel);
         addEncounterPanel.add(bloodPressureTxt);
 
-        temperatureLabel.setText("Temperature (000.00 F - 199.99 F)");
+        temperatureLabel.setText("Temperature (0 F - 200 F)");
         addEncounterPanel.add(temperatureLabel);
 
         temperatureTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -243,7 +243,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         });
         addEncounterPanel.add(temperatureTxt);
 
-        heartRateLabel.setText("Heart Rate ()000 - 999)");
+        heartRateLabel.setText("Heart Rate (0 - 160)");
         addEncounterPanel.add(heartRateLabel);
 
         heartRateTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -380,11 +380,11 @@ public class EncountersPanel extends javax.swing.JPanel {
         String temperatureText = temperatureTxt.getText();
 
         try {
-            if (!Pattern.matches(Constants.heartRateRegex, heartRateText) || !Pattern.matches(Constants.numberReg, heartRateText)) {
+            if (!Pattern.matches(Constants.numberReg, heartRateText) || Integer.parseInt(heartRateText) < 0 || Integer.parseInt(heartRateText) > 160) {
                 throw new CustomException(Constants.INVALID_HEART_RATE);
             }
 
-            if (!Pattern.matches(Constants.temperatureRegex, temperatureText) || !Pattern.matches(Constants.decimalReg, temperatureText)) {
+            if (!Pattern.matches(Constants.decimalReg, temperatureText) || Double.parseDouble(temperatureText) < 0 || Double.parseDouble(temperatureText) > 200) {
                 throw new CustomException(Constants.INVALID_TEMP);
             }
 
@@ -444,11 +444,11 @@ public class EncountersPanel extends javax.swing.JPanel {
         String temperatureText = temperatureTxt.getText();
 
         try {
-            if (!Pattern.matches(Constants.heartRateRegex, heartRateText) || !Pattern.matches(Constants.numberReg, heartRateText)) {
+            if (!Pattern.matches(Constants.numberReg, heartRateText) || Integer.parseInt(heartRateText) < 0 || Integer.parseInt(heartRateText) > 160) {
                 throw new CustomException(Constants.INVALID_HEART_RATE);
             }
 
-            if (!Pattern.matches(Constants.temperatureRegex, temperatureText) || !Pattern.matches(Constants.decimalReg, temperatureText)) {
+             if (!Pattern.matches(Constants.decimalReg, temperatureText) || Double.parseDouble(temperatureText) < 0 || Double.parseDouble(temperatureText) > 200) {
                 throw new CustomException(Constants.INVALID_TEMP);
             }
 
