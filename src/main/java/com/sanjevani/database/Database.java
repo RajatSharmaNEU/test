@@ -53,6 +53,17 @@ public class Database {
     public static HashMap<Integer,Encounter> encounterList = new HashMap<>();  
     public static String[] roles = {"Doctor", "Patient", "SystemAdmin", "CommunityAdmin", "HospitalAdmin"};
     
+    //Refresh Database
+    public static void refreshDatabase(){
+        houseList = masterHouseList;
+        cityList = masterCityList;
+        communityList = masterCommunityList;
+        hospitalList = masterHospitalList;
+        vitalSignList= masterVitalSignList;
+        personList = masterPersonList;
+        encounterList = masterEncounterList;
+        Database.roles = new String[]{"Doctor", "Patient", "SystemAdmin", "CommunityAdmin", "HospitalAdmin"};
+    }
     // Create Instance Methods
     // House CRUD Method
     public static House createHouse(int communityId, String address) {

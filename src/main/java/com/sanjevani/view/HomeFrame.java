@@ -4,6 +4,7 @@
  */
 package com.sanjevani.view;
 import com.sanjevani.database.ApplicationState;
+import com.sanjevani.database.Database;
 import java.awt.CardLayout;
 
 /**
@@ -172,6 +173,7 @@ public class HomeFrame extends javax.swing.JFrame {
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
         new LoginFrame().setVisible(true);
+        Database.refreshDatabase();
         dispose();
     }//GEN-LAST:event_logoutBtnActionPerformed
 
