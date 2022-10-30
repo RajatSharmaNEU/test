@@ -141,7 +141,7 @@ public class Database {
     Encounter encounter2 = createEncounter(3, 1, "09-26-2022", "Pending", 1, 1);    
     
     // Admin Data
-    Person systemAdmin = createAdmin("Rajat Sharma", "rajatsharma@gmail.com", "test@1234", "SystemAdmin", 30, "Male", 4);
+    Person systemAdmin = createAdmin("Rajat Sharma", "a", "a", "SystemAdmin", 30, "Male", 4);
     Person communityAdmin = createAdmin("Gaurang Londhe", "gaurangLondhe@gmail.com", "test@1234", "CommunityAdmin", 30, "Male", 5);
     Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "chakradharGrandhi@gmail.com", "test@1234", "HospitalAdmin", 30, "Male", 6);
     
