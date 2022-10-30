@@ -14,6 +14,7 @@ import com.sanjevani.model.Person;
 import com.sanjevani.model.VitalSign;
 import com.toedter.calendar.JCalendar;
 import java.awt.BorderLayout;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -127,7 +128,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         HashMap<Integer,Encounter> list = Database.encounterList;
         String[] tableColumns = {"Id", "Patient Name", "Age", "Gender", "Temperatire", "Blood Pressure", "Heart Rate", "Encounter Date", "Status", "Doctor Name", "Hospital Name"};
         String[][] tableContent = new String[list.size()][tableColumns.length];
-
+        SimpleDateFormat dateOnly = new SimpleDateFormat("MM/dd/yyyy");
         int key = 0;
         for(Encounter encounter: list.values()) {
             Person patient = Database.personList.get(encounter.getPatientId());
@@ -142,7 +143,7 @@ public class EncountersPanel extends javax.swing.JPanel {
             tableContent[key][4] = String.valueOf(vitalSign.getTemperature());
             tableContent[key][5] = vitalSign.getBloodPressure();
             tableContent[key][6] = String.valueOf(vitalSign.getHeartRate());
-            tableContent[key][7] = String.valueOf(encounter.getDateOfEncounter());
+            tableContent[key][7] = String.valueOf(dateOnly.format(encounter.getDateOfEncounter()));
             tableContent[key][8] = encounter.getStatus();
             
             tableContent[key][9] = doctor.getName();

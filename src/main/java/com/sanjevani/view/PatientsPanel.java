@@ -10,6 +10,9 @@ import com.sanjevani.model.Community;
 import com.sanjevani.model.Encounter;
 import com.sanjevani.model.House;
 import com.sanjevani.model.Person;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -317,11 +320,14 @@ public class PatientsPanel extends javax.swing.JPanel {
         // Populate encounter table for a patient
         List<Encounter> patientEncounterList = Database.getEncounterByPatientId(selectedPatientId);
         String[][] tableContent = new String[patientEncounterList.size()][tableColumns.length];
+
+        SimpleDateFormat dateOnly = new SimpleDateFormat("MM/dd/yyyy");
+        
         int key = 0;
         
         for(Encounter encounter: patientEncounterList) {
             tableContent[key][0] = Database.getPeople("Doctor").get(encounter.getDoctorId()).getName();
-            tableContent[key][1] = encounter.getDateOfEncounter();
+            tableContent[key][1] = String.valueOf(dateOnly.format(encounter.getDateOfEncounter()));
             tableContent[key][2] = Database.hospitalList.get(encounter.getHospitalId()).getName();
             key++;
         }
