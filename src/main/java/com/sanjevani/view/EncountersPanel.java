@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -222,7 +223,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         addEncounterPanel.add(bloodPressureLabel);
         addEncounterPanel.add(bloodPressureTxt);
 
-        temperatureLabel.setText("Temperature");
+        temperatureLabel.setText("Temperature (fahrenheit)");
         addEncounterPanel.add(temperatureLabel);
 
         temperatureTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -365,7 +366,18 @@ public class EncountersPanel extends javax.swing.JPanel {
         int selectedDoctorId = doctorComboBox.getSelectedIndex();
         int selectedPatientId = patientComboBox.getSelectedIndex();
 
+        String heartRateText = heartRateTxt.getText();
+        String temperatureText = temperatureTxt.getText();
+        
         try {
+            if (!Pattern.matches(Constants.heartRateRegex, heartRateText) || !Pattern.matches(Constants.numberReg, heartRateText)){
+                throw new CustomException(Constants.INVALID_HEART_RATE);
+            }
+            
+            if (!Pattern.matches(Constants.temperatureRegex, temperatureText) || !Pattern.matches(Constants.decimalReg, temperatureText)){
+                throw new CustomException(Constants.INVALID_TEMP);
+            }
+            
             if (selectedHospitalId == 0
                     || selectedDoctorId == 0
                     || selectedPatientId == 0
@@ -380,7 +392,6 @@ public class EncountersPanel extends javax.swing.JPanel {
 
             Double temperature = Double.parseDouble(temperatureTxt.getText());
             String bloodPressure = bloodPressureTxt.getText();
-            Integer heartRate = Integer.parseInt(heartRateTxt.getText());
 
             Database.updateVitalSign(
                     selectedEncounter.getVitalSignId(),
@@ -402,8 +413,10 @@ public class EncountersPanel extends javax.swing.JPanel {
 
         } catch (CustomException e) {
             Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
-            if (e.getMessage().endsWith(Constants.INVALID_ZIPCODE)) {
-                JOptionPane.showMessageDialog(this, Constants.INVALID_ZIPCODE);
+            if (e.getMessage().endsWith(Constants.INVALID_HEART_RATE)) {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_HEART_RATE);
+            } else if (e.getMessage().endsWith(Constants.INVALID_TEMP)) {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_TEMP);
             } else {
                 JOptionPane.showMessageDialog(this, Constants.INVALID_ENCOUNTER_DETAIL);
             }
@@ -417,7 +430,19 @@ public class EncountersPanel extends javax.swing.JPanel {
         int selectedDoctorId = doctorComboBox.getSelectedIndex();
         int selectedPatientId = patientComboBox.getSelectedIndex();
 
+        String heartRateText = heartRateTxt.getText();
+        String temperatureText = temperatureTxt.getText();
+        
+        
         try {
+            if (!Pattern.matches(Constants.heartRateRegex, heartRateText) || !Pattern.matches(Constants.numberReg, heartRateText)){
+                throw new CustomException(Constants.INVALID_HEART_RATE);
+            }
+            
+            if (!Pattern.matches(Constants.temperatureRegex, temperatureText) || !Pattern.matches(Constants.decimalReg, temperatureText)){
+                throw new CustomException(Constants.INVALID_TEMP);
+            }
+            
             if (selectedHospitalId == 0
                     || selectedDoctorId == 0
                     || selectedPatientId == 0
@@ -445,8 +470,10 @@ public class EncountersPanel extends javax.swing.JPanel {
 
         } catch (CustomException e) {
             Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
-            if (e.getMessage().endsWith(Constants.INVALID_ZIPCODE)) {
-                JOptionPane.showMessageDialog(this, Constants.INVALID_ZIPCODE);
+            if (e.getMessage().endsWith(Constants.INVALID_HEART_RATE)) {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_HEART_RATE);
+            } else if (e.getMessage().endsWith(Constants.INVALID_TEMP)) {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_TEMP);
             } else {
                 JOptionPane.showMessageDialog(this, Constants.INVALID_ENCOUNTER_DETAIL);
             }
