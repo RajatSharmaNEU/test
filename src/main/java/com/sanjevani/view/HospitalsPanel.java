@@ -92,8 +92,6 @@ public class HospitalsPanel extends javax.swing.JPanel {
             tableContent[key][0] = String.valueOf(hospital.getHospitalId());
             tableContent[key][1] = hospital.getName();
             
-            System.out.println(hospital.getCommunityId());
-            System.out.println(Database.communityList);
             Community community = Database.communityList.get(hospital.getCommunityId());
             
             tableContent[key][2] = community.getCommunityName();

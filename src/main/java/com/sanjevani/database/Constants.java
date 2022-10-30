@@ -13,6 +13,7 @@ public class Constants {
     public static String INVALID_DOCTOR_DETAIL = "Please provide all doctor details.";
     public static String INVALID_PERSON_DETAIL = "Please provide all person details.";
     public static String INVALID_COMMUNITY_DETAIL = "Please provide all community details.";
+    public static String INVALID_ENCOUNTER_DETAIL = "Please provide all encounter details.";
     public static String INVALID_ZIPCODE = "Zipcode must be a number";
     public static String INVALID_AGE = "Age must be a number and between 10 to 99";
     public static final String ageRegex = "[1-9]{1}[0-9]{1}";

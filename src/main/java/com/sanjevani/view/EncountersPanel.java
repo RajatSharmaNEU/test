@@ -5,7 +5,9 @@
 package com.sanjevani.view;
 
 import com.sanjevani.database.ApplicationState;
+import com.sanjevani.database.Constants;
 import com.sanjevani.database.Database;
+import com.sanjevani.exceptions.CustomException;
 import com.sanjevani.model.Community;
 import com.sanjevani.model.Encounter;
 import com.sanjevani.model.Hospital;
@@ -19,7 +21,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,17 +32,19 @@ import javax.swing.table.DefaultTableModel;
  * @author rajatsharma
  */
 public class EncountersPanel extends javax.swing.JPanel {
+
     int selectedEncounterId;
     List<Integer> hospitalKeyList = new ArrayList<>();
     List<String> hospitalNameList = new ArrayList<>();
-    
+
     List<Integer> patientKeyList = new ArrayList<>();
     List<String> patientNameList = new ArrayList<>();
-    
+
     List<Integer> doctorKeyList = new ArrayList<>();
     List<String> doctorNameList = new ArrayList<>();
-    
+
     JCalendar calendar = new JCalendar();
+
     /**
      * Creates new form HospitalsPanel
      */
@@ -46,7 +53,7 @@ public class EncountersPanel extends javax.swing.JPanel {
         setEncounterTable();
         initializeEncounterView();
     }
-    
+
     private void initializeEncounterView() {
         //Add calendar
         calendarPanel.add(calendar);
@@ -57,85 +64,82 @@ public class EncountersPanel extends javax.swing.JPanel {
         DefaultComboBoxModel hospitalModel = new DefaultComboBoxModel();
         hospitalModel.removeAllElements();
         hospitalModel.addElement("--Select--");
-        
+
         Database.hospitalList.forEach((key, hospital) -> {
             hospitalKeyList.add(key);
             hospitalNameList.add(hospital.getName());
             hospitalModel.addElement(hospital.getName());
         });
-        
+
         hospitalComboBox.setModel(hospitalModel);
-        
+
         // Populate Doctor
         DefaultComboBoxModel doctorModel = new DefaultComboBoxModel();
         doctorModel.removeAllElements();
         doctorModel.addElement("--Select--");
-        
+
         Database.getPeople("Doctor").forEach((key, doctor) -> {
             doctorKeyList.add(key);
             doctorNameList.add(doctor.getName());
             doctorModel.addElement(doctor.getName());
         });
-        
+
         doctorComboBox.setModel(doctorModel);
-        
+
         // Populate Doctor
         DefaultComboBoxModel patientModel = new DefaultComboBoxModel();
         patientModel.removeAllElements();
         patientModel.addElement("--Select--");
-        
+
         Database.getPeople("Patient").forEach((key, patient) -> {
             patientKeyList.add(key);
             patientNameList.add(patient.getName());
             patientModel.addElement(patient.getName());
         });
-        
+
         patientComboBox.setModel(patientModel);
-        
-        
-        if(ApplicationState.isPatient()){
+
+        if (ApplicationState.isPatient()) {
             buttonPanel.setVisible(false);
         }
-        
-        
+
         // hide update and delete btn
         updateBtn.setVisible(false);
         deleteBtn.setVisible(false);
     }
-    
+
     private void resetEncounterForm() {
-        
+
         hospitalComboBox.setSelectedIndex(0);
         doctorComboBox.setSelectedIndex(0);
         patientComboBox.setSelectedIndex(0);
         calendar.setDate(new Date());
-        
+
         bloodPressureTxt.setText("");
         temperatureTxt.setText("");
         heartRateTxt.setText("");
-        
+
         updateBtn.setVisible(false);
         deleteBtn.setVisible(false);
-        
+
         // Hide ID column
         encounterTable.getColumnModel().getColumn(0).setMinWidth(0);
         encounterTable.getColumnModel().getColumn(0).setMaxWidth(0);
         encounterTable.getColumnModel().getColumn(0).setWidth(0);
     }
 
-    
     private void setEncounterTable() {
-        HashMap<Integer,Encounter> list = Database.encounterList;
+        HashMap<Integer, Encounter> list = Database.encounterList;
         String[] tableColumns = {"Id", "Patient Name", "Age", "Gender", "Temperatire", "Blood Pressure", "Heart Rate", "Encounter Date", "Status", "Doctor Name", "Hospital Name"};
         String[][] tableContent = new String[list.size()][tableColumns.length];
         SimpleDateFormat dateOnly = new SimpleDateFormat("MM/dd/yyyy");
         int key = 0;
-        for(Encounter encounter: list.values()) {
+        for (Encounter encounter : list.values()) {
             Person patient = Database.personList.get(encounter.getPatientId());
             VitalSign vitalSign = Database.vitalSignList.get(encounter.getVitalSignId());
             Person doctor = Database.personList.get(encounter.getDoctorId());
             Hospital hospital = Database.hospitalList.get(encounter.getHospitalId());
-            
+
             tableContent[key][0] = String.valueOf(encounter.getEncounterId());
             tableContent[key][1] = patient.getName();
             tableContent[key][2] = String.valueOf(patient.getAge());
@@ -145,12 +149,12 @@ public class EncountersPanel extends javax.swing.JPanel {
             tableContent[key][6] = String.valueOf(vitalSign.getHeartRate());
             tableContent[key][7] = String.valueOf(dateOnly.format(encounter.getDateOfEncounter()));
             tableContent[key][8] = encounter.getStatus();
-            
+
             tableContent[key][9] = doctor.getName();
             tableContent[key][10] = hospital.getName();
             key++;
         }
-        
+
         encounterTable.setModel(new DefaultTableModel(tableContent, tableColumns));
         resetEncounterForm();
     }
@@ -356,44 +360,97 @@ public class EncountersPanel extends javax.swing.JPanel {
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         Encounter selectedEncounter = Database.encounterList.get(selectedEncounterId);
-        
-        int hospitalId = hospitalKeyList.get(hospitalComboBox.getSelectedIndex()-1);
-        int doctorId = doctorKeyList.get(doctorComboBox.getSelectedIndex()-1);
-        int patientId = patientKeyList.get(patientComboBox.getSelectedIndex()-1);
-        
-        
-        Database.updateVitalSign(
-                selectedEncounter.getVitalSignId(), 
-                Double.parseDouble(temperatureTxt.getText()), 
-                bloodPressureTxt.getText(), 
-                Integer.parseInt(heartRateTxt.getText())
-        );
-        
-        Database.updateEncounter(
-                selectedEncounterId, 
-                patientId, 
-                selectedEncounter.getVitalSignId(),
-                calendar.getDate(),
-                statusComboBox.getSelectedItem().toString(),
-                doctorId, 
-                hospitalId
-        );
-        setEncounterTable();
-        
+
+        int selectedHospitalId = hospitalComboBox.getSelectedIndex();
+        int selectedDoctorId = doctorComboBox.getSelectedIndex();
+        int selectedPatientId = patientComboBox.getSelectedIndex();
+
+        try {
+            if (selectedHospitalId == 0
+                    || selectedDoctorId == 0
+                    || selectedPatientId == 0
+                    || temperatureTxt.getText().isBlank()
+                    || bloodPressureTxt.getText().isBlank()
+                    || heartRateTxt.getText().isBlank()) {
+                throw new CustomException(Constants.INVALID_ENCOUNTER_DETAIL);
+            }
+            int hospitalId = hospitalKeyList.get(selectedHospitalId - 1);
+            int doctorId = doctorKeyList.get(selectedDoctorId - 1);
+            int patientId = patientKeyList.get(selectedPatientId - 1);
+
+            Double temperature = Double.parseDouble(temperatureTxt.getText());
+            String bloodPressure = bloodPressureTxt.getText();
+            Integer heartRate = Integer.parseInt(heartRateTxt.getText());
+
+            Database.updateVitalSign(
+                    selectedEncounter.getVitalSignId(),
+                    Double.parseDouble(temperatureTxt.getText()),
+                    bloodPressureTxt.getText(),
+                    Integer.parseInt(heartRateTxt.getText())
+            );
+
+            Database.updateEncounter(
+                    selectedEncounterId,
+                    patientId,
+                    selectedEncounter.getVitalSignId(),
+                    calendar.getDate(),
+                    statusComboBox.getSelectedItem().toString(),
+                    doctorId,
+                    hospitalId
+            );
+            setEncounterTable();
+
+        } catch (CustomException e) {
+            Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
+            if (e.getMessage().endsWith(Constants.INVALID_ZIPCODE)) {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_ZIPCODE);
+            } else {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_ENCOUNTER_DETAIL);
+            }
+        }
+
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        int hospitalId = hospitalKeyList.get(hospitalComboBox.getSelectedIndex()-1);
-        int doctorId = doctorKeyList.get(doctorComboBox.getSelectedIndex()-1);
-        int patientId = patientKeyList.get(patientComboBox.getSelectedIndex()-1);
+
+        int selectedHospitalId = hospitalComboBox.getSelectedIndex();
+        int selectedDoctorId = doctorComboBox.getSelectedIndex();
+        int selectedPatientId = patientComboBox.getSelectedIndex();
+
+        try {
+            if (selectedHospitalId == 0
+                    || selectedDoctorId == 0
+                    || selectedPatientId == 0
+                    || temperatureTxt.getText().isBlank()
+                    || bloodPressureTxt.getText().isBlank()
+                    || heartRateTxt.getText().isBlank()) {
+                throw new CustomException(Constants.INVALID_ENCOUNTER_DETAIL);
+            }
+
+            int hospitalId = hospitalKeyList.get(selectedHospitalId - 1);
+            int doctorId = doctorKeyList.get(selectedDoctorId - 1);
+            int patientId = patientKeyList.get(selectedPatientId - 1);
+
         
-        Date dateOfEncounter = calendar.getDate();
-        
-        
-        Database.createVitalSign(Double.parseDouble(temperatureTxt.getText()), bloodPressureTxt.getText(), Integer.parseInt(heartRateTxt.getText()));
-        
-        Database.createEncounter(patientId, Database.lastVitalSignId - 1, dateOfEncounter, statusComboBox.getSelectedItem().toString(), doctorId, hospitalId);
-        setEncounterTable();
+            Double temperature = Double.parseDouble(temperatureTxt.getText());
+            String bloodPressure = bloodPressureTxt.getText();
+            Integer heartRate = Integer.parseInt(heartRateTxt.getText());
+
+            Date dateOfEncounter = calendar.getDate();
+
+            Database.createVitalSign(temperature, bloodPressure, heartRate);
+
+            Database.createEncounter(patientId, Database.lastVitalSignId - 1, dateOfEncounter, statusComboBox.getSelectedItem().toString(), doctorId, hospitalId);
+            setEncounterTable();
+
+        } catch (CustomException e) {
+            Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
+            if (e.getMessage().endsWith(Constants.INVALID_ZIPCODE)) {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_ZIPCODE);
+            } else {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_ENCOUNTER_DETAIL);
+            }
+        }
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
@@ -406,21 +463,21 @@ public class EncountersPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void encounterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encounterTableMouseClicked
-        selectedEncounterId = Integer.parseInt(encounterTable.getValueAt(encounterTable.getSelectedRow(), 0 ).toString());
+        selectedEncounterId = Integer.parseInt(encounterTable.getValueAt(encounterTable.getSelectedRow(), 0).toString());
         Encounter encounter = Database.encounterList.get(selectedEncounterId);
-        
+
         hospitalComboBox.setSelectedItem(Database.hospitalList.get(encounter.getHospitalId()).getName());
         doctorComboBox.setSelectedItem(Database.personList.get(encounter.getDoctorId()).getName());
         patientComboBox.setSelectedItem(Database.personList.get(encounter.getPatientId()).getName());
         calendar.setDate(encounter.getDateOfEncounter());
-        
+
         VitalSign vitalSign = Database.vitalSignList.get(encounter.getVitalSignId());
         bloodPressureTxt.setText(vitalSign.getBloodPressure());
         temperatureTxt.setText(String.valueOf(vitalSign.getTemperature()));
         heartRateTxt.setText(String.valueOf(vitalSign.getHeartRate()));
-        
+
         statusComboBox.setSelectedItem(encounter.getStatus());
-        
+
         // Hide and Show Button
         updateBtn.setVisible(true);
         deleteBtn.setVisible(true);
