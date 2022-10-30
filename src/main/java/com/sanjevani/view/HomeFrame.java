@@ -155,19 +155,19 @@ public class HomeFrame extends javax.swing.JFrame {
 
     private void showPatientsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPatientsBtnActionPerformed
         // TODO add your handling code here:
-        viewPanel.add("People", new PatientsPanel());
+        viewPanel.add("Patient", new PatientsPanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showPatientsBtnActionPerformed
 
     private void showCommunitiesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showCommunitiesBtnActionPerformed
         // TODO add your handling code here:
-        viewPanel.add("People", new CommunitiesPanel());
+        viewPanel.add("Communities", new CommunitiesPanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showCommunitiesBtnActionPerformed
 
     private void showEncountersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showEncountersBtnActionPerformed
         // TODO add your handling code here:
-        viewPanel.add("People", new EncountersPanel());
+        viewPanel.add("Encounter", new EncountersPanel());
         cardLayout.next(viewPanel);
     }//GEN-LAST:event_showEncountersBtnActionPerformed
 

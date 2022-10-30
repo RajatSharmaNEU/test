@@ -5,11 +5,17 @@
 package com.sanjevani.view;
 
 import com.sanjevani.database.ApplicationState;
+import com.sanjevani.database.Constants;
 import com.sanjevani.database.Database;
+import com.sanjevani.exceptions.CustomException;
 import com.sanjevani.model.City;
 import com.sanjevani.model.Community;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -199,18 +205,59 @@ public class CommunitiesPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
-        Database.updateCommunity(
+        String communityName = communityNameTxt.getText();
+        String zipcode = zipcodeTxt.getText();
+        int cityIndex = cityComboBox.getSelectedIndex();
+        try{
+            if (!Pattern.matches(Constants.numberReg, zipcode)) {
+                throw new CustomException(Constants.INVALID_ZIPCODE);
+            }
+
+            if(communityName.isBlank() || zipcode.isBlank() || cityIndex == 0){
+                throw new CustomException(Constants.INVALID_COMMUNITY_DETAIL);
+            } {
+            Database.updateCommunity(
                 selectedCommunityId, 
-                communityNameTxt.getText(), 
-                cityComboBox.getSelectedIndex()-1,
-                zipcodeTxt.getText());
+                communityName, 
+                cityIndex-1,
+                zipcode);
         
-        setCommunitiesTable();
+            setCommunitiesTable();
+            }
+        } catch (CustomException e) {
+            Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
+            if (e.getMessage().endsWith(Constants.INVALID_ZIPCODE)) {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_ZIPCODE);
+            } else {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_COMMUNITY_DETAIL);
+            }
+        }
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        Database.createCommunity(communityNameTxt.getText(),cityComboBox.getSelectedIndex()-1, zipcodeTxt.getText());
-        setCommunitiesTable();
+        
+        String communityName = communityNameTxt.getText();
+        String zipcode = zipcodeTxt.getText();
+        int cityIndex = cityComboBox.getSelectedIndex();
+        try{
+            if (!Pattern.matches(Constants.numberReg, zipcode)) {
+                throw new CustomException(Constants.INVALID_ZIPCODE);
+            }
+
+            if(communityName.isBlank() || zipcode.isBlank() || cityIndex == 0){
+                throw new CustomException(Constants.INVALID_COMMUNITY_DETAIL);
+            } {
+                Database.createCommunity(communityName,cityIndex-1, zipcode);
+                setCommunitiesTable();
+            }
+        } catch (CustomException e) {
+            Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
+            if (e.getMessage().endsWith(Constants.INVALID_ZIPCODE)) {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_ZIPCODE);
+            } else {
+                JOptionPane.showMessageDialog(this, Constants.INVALID_COMMUNITY_DETAIL);
+            }
+        }
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
