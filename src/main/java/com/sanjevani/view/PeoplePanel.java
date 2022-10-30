@@ -6,13 +6,16 @@ package com.sanjevani.view;
 
 import com.sanjevani.database.Database;
 import com.sanjevani.model.Community;
+import com.sanjevani.model.Hospital;
 import com.sanjevani.model.House;
 import com.sanjevani.model.Person;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,7 +24,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PeoplePanel extends javax.swing.JPanel {
     int selectedPersonId;
+    List<String> roleWithHospitalIds  = Arrays.asList("HospitalAdmin", "Doctor", "SystemAdmin");
     List<Integer> communityKeyList = new ArrayList<>();
+    List<Integer> hospitalKeyList = new ArrayList<>();
+    List<String> hospitalNameList = new ArrayList<>();
+    
     /**
      * Creates new form HospitalsPanel
      */
@@ -55,6 +62,26 @@ public class PeoplePanel extends javax.swing.JPanel {
         
         communityComboBox.setModel(communityModel);
         
+        // Populate Hospitals
+        DefaultListModel hospitalsListModel = new DefaultListModel();
+        hospitalsListModel.removeAllElements();
+        
+        int key = 0;
+        
+        for(Hospital hospital: Database.hospitalList.values()) {
+            hospitalKeyList.add(hospital.getHospitalId());
+            hospitalNameList.add(hospital.getName());
+            hospitalsListModel.addElement(hospital.getName());
+
+            key++;
+        }
+        
+        hospitalsList.setModel(hospitalsListModel);
+        
+        // hide hospital panels
+        hospitalLabel.setVisible(false);
+        hospitalScrollPane.setVisible(false);
+        
         // hide update and delete btn
         updateBtn.setVisible(false);
         deleteBtn.setVisible(false);
@@ -73,6 +100,11 @@ public class PeoplePanel extends javax.swing.JPanel {
         
         updateBtn.setVisible(false);
         deleteBtn.setVisible(false);
+        
+        // hide hospital panels
+        hospitalLabel.setVisible(false);
+        hospitalScrollPane.setVisible(false);
+        
         
         // Hide ID column
         peopleTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -137,6 +169,9 @@ public class PeoplePanel extends javax.swing.JPanel {
         houseTxt = new javax.swing.JTextField();
         communityLabel = new javax.swing.JLabel();
         communityComboBox = new javax.swing.JComboBox<>();
+        hospitalLabel = new javax.swing.JLabel();
+        hospitalScrollPane = new javax.swing.JScrollPane();
+        hospitalsList = new javax.swing.JList<>();
         buttonPanel = new javax.swing.JPanel();
         updateBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
@@ -148,7 +183,7 @@ public class PeoplePanel extends javax.swing.JPanel {
         PeopleOuterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage People"));
         PeopleOuterPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        AddPeoplePanel.setLayout(new java.awt.GridLayout(8, 2));
+        AddPeoplePanel.setLayout(new java.awt.GridLayout(9, 2));
 
         personNameLabel.setText("Name");
         AddPeoplePanel.add(personNameLabel);
@@ -176,6 +211,11 @@ public class PeoplePanel extends javax.swing.JPanel {
         AddPeoplePanel.add(roleLabel);
 
         roleComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        roleComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                roleComboBoxItemStateChanged(evt);
+            }
+        });
         AddPeoplePanel.add(roleComboBox);
 
         genderLabel.setText("Gender");
@@ -193,6 +233,18 @@ public class PeoplePanel extends javax.swing.JPanel {
 
         communityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         AddPeoplePanel.add(communityComboBox);
+
+        hospitalLabel.setText("Hospital");
+        AddPeoplePanel.add(hospitalLabel);
+
+        hospitalsList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        hospitalScrollPane.setViewportView(hospitalsList);
+
+        AddPeoplePanel.add(hospitalScrollPane);
 
         PeopleOuterPanel.add(AddPeoplePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 19, 900, 360));
 
@@ -288,6 +340,30 @@ public class PeoplePanel extends javax.swing.JPanel {
         Community community = Database.communityList.get(house.getCommunityId());
         communityComboBox.setSelectedItem(community.getCommunityName());
         
+         // set hospitals belongs to selected doctor
+        
+        if(roleWithHospitalIds.contains(selectedItem.getRole())){
+            // hide hospital panels
+            hospitalLabel.setVisible(true);
+            hospitalScrollPane.setVisible(true);
+            int i = 0;
+            int[] indices = new int[selectedItem.getHospitalIds().size()];
+            for (Integer hospitalId : selectedItem.getHospitalIds()) {
+                if (Database.hospitalList.containsKey(hospitalId)) {
+                    String hospitalName = Database.hospitalList.get(hospitalId).getName();
+                    int index = ((DefaultListModel) hospitalsList.getModel()).indexOf(hospitalName);
+                    indices[i++] = index;
+                }
+            }
+            hospitalsList.setSelectedIndices(indices);
+
+            
+        } else {
+            // hide hospital panels
+            hospitalLabel.setVisible(false);
+            hospitalScrollPane.setVisible(false);
+        }
+       
         // Hide and Show Button
         updateBtn.setVisible(true);
         deleteBtn.setVisible(true);
@@ -308,11 +384,24 @@ public class PeoplePanel extends javax.swing.JPanel {
         int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
         selectedPersonHouse.setCommunityId(communityId);
         
+        List<Integer> selectedHospitalIds = new ArrayList<>();
+        for(int index: hospitalsList.getSelectedIndices()){
+            selectedHospitalIds.add(hospitalKeyList.get(index));
+        }
+        selectedPerson.setHospitalIds(selectedHospitalIds);
+        
+        
         setPeopleTable();
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         int communityId = communityKeyList.get(communityComboBox.getSelectedIndex()-1);
+        
+        List<Integer> selectedHospitalIds = new ArrayList<>();
+        for(int index: hospitalsList.getSelectedIndices()){
+            selectedHospitalIds.add(hospitalKeyList.get(index));
+        }
+        
         Database.createHouse(communityId, houseTxt.getText());
 
         // TODO: Fix lasthouseID
@@ -323,7 +412,8 @@ public class PeoplePanel extends javax.swing.JPanel {
                 roleComboBox.getSelectedItem().toString(),
                 Integer.parseInt(ageTxt.getText()),
                 genderComboBox.getSelectedItem().toString(),
-                Database.lastHouseId-1
+                Database.lastHouseId-1,
+                selectedHospitalIds
         );
         setPeopleTable();
     }//GEN-LAST:event_addBtnActionPerformed
@@ -341,6 +431,18 @@ public class PeoplePanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_passwordTxtActionPerformed
 
+    private void roleComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_roleComboBoxItemStateChanged
+        if(roleWithHospitalIds.contains(roleComboBox.getSelectedItem().toString())){
+            // hide hospital panels
+            hospitalLabel.setVisible(true);
+            hospitalScrollPane.setVisible(true);
+        } else {
+            // hide hospital panels
+            hospitalLabel.setVisible(false);
+            hospitalScrollPane.setVisible(false);
+        }
+    }//GEN-LAST:event_roleComboBoxItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AddPeoplePanel;
@@ -356,6 +458,9 @@ public class PeoplePanel extends javax.swing.JPanel {
     private javax.swing.JTextField emailIdTxt;
     private javax.swing.JComboBox<String> genderComboBox;
     private javax.swing.JLabel genderLabel;
+    private javax.swing.JLabel hospitalLabel;
+    private javax.swing.JScrollPane hospitalScrollPane;
+    private javax.swing.JList<String> hospitalsList;
     private javax.swing.JLabel houseLabel;
     private javax.swing.JTextField houseTxt;
     private javax.swing.JLabel passwordLabel;

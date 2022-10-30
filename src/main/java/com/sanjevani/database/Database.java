@@ -71,8 +71,8 @@ public class Database {
         personList.put(lastPersonId++, patient);
         return patient;
     }
-    public static Person createAdmin(String name, String emailId, String password, String role, int age, String gender, int houseId) {
-        return personList.put(lastPersonId, new Person(lastPersonId++, name, emailId, password, role, age, gender, houseId, null));
+    public static Person createAdmin(String name, String emailId, String password, String role, int age, String gender, int houseId, List<Integer> hospitalIds) {
+        return personList.put(lastPersonId, new Person(lastPersonId++, name, emailId, password, role, age, gender, houseId, hospitalIds));
     }
     public static Encounter createEncounter(int patientId, int vitalSignId, String dateOfEncounter, String status, int doctorId, int hospitalId) {
         return encounterList.put(lastEncounterId, new Encounter(lastEncounterId++, patientId, vitalSignId, dateOfEncounter, status, doctorId, hospitalId));
@@ -141,9 +141,9 @@ public class Database {
     Encounter encounter2 = createEncounter(3, 1, "09-26-2022", "Pending", 1, 1);    
     
     // Admin Data
-    Person systemAdmin = createAdmin("Rajat Sharma", "a", "a", "SystemAdmin", 30, "Male", 4);
-    Person communityAdmin = createAdmin("Gaurang Londhe", "c", "c", "CommunityAdmin", 30, "Male", 5);
-    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "h", "h", "HospitalAdmin", 30, "Male", 6);
+    Person systemAdmin = createAdmin("Rajat Sharma", "a", "a", "SystemAdmin", 30, "Male", 4, null);
+    Person communityAdmin = createAdmin("Gaurang Londhe", "c", "c", "CommunityAdmin", 30, "Male", 5, null);
+    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "h", "h", "HospitalAdmin", 30, "Male", 6, Arrays.asList(0));
     
     
     // More Doctor Data
