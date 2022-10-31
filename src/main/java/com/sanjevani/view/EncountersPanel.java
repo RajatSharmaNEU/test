@@ -5,6 +5,7 @@
 package com.sanjevani.view;
 
 import com.sanjevani.database.ApplicationState;
+import static com.sanjevani.database.ApplicationState.authenticatedPerson;
 import com.sanjevani.database.Constants;
 import com.sanjevani.database.Database;
 import com.sanjevani.exceptions.CustomException;
@@ -79,12 +80,18 @@ public class EncountersPanel extends javax.swing.JPanel {
         doctorModel.removeAllElements();
         doctorModel.addElement("--Select--");
 
-        Database.getPeople("Doctor").forEach((key, doctor) -> {
-            doctorKeyList.add(key);
-            doctorNameList.add(doctor.getName());
-            doctorModel.addElement(doctor.getName());
-        });
-
+        if (ApplicationState.isDoctor()) {
+            doctorKeyList.add(ApplicationState.authenticatedPerson.getPersonId());
+            doctorNameList.add(ApplicationState.authenticatedPerson.getName());
+            doctorModel.addElement(ApplicationState.authenticatedPerson.getName());
+        } else {
+            Database.getPeople("Doctor").forEach((key, doctor) -> {
+                doctorKeyList.add(key);
+                doctorNameList.add(doctor.getName());
+                doctorModel.addElement(doctor.getName());
+            });
+        }
+        
         doctorComboBox.setModel(doctorModel);
 
         // Populate Doctor
@@ -141,18 +148,26 @@ public class EncountersPanel extends javax.swing.JPanel {
             Person doctor = Database.personList.get(encounter.getDoctorId());
             Hospital hospital = Database.hospitalList.get(encounter.getHospitalId());
 
-            tableContent[key][0] = String.valueOf(encounter.getEncounterId());
-            tableContent[key][1] = patient.getName();
-            tableContent[key][2] = String.valueOf(patient.getAge());
-            tableContent[key][3] = patient.getGender();
-            tableContent[key][4] = String.valueOf(vitalSign.getTemperature());
-            tableContent[key][5] = vitalSign.getBloodPressure();
-            tableContent[key][6] = String.valueOf(vitalSign.getHeartRate());
-            tableContent[key][7] = String.valueOf(dateOnly.format(encounter.getDateOfEncounter()));
-            tableContent[key][8] = encounter.getStatus();
+            System.out.println(ApplicationState.isDoctor());
+            System.out.println(ApplicationState.authenticatedPerson.getPersonId());
+            System.out.println(encounter.getDoctorId());
 
-            tableContent[key][9] = doctor.getName();
-            tableContent[key][10] = hospital.getName();
+            if ((ApplicationState.isDoctor() && ApplicationState.authenticatedPerson.getPersonId() == encounter.getDoctorId())
+                    || !ApplicationState.isDoctor()) {
+                tableContent[key][0] = String.valueOf(encounter.getEncounterId());
+                tableContent[key][1] = patient.getName();
+                tableContent[key][2] = String.valueOf(patient.getAge());
+                tableContent[key][3] = patient.getGender();
+                tableContent[key][4] = String.valueOf(vitalSign.getTemperature());
+                tableContent[key][5] = vitalSign.getBloodPressure();
+                tableContent[key][6] = String.valueOf(vitalSign.getHeartRate());
+                tableContent[key][7] = String.valueOf(dateOnly.format(encounter.getDateOfEncounter()));
+                tableContent[key][8] = encounter.getStatus();
+
+                tableContent[key][9] = doctor.getName();
+                tableContent[key][10] = hospital.getName();
+            }
+
             key++;
         }
 
@@ -448,7 +463,7 @@ public class EncountersPanel extends javax.swing.JPanel {
                 throw new CustomException(Constants.INVALID_HEART_RATE);
             }
 
-             if (!Pattern.matches(Constants.decimalReg, temperatureText) || Double.parseDouble(temperatureText) < 0 || Double.parseDouble(temperatureText) > 200) {
+            if (!Pattern.matches(Constants.decimalReg, temperatureText) || Double.parseDouble(temperatureText) < 0 || Double.parseDouble(temperatureText) > 200) {
                 throw new CustomException(Constants.INVALID_TEMP);
             }
 

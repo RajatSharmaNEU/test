@@ -266,30 +266,30 @@ public class Database {
     
     
     // Doctor Data
-    Doctor doctor1 = createDoctor("Dr. Rajeev Aggarwal", "d", "d", 30, "Male", 0, Arrays.asList(0));
-    Doctor doctor2 = createDoctor("Dr. Sunita Williams", "sunitawilliams@gmail.com", "test@1234", 25, "Female", 1, Arrays.asList(0,1));
+    Doctor doctor1 = createDoctor("Dr. Rajeev Aggarwal", "rajeev@gmail.com", "test@123", 30, "Male", 0, Arrays.asList(0));
+    Doctor doctor2 = createDoctor("Dr. Sunita Williams", "sunitawilliams@gmail.com", "test@123", 25, "Female", 1, Arrays.asList(0,1));
     
     // Vital Sign Data
     VitalSign vitalSign1 = createVitalSign(98.97, "80-120", 72);
     VitalSign vitalSign2 = createVitalSign(99.99, "70-110", 77);
     
     // Patient Data
-    Patient patient1 = createPatient("Manthan", "p", "p", 30, "Male", 2);
-    Patient patient2 = createPatient("Yash Pawar", "yashpawar", "test@1234", 25, "Male", 3);
+    Patient patient1 = createPatient("Manthan", "manthan@gmail.com", "test@123", 30, "Male", 2);
+    Patient patient2 = createPatient("Yash Pawar", "yashpawar", "test@123", 25, "Male", 3);
     
     // Encounter Data
     Encounter encounter1 = createEncounter(2, 0, new Date(), "Pending", 0, 0);
     Encounter encounter2 = createEncounter(3, 1, new Date(), "Pending", 1, 1);    
     
     // Admin Data
-    Person systemAdmin = createAdmin("Rajat Sharma", "a", "a", "SystemAdmin", 30, "Male", 4, null);
-    Person communityAdmin = createAdmin("Gaurang Londhe", "c", "c", "CommunityAdmin", 30, "Male", 5, null);
-    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "h", "h", "HospitalAdmin", 30, "Male", 6, Arrays.asList(0));
+    Person systemAdmin = createAdmin("Rajat Sharma", "rajat@gmail.com", "test@123", "SystemAdmin", 30, "Male", 4, null);
+    Person communityAdmin = createAdmin("Gaurang Londhe", "gaurang@gmail.com", "test@123", "CommunityAdmin", 30, "Male", 5, null);
+    Person hospitalAdmin = createAdmin("Chakradhar Grandhi", "chakri@gmail.com", "test@123", "HospitalAdmin", 30, "Male", 6, Arrays.asList(0));
     
     
     // More Doctor Data
-    Doctor doctor3 = createDoctor("Dr. Diljit Singh", "diljitsingh@gmail.com", "test@1234", 30, "Male", 0, Arrays.asList(0));
-    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh@gmail.com", "test@1234", 25, "Female", 1, Arrays.asList(0, 1));
+    Doctor doctor3 = createDoctor("Dr. Diljit Singh", "diljitsingh@gmail.com", "test@123", 30, "Male", 0, Arrays.asList(0));
+    Doctor doctor4 = createDoctor("Dr. Rina Singh", "rinasingh@gmail.com", "test@123", 25, "Female", 1, Arrays.asList(0, 1));
     }
 }
 
