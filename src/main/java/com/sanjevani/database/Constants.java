@@ -9,6 +9,8 @@ package com.sanjevani.database;
  * @author rajatsharma
  */
 public class Constants {
+    public static String CANNOT_DELETE_HOSPITAL = "Hospital can not be deleted as it is in use.";
+    public static String CANNOT_DELETE_DOCTOR = "Doctor can not be deleted as it is in use.";
     public static String INVALID_HOSPITAL_DETAIL = "Please provide all hospital details.";
     public static String INVALID_DOCTOR_DETAIL = "Please provide all doctor details.";
     public static String INVALID_PERSON_DETAIL = "Please provide all person details.";

@@ -9,6 +9,7 @@ import com.sanjevani.database.Constants;
 import com.sanjevani.database.Database;
 import com.sanjevani.exceptions.CustomException;
 import com.sanjevani.model.Community;
+import com.sanjevani.model.Encounter;
 import com.sanjevani.model.Hospital;
 import com.sanjevani.model.House;
 import com.sanjevani.model.Person;
@@ -455,8 +456,21 @@ public class DoctorsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.deleteDoctor(selectedDoctorId);
-        setDoctorsTable();
+        int key = 0;
+        boolean isUsed = false;
+        
+        for(Encounter encounter: Database.encounterList.values()) {
+            if(encounter.getDoctorId() == selectedDoctorId) {
+                JOptionPane.showMessageDialog(this, Constants.CANNOT_DELETE_DOCTOR);
+                isUsed = true;
+            }
+            key++;
+        }
+        
+        if(!isUsed) {
+            Database.deleteDoctor(selectedDoctorId);
+            setDoctorsTable();
+        }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void passwordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTxtActionPerformed

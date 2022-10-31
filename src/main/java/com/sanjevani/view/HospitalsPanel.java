@@ -9,6 +9,7 @@ import com.sanjevani.database.Constants;
 import com.sanjevani.database.Database;
 import com.sanjevani.exceptions.CustomException;
 import com.sanjevani.model.Community;
+import com.sanjevani.model.Encounter;
 import com.sanjevani.model.Hospital;
 import com.sanjevani.model.Person;
 import java.util.ArrayList;
@@ -346,8 +347,22 @@ public class HospitalsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.deleteHospital(selectedHospitalId);
-        setHospitalsTable();
+        
+        int key = 0;
+        boolean isUsed = false;
+        
+        for(Encounter encounter: Database.encounterList.values()) {
+            if(encounter.getHospitalId() == selectedHospitalId) {
+                JOptionPane.showMessageDialog(this, Constants.CANNOT_DELETE_HOSPITAL);
+                isUsed = true;
+            }
+            key++;
+        }
+        
+        if(!isUsed) {
+            Database.deleteHospital(selectedHospitalId);
+            setHospitalsTable();
+        }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
 
