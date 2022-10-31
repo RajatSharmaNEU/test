@@ -402,6 +402,20 @@ public class PatientsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        
+        int key = 0;
+        HashMap<Integer, Encounter> encounterList= new HashMap<>();
+        
+        for(Encounter encounter: Database.encounterList.values()) {
+            int patientId = encounter.getPatientId();
+            int encounterId = encounter.getEncounterId();
+            if(patientId != selectedPatientId) {
+                encounterList.put(encounterId, encounter);
+            }
+            key++;
+        }
+        
+        Database.encounterList = encounterList;
         Database.deletePatient(selectedPatientId);
         setPatientsTable();
     }//GEN-LAST:event_deleteBtnActionPerformed

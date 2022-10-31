@@ -8,6 +8,7 @@ import com.sanjevani.database.Constants;
 import com.sanjevani.database.Database;
 import com.sanjevani.exceptions.CustomException;
 import com.sanjevani.model.Community;
+import com.sanjevani.model.Encounter;
 import com.sanjevani.model.Hospital;
 import com.sanjevani.model.House;
 import com.sanjevani.model.Person;
@@ -31,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 public class PeoplePanel extends javax.swing.JPanel {
 
     int selectedPersonId;
+    Person selectedItem;
     List<String> roleWithHospitalIds = Arrays.asList("HospitalAdmin", "Doctor", "SystemAdmin");
     List<Integer> communityKeyList = new ArrayList<>();
     List<Integer> hospitalKeyList = new ArrayList<>();
@@ -330,7 +332,7 @@ public class PeoplePanel extends javax.swing.JPanel {
     private void peopleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peopleTableMouseClicked
         selectedPersonId = Integer.parseInt(peopleTable.getValueAt(peopleTable.getSelectedRow(), 0).toString());
 
-        Person selectedItem = Database.personList.get(selectedPersonId);
+        selectedItem = Database.personList.get(selectedPersonId);
 
         personNameTxt.setText(selectedItem.getName());
         emailIdTxt.setText(selectedItem.getEmailId());
@@ -406,7 +408,7 @@ public class PeoplePanel extends javax.swing.JPanel {
                     || selectedCommunityId == 0) {
                 throw new CustomException("Invalid Person Details");
             }
-            
+
             Database.updateHouse(
                     selectedPerson.getHouseId(),
                     communityId,
@@ -421,7 +423,7 @@ public class PeoplePanel extends javax.swing.JPanel {
                     roleComboBox.getSelectedItem().toString(),
                     Integer.parseInt(ageTxt.getText()),
                     genderComboBox.getSelectedItem().toString(),
-                    Database.lastHouseId-1,
+                    Database.lastHouseId - 1,
                     selectedHospitalIds
             );
             setPeopleTable();
@@ -437,60 +439,58 @@ public class PeoplePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        
 
         List<Integer> selectedHospitalIds = new ArrayList<>();
         for (int index : hospitalsList.getSelectedIndices()) {
             selectedHospitalIds.add(hospitalKeyList.get(index));
         }
-        
+
         String personName = personNameTxt.getText(),
                 personEmailId = emailIdTxt.getText(),
                 doctorPassword = passwordTxt.getText(),
                 age = ageTxt.getText(),
                 gender = genderComboBox.getSelectedItem().toString();
-        
+
         int selectedCommunityId = communityComboBox.getSelectedIndex();
-        
+
         try {
-            if (!Pattern.matches(Constants.ageRegex, age) || !Pattern.matches(Constants.numberReg, age)){
+            if (!Pattern.matches(Constants.ageRegex, age) || !Pattern.matches(Constants.numberReg, age)) {
                 throw new CustomException(Constants.INVALID_AGE);
             }
-            
+
             if (personName.isBlank()
                     || personEmailId.isBlank()
                     || doctorPassword.isBlank()
                     || age.isBlank()
                     || houseTxt.getText().isBlank()
                     || genderComboBox.getSelectedIndex() == 0
-                    || selectedCommunityId == 0) 
-            {
+                    || selectedCommunityId == 0) {
                 throw new CustomException(Constants.INVALID_PERSON_DETAIL);
-            } 
-            
-            if(Database.isEmailIdExist(personEmailId)) {
+            }
+
+            if (Database.isEmailIdExist(personEmailId)) {
                 throw new CustomException(Constants.INVALID_EMAILID);
             }
-            
-            int communityId = communityKeyList.get(selectedCommunityId-1);
+
+            int communityId = communityKeyList.get(selectedCommunityId - 1);
             Database.createHouse(communityId, houseTxt.getText());
             Database.createAdmin(
-                personNameTxt.getText(),
-                emailIdTxt.getText(),
-                passwordTxt.getText(),
-                roleComboBox.getSelectedItem().toString(),
-                Integer.parseInt(ageTxt.getText()),
-                genderComboBox.getSelectedItem().toString(),
-                Database.lastHouseId - 1,
-                selectedHospitalIds
-        );
-        setPeopleTable();
-            
-        } catch(CustomException e) {
+                    personNameTxt.getText(),
+                    emailIdTxt.getText(),
+                    passwordTxt.getText(),
+                    roleComboBox.getSelectedItem().toString(),
+                    Integer.parseInt(ageTxt.getText()),
+                    genderComboBox.getSelectedItem().toString(),
+                    Database.lastHouseId - 1,
+                    selectedHospitalIds
+            );
+            setPeopleTable();
+
+        } catch (CustomException e) {
             Logger.getLogger(HomeFrame.class.getName()).log(Level.SEVERE, "INFO", e);
-            if(e.getMessage().endsWith(Constants.INVALID_AGE)){
+            if (e.getMessage().endsWith(Constants.INVALID_AGE)) {
                 JOptionPane.showMessageDialog(this, Constants.INVALID_AGE);
-            } else if(e.getMessage().endsWith(Constants.INVALID_EMAILID)){
+            } else if (e.getMessage().endsWith(Constants.INVALID_EMAILID)) {
                 JOptionPane.showMessageDialog(this, Constants.INVALID_EMAILID);
             } else {
                 JOptionPane.showMessageDialog(this, Constants.INVALID_PERSON_DETAIL);
@@ -503,8 +503,43 @@ public class PeoplePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_resetBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        Database.deletePerson(selectedPersonId);
-        setPeopleTable();
+
+        if (selectedItem.getRole() == "Doctor") {
+            int key = 0;
+            boolean isUsed = false;
+
+            for (Encounter encounter : Database.encounterList.values()) {
+                if (encounter.getDoctorId() == selectedPersonId) {
+                    JOptionPane.showMessageDialog(this, Constants.CANNOT_DELETE_DOCTOR);
+                    isUsed = true;
+                }
+                key++;
+            }
+
+            if (!isUsed) {
+                Database.deletePerson(selectedPersonId);
+                setPeopleTable();
+            }
+        }
+
+        if (selectedItem.getRole() == "Patient") {
+            int key = 0;
+            HashMap<Integer, Encounter> encounterList = new HashMap<>();
+
+            for (Encounter encounter : Database.encounterList.values()) {
+                int patientId = encounter.getPatientId();
+                int encounterId = encounter.getEncounterId();
+                if (patientId != selectedPersonId) {
+                    encounterList.put(encounterId, encounter);
+                }
+                key++;
+            }
+
+            Database.encounterList = encounterList;
+            Database.deletePatient(selectedPersonId);
+            setPeopleTable();
+        }
+
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void passwordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTxtActionPerformed

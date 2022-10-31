@@ -6,7 +6,10 @@
 package com.sanjevani;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedLightIJTheme;
 import com.sanjevani.database.Database;
+import com.sanjevani.view.HomeFrame;
 import com.sanjevani.view.LoginFrame;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,6 +21,12 @@ public class Sanjevani {
         FlatSolarizedLightIJTheme.setup();
         
         Database.createDatabase();
-        new LoginFrame().setVisible(true);
+        
+        try {
+            new LoginFrame().setVisible(true);
+        } catch (Exception e) {
+            Logger.getLogger(Sanjevani.class.getName()).log(Level.SEVERE, "Some error occured");
+        }
+        
     }
 }
