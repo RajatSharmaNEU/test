@@ -2,6 +2,8 @@ Medical Resource System - Sanjevani
 
 A platform to manage Medical Resources in different city and community.
 
+UML Class Diagram ![Alt Class Diagram](./diagram/Sanjevani.jpg "Class Daigram")
+
 Main highlights are as following - 
 
 - Functionalities supported by the platform are as following -
