@@ -10,6 +10,9 @@ import com.sanjevani.database.Database;
 import com.sanjevani.exceptions.CustomException;
 import com.sanjevani.model.City;
 import com.sanjevani.model.Community;
+import com.sanjevani.model.Encounter;
+import com.sanjevani.model.Hospital;
+import com.sanjevani.model.Person;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +50,7 @@ public class CommunitiesPanel extends javax.swing.JPanel {
         
         // hide update and delete btn
         updateBtn.setVisible(false);
+        deleteBtn.setVisible(false);
         
         if(ApplicationState.isCommunityAdmin()) {
             addBtn.setVisible(false);
@@ -103,6 +107,7 @@ public class CommunitiesPanel extends javax.swing.JPanel {
         updateBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
         resetBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         scrollTablePanel = new javax.swing.JScrollPane();
         communitiesTable = new javax.swing.JTable();
 
@@ -154,6 +159,14 @@ public class CommunitiesPanel extends javax.swing.JPanel {
             }
         });
         buttonPanel.add(resetBtn);
+
+        deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(deleteBtn);
 
         CommunitiesOuterPanel.add(buttonPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, -1, 60));
 
@@ -254,6 +267,34 @@ public class CommunitiesPanel extends javax.swing.JPanel {
         resetCommunityForm();
     }//GEN-LAST:event_resetBtnActionPerformed
 
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        int key = 0;
+        boolean isUsed = false;
+        
+        for(Hospital hospital: Database.hospitalList.values()) {
+            if(hospital.getCommunityId() == selectedCommunityId) {
+                isUsed = true;
+            }
+            key++;
+        }
+        
+        for(Person person: Database.personList.values()) {
+            if(Database.houseList.get(person.getHouseId()).getCommunityId() == selectedCommunityId) {
+                isUsed = true;
+            }
+            key++;
+        }
+        
+        if(!isUsed) {
+            Database.deleteCommunity(selectedCommunityId);
+            setCommunitiesTable();
+        } else {
+            JOptionPane.showMessageDialog(this, Constants.CANNOT_DELETE_COMMUNITY);
+        }
+        
+        
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
     private void communitiesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_communitiesTableMouseClicked
         selectedCommunityId = Integer.parseInt(communitiesTable.getValueAt(communitiesTable.getSelectedRow(), 0 ).toString());
         Community community = Database.communityList.get(selectedCommunityId);
@@ -265,6 +306,11 @@ public class CommunitiesPanel extends javax.swing.JPanel {
         
         // Hide and Show Button
         updateBtn.setVisible(true);
+        
+        if(!ApplicationState.isCommunityAdmin()) {
+            deleteBtn.setVisible(true);
+        }
+        
         
     }//GEN-LAST:event_communitiesTableMouseClicked
 
@@ -279,6 +325,7 @@ public class CommunitiesPanel extends javax.swing.JPanel {
     private javax.swing.JTable communitiesTable;
     private javax.swing.JLabel communityNameLabel;
     private javax.swing.JTextField communityNameTxt;
+    private javax.swing.JButton deleteBtn;
     private javax.swing.JButton resetBtn;
     private javax.swing.JScrollPane scrollTablePanel;
     private javax.swing.JButton updateBtn;
